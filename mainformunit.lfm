@@ -1,21 +1,25 @@
 object MainForm: TMainForm
-  Left = 2091
+  Left = 1223
   Height = 600
-  Top = 795
-  Width = 800
+  Top = 411
+  Width = 689
   Caption = 'MainForm'
-  ClientHeight = 577
-  ClientWidth = 800
+  ClientHeight = 600
+  ClientWidth = 689
   Menu = MainMenu
+  OnClose = FormClose
   OnCreate = FormCreate
-  LCLVersion = '2.0.6.0'
+  OnDestroy = FormDestroy
+  OnShow = FormShow
   object Toolbar: TToolBar
     Left = 0
     Height = 26
     Top = 0
-    Width = 800
+    Width = 689
     Anchors = []
     Caption = 'ToolBar'
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 0
     object DividerBevel1: TDividerBevel
       Left = 111
@@ -156,25 +160,27 @@ object MainForm: TMainForm
       Width = 22
       Action = ActionHelpHelpContents
       ShowCaption = False
+      ShowHint = True
+      ParentShowHint = False
     end
   end
   object pnlStatusBar: TPanel
     Left = 0
     Height = 41
-    Top = 536
-    Width = 802
+    Top = 559
+    Width = 691
     Anchors = [akLeft, akRight, akBottom]
     BevelInner = bvLowered
     BorderStyle = bsSingle
     Caption = 'StatusBar'
     ClientHeight = 39
-    ClientWidth = 800
+    ClientWidth = 689
     TabOrder = 1
     object lblStatusMessage: TLabel
       Left = 8
-      Height = 17
-      Top = 3
-      Width = 624
+      Height = 15
+      Top = 4
+      Width = 513
       Anchors = [akLeft, akRight]
       Caption = 'StatusMessage'
       Font.Color = clGreen
@@ -183,9 +189,9 @@ object MainForm: TMainForm
     end
     object lblErrorMessage: TLabel
       Left = 9
-      Height = 17
-      Top = 17
-      Width = 623
+      Height = 15
+      Top = 18
+      Width = 512
       Anchors = [akLeft, akRight]
       Caption = 'ErrorMessage'
       Font.Color = clRed
@@ -193,7 +199,7 @@ object MainForm: TMainForm
       ParentFont = False
     end
     object ProgressBar: TProgressBar
-      Left = 638
+      Left = 527
       Height = 22
       Top = 8
       Width = 100
@@ -201,7 +207,7 @@ object MainForm: TMainForm
       TabOrder = 0
     end
     object imgActionIcon: TImage
-      Left = 744
+      Left = 633
       Height = 22
       Top = 8
       Width = 22
@@ -232,7 +238,7 @@ object MainForm: TMainForm
       }
     end
     object imgDirtyIcon: TImage
-      Left = 768
+      Left = 657
       Height = 22
       Top = 8
       Width = 22
@@ -265,6 +271,7 @@ object MainForm: TMainForm
   end
   object MainMenu: TMainMenu
     Images = ImageList1
+    left = 16
     top = 32
     object MenuFile: TMenuItem
       Caption = '&File'
@@ -401,6 +408,7 @@ object MainForm: TMainForm
   end
   object ActionList1: TActionList
     Images = ImageList1
+    left = 16
     top = 88
     object ActionFileNew: TAction
       Category = 'File'
@@ -622,6 +630,7 @@ object MainForm: TMainForm
     end
   end
   object ImageList1: TImageList
+    left = 16
     top = 144
     Bitmap = {
       4C69100000001000000010000000FFFFFF00FFFFFF00EEC09AFFE7C1A6FFE5BF
@@ -1138,5 +1147,11 @@ object MainForm: TMainForm
       00000000000000000000491E0D048455324E7143269F5328132C552A15010000
       0000000000000000000000000000
     }
+  end
+  object IniPropStorage1: TIniPropStorage
+    StoredValues = <>
+    OnRestoreProperties = IniPropStorage1RestoreProperties
+    left = 16
+    top = 200
   end
 end
