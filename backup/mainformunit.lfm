@@ -11,6 +11,7 @@ object MainForm: TMainForm
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
+  LCLVersion = '2.0.6.0'
   object Toolbar: TToolBar
     Left = 0
     Height = 26
@@ -173,8 +174,8 @@ object MainForm: TMainForm
     BevelInner = bvLowered
     BorderStyle = bsSingle
     Caption = 'StatusBar'
-    ClientHeight = 39
-    ClientWidth = 689
+    ClientHeight = 41
+    ClientWidth = 691
     TabOrder = 1
     object lblStatusMessage: TLabel
       Left = 8

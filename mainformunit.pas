@@ -269,11 +269,10 @@ procedure TMainForm.ActionFileOpenOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('FileOpen');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='FileOpen';
 
      except
-       ShowMessage('Error:FileOpen');
+       lblErrorMessage.Caption:='Error:FileOpen';
      end;
    finally
      //always do something
@@ -285,11 +284,10 @@ procedure TMainForm.ActionFileSaveOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('FileSave');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='FileSave';
 
      except
-       ShowMessage('Error:FileSave');
+       lblErrorMessage.Caption:='Error:FileSave';
      end;
    finally
      //always do something
@@ -301,11 +299,10 @@ procedure TMainForm.ActionFileSaveAsOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('FileSaveAs');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='FileSaveAs';
 
      except
-       ShowMessage('Error:FileSaveAs');
+       lblErrorMessage.Caption:='Error:FileSaveAs';
      end;
    finally
      //always do something
@@ -315,16 +312,15 @@ end;
 
 procedure TMainForm.ActionFilePrintOnExecute(Sender: TObject);
 var sStatusMessage : String;
+
 begin
 
    try
      try
-     //ShowMessage('FilePrint');
-     //WriteLn('About');
      lblStatusMessage.Caption:='FilePrint';
 
      except
-       ShowMessage('Error:FilePrint');
+       lblErrorMessage.Caption:='Error:FilePrint';
      end;
    finally
      //always do something
@@ -336,11 +332,10 @@ procedure TMainForm.ActionFilePrintSetupOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('FilePrintSetup');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='FilePrintSetup';
 
      except
-       ShowMessage('Error:FilePrintSetup');
+       lblErrorMessage.Caption:='Error:FilePrintSetup';
      end;
    finally
      //always do something
@@ -352,11 +347,10 @@ procedure TMainForm.ActionFileExitOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('FileExit');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='FileExit';
 
      except
-       ShowMessage('Error:FileExit');
+       lblErrorMessage.Caption:='Error:FileExit';
      end;
    finally
      //always do something
@@ -369,11 +363,10 @@ procedure TMainForm.ActionEditUndoOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('EditUndo');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='EditUndo';
 
      except
-       ShowMessage('Error:EditUndo');
+       lblErrorMessage.Caption:='Error:EditUndo';
      end;
    finally
      //always do something
@@ -385,11 +378,10 @@ procedure TMainForm.ActionEditRedoOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('EditRedo');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='EditRedo';
 
      except
-       ShowMessage('Error:EditRedo');
+       lblErrorMessage.Caption:='Error:EditRedo';
      end;
    finally
      //always do something
@@ -401,11 +393,10 @@ procedure TMainForm.ActionEditRefreshOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('EditRefresh');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='EditRefresh';
 
      except
-       ShowMessage('Error:EditRefresh');
+       lblErrorMessage.Caption:='Error:EditRefresh';
      end;
    finally
      //always do something
@@ -417,11 +408,10 @@ procedure TMainForm.ActionEditReplaceOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('EditReplace');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='EditReplace';
 
      except
-       ShowMessage('Error:EditReplace');
+       lblErrorMessage.Caption:='Error:EditReplace';
      end;
    finally
      //always do something
@@ -433,11 +423,10 @@ procedure TMainForm.ActionEditSelectAllOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('EditSelectAll');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='EditSelectAll';
 
      except
-       ShowMessage('Error:EditSelectAll');
+       lblErrorMessage.Caption:='Error:EditSelectAll';
      end;
    finally
      //always do something
@@ -449,11 +438,10 @@ procedure TMainForm.ActionEditCutOnExecute(Sender: TObject);
 begin
     try
      try
-     ShowMessage('EditCut');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='EditCut';
 
      except
-       ShowMessage('Error:EditCut');
+       lblErrorMessage.Caption:='Error:EditCut';
      end;
    finally
      //always do something
@@ -465,11 +453,10 @@ procedure TMainForm.ActionEditFindOnExecute(Sender: TObject);
 begin
     try
      try
-     ShowMessage('EditFind');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='EditFind';
 
      except
-       ShowMessage('Error:EditFind');
+       lblErrorMessage.Caption:='Error:EditFind';
      end;
    finally
      //always do something
@@ -481,11 +468,10 @@ procedure TMainForm.ActionEditGoToOnExecute(Sender: TObject);
 begin
     try
      try
-     ShowMessage('EditGoTo');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='EditGoTo';
 
      except
-       ShowMessage('Error:EditGoTo');
+       lblErrorMessage.Caption:='Error:EditGoTo';
      end;
    finally
      //always do something
@@ -497,11 +483,10 @@ procedure TMainForm.ActionEditPasteExecute(Sender: TObject);
 begin
     try
      try
-     ShowMessage('EditPaste');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='EditPaste';
 
      except
-       ShowMessage('Error:EditPaste');
+       lblErrorMessage.Caption:='Error:EditPaste';
      end;
    finally
      //always do something
@@ -513,11 +498,10 @@ procedure TMainForm.ActionEditPasteSpecialOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('EditPasteSpecial');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='EditPasteSpecial';
 
      except
-       ShowMessage('Error:EditPasteSpecial');
+       lblErrorMessage.Caption:='Error:EditPasteSpecial';
      end;
    finally
      //always do something
@@ -529,11 +513,10 @@ procedure TMainForm.ActionEditPreferencesOnExecute(Sender: TObject);
 begin
     try
      try
-     ShowMessage('EditPreferences');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='EditPreferences';
 
      except
-       ShowMessage('Error:EditPreferences');
+       lblErrorMessage.Caption:='Error:EditPreferences';
      end;
    finally
      //always do something
@@ -545,11 +528,10 @@ procedure TMainForm.ActionEditCopyOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('EditCopy');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='EditCopy';
 
      except
-       ShowMessage('Error:EditCopy');
+       lblErrorMessage.Caption:='Error:EditCopy';
      end;
    finally
      //always do something
@@ -562,11 +544,10 @@ procedure TMainForm.ActionWindowCascadeOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('WindowCascade');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='WindowCascade';
 
      except
-       ShowMessage('Error:WindowCascade');
+       lblErrorMessage.Caption:='Error:WindowCascade';
      end;
    finally
      //always do something
@@ -578,11 +559,10 @@ procedure TMainForm.ActionWindowHideExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('WindowHide');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='WindowHide';
 
      except
-       ShowMessage('Error:WindowHide');
+       lblErrorMessage.Caption:='Error:WindowHide';
      end;
    finally
      //always do something
@@ -594,11 +574,10 @@ procedure TMainForm.ActionWindowNewWindowOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('WindowNewWindow');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='WindowNewWindow';
 
      except
-       ShowMessage('Error:WindowNewWindow');
+       lblErrorMessage.Caption:='Error:WindowNewWindow';
      end;
    finally
      //always do something
@@ -610,11 +589,10 @@ procedure TMainForm.ActionWindowShowExecute(Sender: TObject);
 begin
     try
      try
-     ShowMessage('WindowShow');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='WindowShow';
 
      except
-       ShowMessage('Error:WindowShow');
+       lblErrorMessage.Caption:='Error:WindowShow';
      end;
    finally
      //always do something
@@ -626,11 +604,10 @@ procedure TMainForm.ActionWindowTileOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('WindowTile');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='WindowTile';
 
      except
-       ShowMessage('Error:WindowTile');
+       lblErrorMessage.Caption:='Error:WindowTile';
      end;
    finally
      //always do something
@@ -643,11 +620,10 @@ procedure TMainForm.ActionWindowArrangeAllExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('WindowArrangeAll');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='WindowArrangeAll';
 
      except
-       ShowMessage('Error:WindowArrangeAll');
+       lblErrorMessage.Caption:='Error:WindowArrangeAll';
      end;
    finally
      //always do something
@@ -660,11 +636,10 @@ procedure TMainForm.ActionHelpHelpContentsOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('HelpHelpContents');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='HelpHelpContents';
 
      except
-       ShowMessage('Error:HelpHelpContents');
+       lblErrorMessage.Caption:='Error:HelpHelpContents';
      end;
    finally
      //always do something
@@ -675,11 +650,10 @@ procedure TMainForm.ActionHelpHelpIndexOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('HelpHelpIndex');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='HelpHelpIndex';
 
      except
-       ShowMessage('Error:HelpHelpIndex');
+       lblErrorMessage.Caption:='Error:HelpHelpIndex';
      end;
    finally
      //always do something
@@ -690,11 +664,10 @@ procedure TMainForm.ActionHelpLicenceInformationOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('HelpLicenceInformation');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='HelpLicenceInformation';
 
      except
-       ShowMessage('Error:HelpLicenceInformation');
+       lblErrorMessage.Caption:='Error:HelpLicenceInformation';
      end;
    finally
      //always do something
@@ -705,26 +678,10 @@ procedure TMainForm.ActionHelpOnlineHelpOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('HelpOnlineHelp');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='HelpOnlineHelp';
 
      except
-       ShowMessage('Error:HelpOnlineHelp');
-     end;
-   finally
-     //always do something
-   end;
-end;
-
-procedure TMainForm.ActionHelpAboutOnExecute(Sender: TObject);
-begin
-   try
-     try
-     ShowMessage('HelpAbout');
-     //WriteLn('About');
-
-     except
-       ShowMessage('Error:HelpAbout');
+       lblErrorMessage.Caption:='Error:HelpOnlineHelp';
      end;
    finally
      //always do something
@@ -735,16 +692,30 @@ procedure TMainForm.ActionHelpCheckForUpdatesOnExecute(Sender: TObject);
 begin
    try
      try
-     ShowMessage('HelpCheckForUpdates');
-     //WriteLn('About');
+     lblStatusMessage.Caption:='HelpCheckForUpdates';
 
      except
-       ShowMessage('Error:HelpCheckForUpdates');
+       lblErrorMessage.Caption:='Error:HelpCheckForUpdates';
      end;
    finally
      //always do something
    end;
 
+end;
+
+procedure TMainForm.ActionHelpAboutOnExecute(Sender: TObject);
+begin
+   try
+     try
+     lblStatusMessage.Caption:='HelpAbout';
+
+     except
+       ShowMessage('Error:HelpAbout');
+       lblErrorMessage.Caption:='Error:HelpAbout';
+     end;
+   finally
+     //always do something
+   end;
 end;
 
 {MainMenu}
