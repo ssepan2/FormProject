@@ -1,16 +1,17 @@
 object MainForm: TMainForm
   Left = 1223
   Height = 600
-  Top = 411
+  Top = 408
   Width = 689
   Caption = 'MainForm'
-  ClientHeight = 600
+  ClientHeight = 577
   ClientWidth = 689
   Menu = MainMenu
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
+  LCLVersion = '2.0.10.0'
   object Toolbar: TToolBar
     Left = 0
     Height = 26
@@ -47,6 +48,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionFileNew
+      Images = ImageList1
+      ImageIndex = 0
       ShowCaption = False
     end
     object sbFileOpen: TSpeedButton
@@ -55,6 +58,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionFileOpen
+      Images = ImageList1
+      ImageIndex = 1
       ShowCaption = False
     end
     object sbFileSave: TSpeedButton
@@ -63,6 +68,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionFileSave
+      Images = ImageList1
+      ImageIndex = 2
       ShowCaption = False
     end
     object sbFileSaveAs: TSpeedButton
@@ -71,6 +78,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionFileSaveAs
+      Images = ImageList1
+      ImageIndex = 3
       ShowCaption = False
     end
     object sbFilePrint: TSpeedButton
@@ -79,6 +88,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionFilePrint
+      Images = ImageList1
+      ImageIndex = 4
       ShowCaption = False
     end
     object sbEditUndo: TSpeedButton
@@ -87,6 +98,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditUndo
+      Images = ImageList1
+      ImageIndex = 5
       ShowCaption = False
     end
     object sbEditRedo: TSpeedButton
@@ -95,6 +108,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditRedo
+      Images = ImageList1
+      ImageIndex = 6
       ShowCaption = False
     end
     object sbEditCut: TSpeedButton
@@ -103,6 +118,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditCut
+      Images = ImageList1
+      ImageIndex = 7
       ShowCaption = False
     end
     object sbEditCopy: TSpeedButton
@@ -111,6 +128,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditCopy
+      Images = ImageList1
+      ImageIndex = 8
       ShowCaption = False
     end
     object sbEditPaste: TSpeedButton
@@ -119,6 +138,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditPaste
+      Images = ImageList1
+      ImageIndex = 9
       ShowCaption = False
     end
     object sbEditFind: TSpeedButton
@@ -127,6 +148,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditFind
+      Images = ImageList1
+      ImageIndex = 10
       ShowCaption = False
     end
     object sbEditReplace: TSpeedButton
@@ -135,6 +158,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditReplace
+      Images = ImageList1
+      ImageIndex = 11
       ShowCaption = False
     end
     object sbEditPreferences: TSpeedButton
@@ -143,6 +168,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditPreferences
+      Images = ImageList1
+      ImageIndex = 13
       ShowCaption = False
     end
     object sbEditRefresh: TSpeedButton
@@ -151,6 +178,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditRefresh
+      Images = ImageList1
+      ImageIndex = 12
       ShowCaption = False
     end
     object sbHelpContents: TSpeedButton
@@ -159,6 +188,8 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionHelpHelpContents
+      Images = ImageList1
+      ImageIndex = 14
       ShowCaption = False
       ShowHint = True
       ParentShowHint = False
@@ -167,7 +198,7 @@ object MainForm: TMainForm
   object pnlStatusBar: TPanel
     Left = 0
     Height = 41
-    Top = 559
+    Top = 536
     Width = 691
     Anchors = [akLeft, akRight, akBottom]
     BevelInner = bvLowered
@@ -271,8 +302,8 @@ object MainForm: TMainForm
   end
   object MainMenu: TMainMenu
     Images = ImageList1
-    left = 16
-    top = 32
+    Left = 16
+    Top = 32
     object MenuFile: TMenuItem
       Caption = '&File'
       object MenuFileNew: TMenuItem
@@ -408,8 +439,8 @@ object MainForm: TMainForm
   end
   object ActionList1: TActionList
     Images = ImageList1
-    left = 16
-    top = 88
+    Left = 16
+    Top = 88
     object ActionFileNew: TAction
       Category = 'File'
       Caption = '&New'
@@ -630,8 +661,8 @@ object MainForm: TMainForm
     end
   end
   object ImageList1: TImageList
-    left = 16
-    top = 144
+    Left = 16
+    Top = 144
     Bitmap = {
       4C69100000001000000010000000FFFFFF00FFFFFF00EEC09AFFE7C1A6FFE5BF
       A4FFE4BEA3FFE2BCA1FFE1BBA0FFDFB99FFFDEB79DFFC08D7AFFEBCFBC8EFFFF
@@ -1151,7 +1182,7 @@ object MainForm: TMainForm
   object IniPropStorage1: TIniPropStorage
     StoredValues = <>
     OnRestoreProperties = IniPropStorage1RestoreProperties
-    left = 16
-    top = 200
+    Left = 16
+    Top = 200
   end
 end

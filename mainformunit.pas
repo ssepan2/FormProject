@@ -215,7 +215,7 @@ end;
 
 function Something():Boolean;
 begin
-    Sleep(1000);//delayFor(0.001);
+    Sleep(3000);//delayFor(0.001);
     Something:=True;
 
 end;
@@ -230,11 +230,16 @@ end;
 procedure TMainForm.ActionFileNewOnExecute(Sender: TObject);
 var
    sStatusMessage:String;
+   sErrorMessage:String;
 begin
+  //TODO:clear status, error messages at beginning of every action
+  //TODO:get progress bar (marquee) working, maybe with dummy proc w/ 1-3 sec delay
+  //TODO:perform sender disable/enable in all actions
+  //TODO:show action icon (where available) in status bar along with progress
    try
        try
-          sStatusMessage:='FileNew...';
-         {objStatusBarViewModel.}//StartProgressBarWithPicture(sStatusMessage, Null, ImageList1.GetBitmap(TODO) [0{TAction(Sender).ImageIndex}], True, 33);
+          sStatusMessage:='FileNew...';//TODO:not displayed
+         {objStatusBarViewModel.}//StartProgressBarWithPicture(sStatusMessage, Null, sbFileNew.Images[0].Image, True, 33);
          //if Sender is TAction then
          //begin
            TAction(Sender).Enabled := False;

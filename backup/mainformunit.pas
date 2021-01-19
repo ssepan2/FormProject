@@ -215,7 +215,7 @@ end;
 
 function Something():Boolean;
 begin
-    Sleep(1000);//delayFor(0.001);
+    Sleep(3000);//delayFor(0.001);
     Something:=True;
 
 end;
@@ -230,11 +230,16 @@ end;
 procedure TMainForm.ActionFileNewOnExecute(Sender: TObject);
 var
    sStatusMessage:String;
+   sErrorMessage:String;
 begin
+  //TODO:clear status, error messages at beginning of every action
+  //TODO:get progress bar (marquee) working, maybe with dummy proc w/ 1-3 sec delay
+  //TODO:perform sender disable/enable in all actions
+  //TODO:show action icon (where available) in status bar along with progress
    try
        try
-          sStatusMessage:='FileNew...';
-         {objStatusBarViewModel.}//StartProgressBarWithPicture(sStatusMessage, Null, ImageList1.GetBitmap(TODO) [0{TAction(Sender).ImageIndex}], True, 33);
+          sStatusMessage:='FileNew...';//TODO:not displayed
+         {objStatusBarViewModel.}//StartProgressBarWithPicture(sStatusMessage, Null, sbFileNew.Images[0].Image, True, 33);
          //if Sender is TAction then
          //begin
            TAction(Sender).Enabled := False;
@@ -272,7 +277,7 @@ begin
      lblStatusMessage.Caption:='FileOpen';
 
      except
-       lblStatusMessage.Caption:='Error:FileOpen';
+       lblErrorMessage.Caption:='Error:FileOpen';
      end;
    finally
      //always do something
@@ -287,7 +292,7 @@ begin
      lblStatusMessage.Caption:='FileSave';
 
      except
-       lblStatusMessage.Caption:='Error:FileSave';
+       lblErrorMessage.Caption:='Error:FileSave';
      end;
    finally
      //always do something
@@ -302,7 +307,7 @@ begin
      lblStatusMessage.Caption:='FileSaveAs';
 
      except
-       lblStatusMessage.Caption:='Error:FileSaveAs';
+       lblErrorMessage.Caption:='Error:FileSaveAs';
      end;
    finally
      //always do something
@@ -320,7 +325,7 @@ begin
      lblStatusMessage.Caption:='FilePrint';
 
      except
-       lblStatusMessage.Caption:='Error:FilePrint';
+       lblErrorMessage.Caption:='Error:FilePrint';
      end;
    finally
      //always do something
@@ -335,7 +340,7 @@ begin
      lblStatusMessage.Caption:='FilePrintSetup';
 
      except
-       lblStatusMessage.Caption:='Error:FilePrintSetup';
+       lblErrorMessage.Caption:='Error:FilePrintSetup';
      end;
    finally
      //always do something
@@ -350,7 +355,7 @@ begin
      lblStatusMessage.Caption:='FileExit';
 
      except
-       lblStatusMessage.Caption:='Error:FileExit';
+       lblErrorMessage.Caption:='Error:FileExit';
      end;
    finally
      //always do something
@@ -366,7 +371,7 @@ begin
      lblStatusMessage.Caption:='EditUndo';
 
      except
-       lblStatusMessage.Caption:='Error:EditUndo';
+       lblErrorMessage.Caption:='Error:EditUndo';
      end;
    finally
      //always do something
@@ -381,7 +386,7 @@ begin
      lblStatusMessage.Caption:='EditRedo';
 
      except
-       lblStatusMessage.Caption:='Error:EditRedo';
+       lblErrorMessage.Caption:='Error:EditRedo';
      end;
    finally
      //always do something
@@ -396,7 +401,7 @@ begin
      lblStatusMessage.Caption:='EditRefresh';
 
      except
-       lblStatusMessage.Caption:='Error:EditRefresh';
+       lblErrorMessage.Caption:='Error:EditRefresh';
      end;
    finally
      //always do something
@@ -411,7 +416,7 @@ begin
      lblStatusMessage.Caption:='EditReplace';
 
      except
-       lblStatusMessage.Caption:='Error:EditReplace';
+       lblErrorMessage.Caption:='Error:EditReplace';
      end;
    finally
      //always do something
@@ -426,7 +431,7 @@ begin
      lblStatusMessage.Caption:='EditSelectAll';
 
      except
-       lblStatusMessage.Caption:='Error:EditSelectAll';
+       lblErrorMessage.Caption:='Error:EditSelectAll';
      end;
    finally
      //always do something
@@ -441,7 +446,7 @@ begin
      lblStatusMessage.Caption:='EditCut';
 
      except
-       lblStatusMessage.Caption:='Error:EditCut';
+       lblErrorMessage.Caption:='Error:EditCut';
      end;
    finally
      //always do something
@@ -456,7 +461,7 @@ begin
      lblStatusMessage.Caption:='EditFind';
 
      except
-       lblStatusMessage.Caption:='Error:EditFind';
+       lblErrorMessage.Caption:='Error:EditFind';
      end;
    finally
      //always do something
@@ -471,7 +476,7 @@ begin
      lblStatusMessage.Caption:='EditGoTo';
 
      except
-       lblStatusMessage.Caption:='Error:EditGoTo';
+       lblErrorMessage.Caption:='Error:EditGoTo';
      end;
    finally
      //always do something
@@ -486,7 +491,7 @@ begin
      lblStatusMessage.Caption:='EditPaste';
 
      except
-       lblStatusMessage.Caption:='Error:EditPaste';
+       lblErrorMessage.Caption:='Error:EditPaste';
      end;
    finally
      //always do something
@@ -501,7 +506,7 @@ begin
      lblStatusMessage.Caption:='EditPasteSpecial';
 
      except
-       lblStatusMessage.Caption:='Error:EditPasteSpecial';
+       lblErrorMessage.Caption:='Error:EditPasteSpecial';
      end;
    finally
      //always do something
@@ -516,7 +521,7 @@ begin
      lblStatusMessage.Caption:='EditPreferences';
 
      except
-       lblStatusMessage.Caption:='Error:EditPreferences';
+       lblErrorMessage.Caption:='Error:EditPreferences';
      end;
    finally
      //always do something
@@ -531,7 +536,7 @@ begin
      lblStatusMessage.Caption:='EditCopy';
 
      except
-       lblStatusMessage.Caption:='Error:EditCopy';
+       lblErrorMessage.Caption:='Error:EditCopy';
      end;
    finally
      //always do something
@@ -547,7 +552,7 @@ begin
      lblStatusMessage.Caption:='WindowCascade';
 
      except
-       lblStatusMessage.Caption:='Error:WindowCascade';
+       lblErrorMessage.Caption:='Error:WindowCascade';
      end;
    finally
      //always do something
@@ -562,7 +567,7 @@ begin
      lblStatusMessage.Caption:='WindowHide';
 
      except
-       lblStatusMessage.Caption:='Error:WindowHide';
+       lblErrorMessage.Caption:='Error:WindowHide';
      end;
    finally
      //always do something
@@ -577,7 +582,7 @@ begin
      lblStatusMessage.Caption:='WindowNewWindow';
 
      except
-       lblStatusMessage.Caption:='Error:WindowNewWindow';
+       lblErrorMessage.Caption:='Error:WindowNewWindow';
      end;
    finally
      //always do something
@@ -592,7 +597,7 @@ begin
      lblStatusMessage.Caption:='WindowShow';
 
      except
-       lblStatusMessage.Caption:='Error:WindowShow';
+       lblErrorMessage.Caption:='Error:WindowShow';
      end;
    finally
      //always do something
@@ -607,7 +612,7 @@ begin
      lblStatusMessage.Caption:='WindowTile';
 
      except
-       lblStatusMessage.Caption:='Error:WindowTile';
+       lblErrorMessage.Caption:='Error:WindowTile';
      end;
    finally
      //always do something
@@ -623,7 +628,7 @@ begin
      lblStatusMessage.Caption:='WindowArrangeAll';
 
      except
-       lblStatusMessage.Caption:='Error:WindowArrangeAll';
+       lblErrorMessage.Caption:='Error:WindowArrangeAll';
      end;
    finally
      //always do something
@@ -639,7 +644,7 @@ begin
      lblStatusMessage.Caption:='HelpHelpContents';
 
      except
-       lblStatusMessage.Caption:='Error:HelpHelpContents';
+       lblErrorMessage.Caption:='Error:HelpHelpContents';
      end;
    finally
      //always do something
@@ -653,7 +658,7 @@ begin
      lblStatusMessage.Caption:='HelpHelpIndex';
 
      except
-       lblStatusMessage.Caption:='Error:HelpHelpIndex';
+       lblErrorMessage.Caption:='Error:HelpHelpIndex';
      end;
    finally
      //always do something
@@ -667,7 +672,7 @@ begin
      lblStatusMessage.Caption:='HelpLicenceInformation';
 
      except
-       lblStatusMessage.Caption:='Error:HelpLicenceInformation';
+       lblErrorMessage.Caption:='Error:HelpLicenceInformation';
      end;
    finally
      //always do something
@@ -681,7 +686,7 @@ begin
      lblStatusMessage.Caption:='HelpOnlineHelp';
 
      except
-       lblStatusMessage.Caption:='Error:HelpOnlineHelp';
+       lblErrorMessage.Caption:='Error:HelpOnlineHelp';
      end;
    finally
      //always do something
@@ -695,7 +700,7 @@ begin
      lblStatusMessage.Caption:='HelpCheckForUpdates';
 
      except
-       lblStatusMessage.Caption:='Error:HelpCheckForUpdates';
+       lblErrorMessage.Caption:='Error:HelpCheckForUpdates';
      end;
    finally
      //always do something
@@ -710,7 +715,8 @@ begin
      lblStatusMessage.Caption:='HelpAbout';
 
      except
-       lblStatusMessage.Caption:='Error:HelpAbout';
+       ShowMessage('Error:HelpAbout');
+       lblErrorMessage.Caption:='Error:HelpAbout';
      end;
    finally
      //always do something

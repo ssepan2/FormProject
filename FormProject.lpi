@@ -46,7 +46,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="2">
+    <Units Count="3">
       <Unit0>
         <Filename Value="FormProject.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -59,6 +59,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainFormUnit"/>
       </Unit1>
+      <Unit2>
+        <Filename Value="ssepan.laz.utility.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Ssepan.Laz.utility"/>
+      </Unit2>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
