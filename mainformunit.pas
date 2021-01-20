@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, ExtCtrls, ActnList, Buttons, IniPropStorage, DividerBevel,
-  RTTICtrls;
+  RTTICtrls,ssepan_laz_utility,ssepan_laz_application;
 
 type
 
@@ -220,9 +220,6 @@ begin
 
 end;
 
-procedure StartProgressBarWithPicture(const sStatusMessage:String ; sErrorMessage : String; objImage : TImage; isMarqueeProgressBarStyle : Boolean; fProgressBarValue : Double);
-begin
-end;
 
 {Actions}
 
@@ -238,8 +235,9 @@ begin
   //TODO:show action icon (where available) in status bar along with progress
    try
        try
-          sStatusMessage:='FileNew...';//TODO:not displayed
-         {objStatusBarViewModel.}//StartProgressBarWithPicture(sStatusMessage, Null, sbFileNew.Images[0].Image, True, 33);
+          sStatusMessage:='FileNew...';
+          sErrorMessage:='';
+          ssepan_laz_application.StartProgressBarWithPicture(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage);//, sbFileNew.Images[0].Image, True, 33);
          //if Sender is TAction then
          //begin
            TAction(Sender).Enabled := False;
@@ -254,19 +252,20 @@ begin
              sStatusMessage := 'FileNew cancelled.' ;
          End;
 
+       finally
+         //always do something
+         TAction(Sender).Enabled := True;
+         lblStatusMessage.Caption:=sStatusMessage;
+         {objStatusBarViewModel.}//StopProgressBar(sStatusMessage)
+       end;
 
      except
-       lblErrorMessage.Caption:='FileNew failed.';
-       //Debug Log.FormatError(Error.Text, Error.Where, Error.BackTrace)
+       on E: Exception do
+          lblErrorMessage.Caption:='FileNew failed: ' + E.Message;
+       //Debug.Log.FormatError(Error.Text, Error.Where, Error.BackTrace)
 
        {objStatusBarViewModel.}//StopProgressBar(Null, 'FileNew failed.')
      end;
-   finally
-     //always do something
-     TAction(Sender).Enabled := True;
-     lblStatusMessage.Caption:=sStatusMessage;
-     {objStatusBarViewModel.}//StopProgressBar(sStatusMessage)
-   end;
 
 end;
 

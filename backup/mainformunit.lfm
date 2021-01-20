@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 1223
+  Left = 1161
   Height = 600
-  Top = 408
+  Top = 117
   Width = 689
   Caption = 'MainForm'
   ClientHeight = 577
@@ -48,8 +48,6 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionFileNew
-      Images = ImageList1
-      ImageIndex = 0
       ShowCaption = False
     end
     object sbFileOpen: TSpeedButton
@@ -58,8 +56,6 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionFileOpen
-      Images = ImageList1
-      ImageIndex = 1
       ShowCaption = False
     end
     object sbFileSave: TSpeedButton
@@ -68,8 +64,6 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionFileSave
-      Images = ImageList1
-      ImageIndex = 2
       ShowCaption = False
     end
     object sbFileSaveAs: TSpeedButton
@@ -78,8 +72,6 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionFileSaveAs
-      Images = ImageList1
-      ImageIndex = 3
       ShowCaption = False
     end
     object sbFilePrint: TSpeedButton
@@ -88,8 +80,6 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionFilePrint
-      Images = ImageList1
-      ImageIndex = 4
       ShowCaption = False
     end
     object sbEditUndo: TSpeedButton
@@ -98,8 +88,6 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditUndo
-      Images = ImageList1
-      ImageIndex = 5
       ShowCaption = False
     end
     object sbEditRedo: TSpeedButton
@@ -108,8 +96,6 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditRedo
-      Images = ImageList1
-      ImageIndex = 6
       ShowCaption = False
     end
     object sbEditCut: TSpeedButton
@@ -118,8 +104,6 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditCut
-      Images = ImageList1
-      ImageIndex = 7
       ShowCaption = False
     end
     object sbEditCopy: TSpeedButton
@@ -128,8 +112,6 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditCopy
-      Images = ImageList1
-      ImageIndex = 8
       ShowCaption = False
     end
     object sbEditPaste: TSpeedButton
@@ -138,8 +120,6 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionEditPaste
-      Images = ImageList1
-      ImageIndex = 9
       ShowCaption = False
     end
     object sbEditFind: TSpeedButton
@@ -193,7 +173,6 @@ object MainForm: TMainForm
     Anchors = [akLeft, akRight, akBottom]
     BevelInner = bvLowered
     BorderStyle = bsSingle
-    Caption = 'StatusBar'
     ClientHeight = 39
     ClientWidth = 689
     TabOrder = 1

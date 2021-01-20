@@ -8,7 +8,7 @@
         <Filename Value="FormProject.lpr"/>
         <IsPartOfProject Value="True"/>
         <CursorPos X="80" Y="10"/>
-        <UsageCount Value="125"/>
+        <UsageCount Value="149"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -18,166 +18,168 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainFormUnit"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="222"/>
-        <CursorPos X="36" Y="242"/>
-        <UsageCount Value="125"/>
+        <TopLine Value="233"/>
+        <CursorPos Y="264"/>
+        <UsageCount Value="149"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
-        <Filename Value="ssepan.laz.utility.pas"/>
+        <Filename Value="ssepan_laz_application.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="Ssepan.Laz.utility"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="37"/>
-        <CursorPos X="53" Y="55"/>
-        <UsageCount Value="27"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="34"/>
+        <CursorPos X="45" Y="63"/>
+        <UsageCount Value="51"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="mainformunit.lfm"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="54" Y="21"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="26"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit3>
       <Unit4>
-        <Filename Value="/usr/share/lazarus/2.0.6/lcl/include/customform.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="2023"/>
-        <CursorPos Y="2071"/>
-        <UsageCount Value="2"/>
-      </Unit4>
-      <Unit5>
         <Filename Value="/usr/share/fpcsrc/3.2.0/packages/chm/src/chmreader.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="57"/>
         <CursorPos X="12" Y="80"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="4"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="ssepan_laz_utility.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Ssepan_Laz_Utility"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="12"/>
+        <CursorPos X="23" Y="37"/>
+        <UsageCount Value="31"/>
+        <Loaded Value="True"/>
       </Unit5>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="714" Column="40" TopLine="690"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="116" Column="4" TopLine="78"/>
       </Position1>
       <Position2>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="234" Column="60" TopLine="223"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="97" Column="49" TopLine="87"/>
       </Position2>
       <Position3>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="247" Column="20" TopLine="214"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="116" Column="4" TopLine="99"/>
       </Position3>
       <Position4>
-        <Filename Value="ssepan.laz.utility.pas"/>
-        <Caret Line="16" Column="26"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="97" Column="50" TopLine="79"/>
       </Position4>
       <Position5>
-        <Filename Value="FormProject.lpr"/>
-        <Caret Line="10" Column="80"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="115" Column="2" TopLine="90"/>
       </Position5>
       <Position6>
-        <Filename Value="ssepan.laz.utility.pas"/>
-        <Caret Line="13" Column="8"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="116" TopLine="92"/>
       </Position6>
       <Position7>
-        <Filename Value="ssepan.laz.utility.pas"/>
-        <Caret Line="14" Column="3"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="95" TopLine="78"/>
       </Position7>
       <Position8>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="242" Column="31" TopLine="222"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="16" Column="80"/>
       </Position8>
       <Position9>
-        <Filename Value="ssepan.laz.utility.pas"/>
-        <Caret Line="37" Column="177" TopLine="19"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="106" Column="11" TopLine="89"/>
       </Position9>
       <Position10>
-        <Filename Value="ssepan.laz.utility.pas"/>
-        <Caret Line="41" Column="108" TopLine="19"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="16" Column="61"/>
       </Position10>
       <Position11>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="242" Column="105" TopLine="222"/>
+        <Caret Line="258" Column="8" TopLine="226"/>
       </Position11>
       <Position12>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="223" Column="149" TopLine="203"/>
+        <Caret Line="257" Column="11" TopLine="241"/>
       </Position12>
       <Position13>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="242" Column="105" TopLine="222"/>
+        <Caret Line="151" Column="46" TopLine="135"/>
       </Position13>
       <Position14>
-        <Filename Value="ssepan.laz.utility.pas"/>
-        <Caret Line="36" Column="51" TopLine="19"/>
+        <Filename Value="mainformunit.pas"/>
+        <Caret Line="257" Column="13" TopLine="240"/>
       </Position14>
       <Position15>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="244" Column="75" TopLine="222"/>
+        <Caret Line="151" Column="46" TopLine="135"/>
       </Position15>
       <Position16>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="242" Column="103" TopLine="222"/>
+        <Caret Line="257" Column="11" TopLine="241"/>
       </Position16>
       <Position17>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="245" Column="85" TopLine="222"/>
+        <Caret Line="263" Column="12" TopLine="240"/>
       </Position17>
       <Position18>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="242" Column="103" TopLine="222"/>
+        <Caret Line="265" Column="55" TopLine="248"/>
       </Position18>
       <Position19>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="252" Column="54" TopLine="222"/>
+        <Caret Line="151" Column="46" TopLine="135"/>
       </Position19>
       <Position20>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="223" Column="149" TopLine="203"/>
+        <Caret Line="265" Column="62" TopLine="248"/>
       </Position20>
       <Position21>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="242" Column="100" TopLine="222"/>
+        <Caret Line="239" Column="49" TopLine="226"/>
       </Position21>
       <Position22>
-        <Filename Value="ssepan.laz.utility.pas"/>
-        <Caret Line="37" Column="178" TopLine="19"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="15" Column="11"/>
       </Position22>
       <Position23>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="246" Column="93" TopLine="222"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="18" Column="33"/>
       </Position23>
       <Position24>
-        <Filename Value="ssepan.laz.utility.pas"/>
-        <Caret Line="66" Column="5" TopLine="31"/>
+        <Filename Value="ssepan_laz_application.pas"/>
+        <Caret Line="15" Column="11"/>
       </Position24>
       <Position25>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="242" Column="100" TopLine="222"/>
+        <Filename Value="ssepan_laz_utility.pas"/>
+        <Caret Line="42" TopLine="7"/>
       </Position25>
       <Position26>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="223" Column="112" TopLine="203"/>
+        <Filename Value="ssepan_laz_utility.pas"/>
+        <Caret Line="14" Column="48"/>
       </Position26>
       <Position27>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="229" Column="29" TopLine="222"/>
+        <Filename Value="ssepan_laz_utility.pas"/>
+        <Caret Line="34" Column="64" TopLine="9"/>
       </Position27>
       <Position28>
-        <Filename Value="mainformunit.pas"/>
-        <Caret Line="246" TopLine="222"/>
+        <Filename Value="ssepan_laz_utility.pas"/>
+        <Caret Line="37" Column="24" TopLine="13"/>
       </Position28>
       <Position29>
-        <Filename Value="ssepan.laz.utility.pas"/>
-        <Caret Line="66" Column="5" TopLine="32"/>
+        <Filename Value="ssepan_laz_utility.pas"/>
+        <Caret Line="48" Column="26" TopLine="13"/>
       </Position29>
       <Position30>
-        <Filename Value="ssepan.laz.utility.pas"/>
-        <Caret Line="22" Column="7" TopLine="12"/>
+        <Filename Value="ssepan_laz_utility.pas"/>
+        <Caret Line="37" Column="28" TopLine="13"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -186,21 +188,35 @@
     </RunParams>
   </ProjectSession>
   <Debugging>
-    <BreakPoints Count="2">
+    <BreakPoints Count="4">
       <Item1>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="mainformunit.pas"/>
-        <Line Value="267"/>
+        <Line Value="269"/>
       </Item1>
       <Item2>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="mainformunit.pas"/>
-        <Line Value="246"/>
+        <Line Value="230"/>
       </Item2>
+      <Item3>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="mainformunit.pas"/>
+        <Line Value="238"/>
+      </Item3>
+      <Item4>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="mainformunit.pas"/>
+        <Line Value="264"/>
+      </Item4>
     </BreakPoints>
   </Debugging>
 </CONFIG>

@@ -17,7 +17,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="2"/>
+      <BuildNr Value="3"/>
       <Attributes pvaPreRelease="True"/>
       <StringTable CompanyName="StephenJSepan" FileDescription="LazarusGuiTemplate" LegalCopyright="Copyright 2019 Stephen J Sepan All Rights Reserved" ProductName="Lazarus GUI Template"/>
     </VersionInfo>
@@ -46,7 +46,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="3">
+    <Units Count="4">
       <Unit0>
         <Filename Value="FormProject.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -60,10 +60,14 @@
         <UnitName Value="MainFormUnit"/>
       </Unit1>
       <Unit2>
-        <Filename Value="ssepan.laz.utility.pas"/>
+        <Filename Value="ssepan_laz_application.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="Ssepan.Laz.utility"/>
       </Unit2>
+      <Unit3>
+        <Filename Value="ssepan_laz_utility.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Ssepan_Laz_Utility"/>
+      </Unit3>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
