@@ -255,16 +255,18 @@ begin
        finally
          //always do something
          TAction(Sender).Enabled := True;
-         lblStatusMessage.Caption:=sStatusMessage;
-         {objStatusBarViewModel.}//StopProgressBar(sStatusMessage)
+         ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage);
        end;
 
      except
        on E: Exception do
-          lblErrorMessage.Caption:='FileNew failed: ' + E.Message;
-       //Debug Log.FormatError(Error.Text, Error.Where, Error.BackTrace)
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'FileNew' , E.HelpContext.ToString);
+          ssepan_laz_application.StopProgressBar('', 'FileNew failed.', lblStatusMessage, lblErrorMessage);
+          WriteLn(sErrorMessage);
+       //Debug.Log.FormatError(Error.Text, Error.Where, Error.BackTrace)
+       end;
 
-       {objStatusBarViewModel.}//StopProgressBar(Null, 'FileNew failed.')
      end;
 
 end;
