@@ -89,10 +89,11 @@ begin
     finally
       //    'give the app time to draw the eye-candy, even if its only for an instant
       //    Wait
+      Application.ProcessMessages;
     end;
   except
     on E: Exception do
-      WriteLn(FormatErrorForLog(E.Message , 'StartProgressBarWithPicture' , E.HelpContext.ToString));
+      LogErrorToFile(FormatErrorForLog(E.Message , 'StartProgressBarWithPicture' , E.HelpContext.ToString));
     //
     //    Error.Propagate 'Throw  }
   end;
@@ -130,12 +131,13 @@ begin
 
 
     finally
-    //'give the app time to draw the eye-candy, even if its only for an instant
-    //Wait
+      //'give the app time to draw the eye-candy, even if its only for an instant
+      //Wait
+        Application.ProcessMessages;
     end;
   except
     on E: Exception do
-      WriteLn(FormatErrorForLog(E.Message , 'UpdateProgressBar' , E.HelpContext.ToString));
+      LogErrorToFile(FormatErrorForLog(E.Message , 'UpdateProgressBar' , E.HelpContext.ToString));
     //
     //    Error.Propagate //Throw
   end;
@@ -177,11 +179,12 @@ begin
     finally
       //    'give the app time to draw the eye-candy, even if its only for an instant
       //    Wait 'Application.DoEvents();
+      Application.ProcessMessages;
     end;
 
   except
     on E: Exception do
-      WriteLn(FormatErrorForLog(E.Message , 'UpdateStatusBarMessages' , E.HelpContext.ToString));
+      LogErrorToFile(FormatErrorForLog(E.Message , 'UpdateStatusBarMessages' , E.HelpContext.ToString));
     //
     //    Error.Propagate 'Throw
   end;
@@ -239,11 +242,12 @@ begin
         finally
           //    'give the app time to draw the eye-candy, even if its only for an instant
           //    Wait 'Application.DoEvents();
+          Application.ProcessMessages;
         end;
 
      except
        on E: Exception do
-         WriteLn(FormatErrorForLog(E.Message , 'StopProgressBar' , E.HelpContext.ToString));
+         LogErrorToFile(FormatErrorForLog(E.Message , 'StopProgressBar' , E.HelpContext.ToString));
          //
          //    Error.Propagate 'Throw
      end;

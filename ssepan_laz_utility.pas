@@ -5,7 +5,7 @@ unit Ssepan_Laz_Utility;
 interface
 
 uses
-  Classes, SysUtils;//,Controls,Forms,ComCtrls,StdCtrls, ExtCtrls;
+  Classes, SysUtils,LazLoggerBase;//,Controls,Forms,ComCtrls,StdCtrls, ExtCtrls;
 
 //type
 
@@ -13,6 +13,7 @@ uses
 //function z():Boolean;
 //Function FormatErrorForScreen(sMessage : String, sContext : String, sHelp : String) : String;
 Function FormatErrorForLog(sMessage , sContext , sHelp : String) : String;
+Procedure LogErrorToFile(sMessage: String);
 
 implementation
 
@@ -44,10 +45,27 @@ begin
     end;
     except
       on E: Exception do
-        WriteLn(E.Message);
-        //FormatErrorForLog:='';
+        LogErrorToFile(E.Message);
     end;
 End;
+
+Procedure LogErrorToFile(sMessage: String);
+begin
+  try
+    try
+      //TODO:write to log
+      DebugLn(sMessage);
+
+    finally
+       //also write to console
+       WriteLn(sMessage);
+    end;
+    except
+      on E: Exception do
+        WriteLn(E.Message);
+    end;
+
+end;
 
 initialization
 begin

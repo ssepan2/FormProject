@@ -89,9 +89,11 @@ begin
     finally
       //    'give the app time to draw the eye-candy, even if its only for an instant
       //    Wait
+      Application.ProcessMessages;
     end;
   except
-    //    Debug Log.FormatError(Error.Text, Error.Where, Error.BackTrace)
+    on E: Exception do
+      LogErrorToFile(FormatErrorForLog(E.Message , 'StartProgressBarWithPicture' , E.HelpContext.ToString));
     //
     //    Error.Propagate 'Throw  }
   end;
@@ -129,11 +131,13 @@ begin
 
 
     finally
-    //'give the app time to draw the eye-candy, even if its only for an instant
-    //Wait
+      //'give the app time to draw the eye-candy, even if its only for an instant
+      //Wait
+        Application.ProcessMessages;
     end;
   except
-    //    Debug Log.FormatError(Error.Text, Error.Where, Error.BackTrace)
+    on E: Exception do
+      WriteLn(FormatErrorForLog(E.Message , 'UpdateProgressBar' , E.HelpContext.ToString));
     //
     //    Error.Propagate //Throw
   end;
@@ -175,11 +179,12 @@ begin
     finally
       //    'give the app time to draw the eye-candy, even if its only for an instant
       //    Wait 'Application.DoEvents();
+      Application.ProcessMessages;
     end;
 
   except
-    //Catch 'ex As Exception
-    //    Debug Log.FormatError(Error.Text, Error.Where, Error.BackTrace)
+    on E: Exception do
+      WriteLn(FormatErrorForLog(E.Message , 'UpdateStatusBarMessages' , E.HelpContext.ToString));
     //
     //    Error.Propagate 'Throw
   end;
@@ -237,6 +242,7 @@ begin
         finally
           //    'give the app time to draw the eye-candy, even if its only for an instant
           //    Wait 'Application.DoEvents();
+          Application.ProcessMessages;
         end;
 
      except

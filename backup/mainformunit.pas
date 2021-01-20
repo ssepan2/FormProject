@@ -262,9 +262,8 @@ begin
        on E: Exception do
        begin
           sErrorMessage:=FormatErrorForLog(E.Message , 'FileNew' , E.HelpContext.ToString);
-          ssepan_laz_application.StopProgressBar('', 'FileNew failed.', lblStatusMessage, lblErrorMessage);
-          WriteLn(sErrorMessage);
-       //Debug.Log.FormatError(Error.Text, Error.Where, Error.BackTrace)
+          ssepan_laz_application.StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage);
+          LogErrorToFile(sErrorMessage);//Debug.Log sErrorMessage
        end;
 
      end;

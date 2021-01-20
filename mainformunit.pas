@@ -263,7 +263,7 @@ begin
        begin
           sErrorMessage:=FormatErrorForLog(E.Message , 'FileNew' , E.HelpContext.ToString);
           ssepan_laz_application.StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage);
-          WriteLn(sErrorMessage);//Debug.Log sErrorMessage
+          LogErrorToFile(sErrorMessage);
        end;
 
      end;
