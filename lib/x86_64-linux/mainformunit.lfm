@@ -204,7 +204,9 @@ object MainForm: TMainForm
       Top = 8
       Width = 100
       Anchors = [akRight]
+      Enabled = False
       TabOrder = 0
+      Visible = False
     end
     object imgActionIcon: TImage
       Left = 633

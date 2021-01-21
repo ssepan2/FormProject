@@ -229,19 +229,17 @@ var
    sStatusMessage:String;
    sErrorMessage:String;
 begin
-  //TODO:clear status, error messages at beginning of every action
-  //TODO:get progress bar (marquee) working, maybe with dummy proc w/ 1-3 sec delay
-  //TODO:perform sender disable/enable in all actions
-  //TODO:show action icon (where available) in status bar along with progress
    try
        try
+           //clear status, error messages at beginning of every action
           sStatusMessage:='FileNew...';
           sErrorMessage:='';
-          ssepan_laz_application.StartProgressBarWithPicture(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage);//, sbFileNew.Images[0].Image, True, 33);
-         //if Sender is TAction then
-         //begin
-           TAction(Sender).Enabled := False;
-         //end;
+          //TODO:get progress bar (marquee) working
+          //TODO:show action icon (where available) in status bar along with progress
+          ssepan_laz_application.StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, lblStatusMessage, lblErrorMessage, ProgressBar);//, sbFileNew.Images[0].Image, True, 33);
+
+          //perform sender disable/enable in all actions
+          TAction(Sender).Enabled := False;
 
          If Something() Then //TODO:FileNew
          begin
@@ -255,14 +253,14 @@ begin
        finally
          //always do something
          TAction(Sender).Enabled := True;
-         ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage);
+         ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar);
        end;
 
      except
        on E: Exception do
        begin
           sErrorMessage:=FormatErrorForLog(E.Message , 'FileNew' , E.HelpContext.ToString);
-          ssepan_laz_application.StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage);
+          ssepan_laz_application.StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar);
           LogErrorToFile(sErrorMessage);
        end;
 

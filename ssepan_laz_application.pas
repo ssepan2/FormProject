@@ -12,10 +12,10 @@ uses
 
 //procedure x();
 //function z():Boolean;
-Procedure StartProgressBarWithPicture(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel);
-procedure UpdateProgressBar(sStatusMessage : String; var ctlStatusMessage: TLabel);
+Procedure StartProgressBarWithPicture(sStatusMessage, sErrorMessage : String; isMarqueeProgressBarStyle:Boolean; var ctlStatusMessage, ctlErrorMessage: TLabel;var ctlProgressBar:TProgressBar);
+procedure UpdateProgressBar(sStatusMessage : String; var ctlStatusMessage: TLabel;var ctlProgressBar:TProgressBar);
 procedure UpdateStatusBarMessages(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel);
-procedure StopProgressBar(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel);
+procedure StopProgressBar(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel;var ctlProgressBar:TProgressBar);
 
 implementation
 
@@ -40,46 +40,40 @@ implementation
 // Picture.
 // </summary>
 // <param name="sStatusMessage"></param>
-// <param name="errorMessage"></param>
+// <param name="serrorMessage"></param>
 // <param name="objImage"></param>
 // <param name="isMarqueeProgressBarStyle"></param>
 // <param name="fProgressBarValue"></param>
-Procedure StartProgressBarWithPicture(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel);//, objImage : TImage, isMarqueeProgressBarStyle : Boolean, fProgressBarValue : Float);//,ctlProgressBar : TProgressBar,ctlActionIconTTImage)
+// <param name="ctlStatusMessage"></param>
+// <param name="ctlErrorMessage"></param>
+// <param name="ctlProgressBar"></param>
+Procedure StartProgressBarWithPicture(sStatusMessage, sErrorMessage : String; isMarqueeProgressBarStyle:Boolean; var ctlStatusMessage, ctlErrorMessage: TLabel;var ctlProgressBar:TProgressBar);//, objImage : TImage, isMarqueeProgressBarStyle : Boolean, fProgressBarValue : Float);//,ctlProgressBar : TProgressBar,ctlActionIconTTImage)
 //var
 begin
   try
     try
+       ctlProgressBar.Visible:=True;
+       ctlProgressBar.Enabled:=True;
+       if (isMarqueeProgressBarStyle) then ctlProgressBar.Style:=pbstMarquee else ctlProgressBar.Style:=pbstNormal;
+      if not (isMarqueeProgressBarStyle) then
+      begin
+          //    'set to blocks if actual percentage was used.
+          //    ctlProgressBar.Value = fProgressBarValue
+          //    'set to value if percentage used.
+          //    'if Style is not Marquee, then we are marking either a count or percentage
+          //    If fProgressBarValue > 1 Then 'ctlProgressBar.Maximum
+          //        'ctlProgressBar.Step = 1
+          //        ctlProgressBar.Value = 1
+          //    Endif
+          //
+      end;
 
-  //    {ctlProgressBar.Pulse = isMarqueeProgressBarStyle
-//    'set to blocks if actual percentage was used.
-//    ctlProgressBar.Value = fProgressBarValue
-//    'set to value if percentage used.
-//    'if Style is not Marquee, then we are marking either a count or percentage
-//    If fProgressBarValue > 1 Then 'ctlProgressBar.Maximum
-//        'ctlProgressBar.Step = 1
-//        ctlProgressBar.Value = 1
-//    Endif
-//
-    If Not (sStatusMessage=Null) Then
-    begin
-      ctlStatusMessage.Caption := sStatusMessage;
-    end
-    else
-    begin
-      ctlStatusMessage.Caption := '';
-    end;
+    if (sStatusMessage=Null) then ctlStatusMessage.Caption := '' else ctlStatusMessage.Caption := sStatusMessage;
 
-    If Not (sErrorMessage=Null) Then
-    begin
-      ctlErrorMessage.Caption := sErrorMessage;
-      ctlErrorMessage.Hint := sErrorMessage;
-    end
-    else
-    begin
-      ctlErrorMessage.Caption := '';
-      ctlErrorMessage.Hint := '';
-    end;
-//
+    if (sErrorMessage=Null) then ctlErrorMessage.Caption := '' else ctlErrorMessage.Caption := sErrorMessage;
+    ctlErrorMessage.Hint := ctlErrorMessage.Caption;
+
+    //
 //    ctlProgressBar.Visible = True
 //
 //    ctlActionIcon.Picture = objImage
@@ -106,19 +100,12 @@ End; //Sub
 // </summary>
 // <param name="sStatusMessage"></param>
 // <param name="fProgressBarValue"></param>
-procedure UpdateProgressBar(sStatusMessage : String; var ctlStatusMessage: TLabel);//, fProgressBarValue As Float)
+procedure UpdateProgressBar(sStatusMessage : String; var ctlStatusMessage: TLabel;var ctlProgressBar:TProgressBar);//, fProgressBarValue As Float)
 begin
   try
     try
 
-    If (sStatusMessage<>Null) Then
-    begin
-        ctlStatusMessage.Caption := sStatusMessage;
-    end
-    else
-    begin
-      ctlStatusMessage.Caption := '';
-    End;
+    if (sStatusMessage=Null) then ctlStatusMessage.Caption := '' else ctlStatusMessage.Caption := sStatusMessage;
 
     //if Style is not Marquee, then we are marking either a count or percentage
     //'if we are simply counting, the progress bar will periodically need to adjust the Maximum.
@@ -156,25 +143,10 @@ procedure UpdateStatusBarMessages(sStatusMessage, sErrorMessage : String; var ct
 begin
   try
     try
-      If (sStatusMessage<>Null) then
-      begin
-          ctlStatusMessage.Caption := sStatusMessage;
-      end
-      else
-      begin
-        ctlStatusMessage.Caption := '';
-      End;
+       if (sStatusMessage=Null) then ctlStatusMessage.Caption := '' else ctlStatusMessage.Caption := sStatusMessage;
 
-      If (sErrorMessage<>Null)  then
-      begin
-          ctlErrorMessage.Caption := sErrorMessage;
-          ctlErrorMessage.Hint := sErrorMessage;
-      end
-      else
-      begin
-        ctlErrorMessage.Caption := '';
-        ctlErrorMessage.Hint := '';
-      End;
+       if (sErrorMessage=Null) then ctlErrorMessage.Caption := '' else ctlErrorMessage.Caption := sErrorMessage;
+       ctlErrorMessage.Hint := ctlErrorMessage.Caption;
 
     finally
       //    'give the app time to draw the eye-candy, even if its only for an instant
@@ -198,29 +170,17 @@ End; //Sub
 // </summary>
 // <param name="sStatusMessage"></param>
 // <param name="sErrorMessage">Null parameter will leave a message unchanged; "" will clear it.</param>
-procedure StopProgressBar(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel);
+procedure StopProgressBar(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel;var ctlProgressBar:TProgressBar);
 begin
     try
        try
 
-         If (sStatusMessage<>Null) then
-         begin
-             ctlStatusMessage.Caption := sStatusMessage;
-         end
-         else
-         begin
-           ctlStatusMessage.Caption := '';
-         End;
+          if (sStatusMessage=Null) then ctlStatusMessage.Caption := '' else ctlStatusMessage.Caption := sStatusMessage;
 
-        If (sErrorMessage<>Null)  then
-        begin
-            ctlErrorMessage.Caption := sErrorMessage;
-            ctlErrorMessage.Hint := sErrorMessage;
-        end
-        else
-        begin
-             //do not clear error at end of operation, clear it at start of operation
-        End;
+          //do not clear error at end of operation, clear it at start of operation
+          if (sErrorMessage=Null) then {do nothing} else ctlErrorMessage.Caption := sErrorMessage;
+          //sync
+          ctlErrorMessage.Hint := ctlErrorMessage.Caption;
 
         //    ctlProgressBar.Pulse = False
         //    'reset back to marquee (default) in case actual percentage was used
@@ -240,6 +200,9 @@ begin
         //
 
         finally
+               ctlProgressBar.Enabled:=False;
+               ctlProgressBar.Visible:=False;
+
           //    'give the app time to draw the eye-candy, even if its only for an instant
           //    Wait 'Application.DoEvents();
           Application.ProcessMessages;
