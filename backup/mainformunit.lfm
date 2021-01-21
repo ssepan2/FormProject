@@ -205,6 +205,8 @@ object MainForm: TMainForm
       Width = 100
       Anchors = [akRight]
       Enabled = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
       Visible = False
     end

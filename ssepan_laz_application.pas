@@ -12,7 +12,14 @@ uses
 
 //procedure x();
 //function z():Boolean;
-Procedure StartProgressBarWithPicture(sStatusMessage, sErrorMessage : String; isMarqueeProgressBarStyle:Boolean; iProgressBarValue:LongInt; var ctlStatusMessage, ctlErrorMessage: TLabel;var ctlProgressBar:TProgressBar);
+Procedure StartProgressBarWithPicture
+(
+          sStatusMessage, sErrorMessage : String;
+          isMarqueeProgressBarStyle, isCountProgressbar:Boolean;
+          iProgressBarValue, iProgressBarMax:LongInt;
+          var ctlStatusMessage, ctlErrorMessage: TLabel;
+          var ctlProgressBar:TProgressBar
+);
 procedure UpdateProgressBar(sStatusMessage : String; var ctlStatusMessage: TLabel;var ctlProgressBar:TProgressBar);
 procedure UpdateStatusBarMessages(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel);
 procedure StopProgressBar(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel;var ctlProgressBar:TProgressBar);
@@ -42,7 +49,9 @@ implementation
 // <param name="sStatusMessage"></param>
 // <param name="serrorMessage"></param>
 // <param name="isMarqueeProgressBarStyle"></param>
-// <param name="fProgressBarValue"></param>
+// <param name="isCountProgressbar"></param>
+// <param name="iProgressBarValue"></param>
+// <param name="iProgressBarMax">ignored when using marquee or using normal and not count (i.e. - percentage); defaults to 100</param>
 // <param name="ctlStatusMessage"></param>
 // <param name="ctlErrorMessage"></param>
 // <param name="ctlProgressBar"></param>
@@ -50,8 +59,8 @@ implementation
 Procedure StartProgressBarWithPicture
 (
   sStatusMessage, sErrorMessage : String;
-  isMarqueeProgressBarStyle:Boolean;
-  iProgressBarValue:LongInt;
+  isMarqueeProgressBarStyle, isCountProgressbar:Boolean;
+  iProgressBarValue, iProgressBarMax:LongInt;
   var ctlStatusMessage, ctlErrorMessage: TLabel;
   var ctlProgressBar:TProgressBar
 );//, objImage : TImage, ;ctlActionIcon:TImage)
@@ -61,29 +70,40 @@ begin
     try
        ctlProgressBar.Visible:=True;
        ctlProgressBar.Enabled:=True;
+
        if (isMarqueeProgressBarStyle) then
        begin
             //marquee
             ctlProgressBar.Style:=pbstMarquee;
+            ctlProgressBar.Max:=100;//
             ctlProgressBar.Step := 1;//
             ctlProgressBar.Position := 33;//one third
        end
        else
        begin
             //progress
+            //if Style is not Marquee, then we are marking either a count or percentage
             ctlProgressBar.Style:=pbstNormal;
-            //set to blocks if actual percentage was used.
-            ctlProgressBar.Smooth:=False;
+            if (isCountProgressbar) then
+            begin
+                 //count
+                 //set to smooth if count was used.
+                 ctlProgressBar.Smooth:=True;
+                 ctlProgressBar.Max:=iProgressBarMax;
 
-            //set to value if percentage used.
+            end
+            else
+            begin
+                 //percentage
+                 //set to blocks if actual percentage was used.
+                 ctlProgressBar.Smooth:=False;
+                 ctlProgressBar.Max:=100;//
+
+            end;
+
+            //set to value if percentage or count used.
+            ctlProgressBar.Step := 1;
             ctlProgressBar.Position := iProgressBarValue;
-            //    'if Style is not Marquee, then we are marking either a count or percentage
-            //    If iProgressBarValue > 1 Then 'ctlProgressBar.Maximum
-            //        'ctlProgressBar.Step := 1;
-            //        ctlProgressBar.Position := 1;
-            //    Endif
-            //
-
        end;
 
       if (sStatusMessage=Null) then ctlStatusMessage.Caption := '' else ctlStatusMessage.Caption := sStatusMessage;
