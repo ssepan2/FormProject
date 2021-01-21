@@ -12,7 +12,7 @@ uses
 
 //procedure x();
 //function z():Boolean;
-Procedure StartProgressBarWithPicture(sStatusMessage, sErrorMessage : String; isMarqueeProgressBarStyle:Boolean; var ctlStatusMessage, ctlErrorMessage: TLabel;var ctlProgressBar:TProgressBar);
+Procedure StartProgressBarWithPicture(sStatusMessage, sErrorMessage : String; isMarqueeProgressBarStyle:Boolean; fProgressBarValue:real; var ctlStatusMessage, ctlErrorMessage: TLabel;var ctlProgressBar:TProgressBar);
 procedure UpdateProgressBar(sStatusMessage : String; var ctlStatusMessage: TLabel;var ctlProgressBar:TProgressBar);
 procedure UpdateStatusBarMessages(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel);
 procedure StopProgressBar(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel;var ctlProgressBar:TProgressBar);
@@ -41,47 +41,65 @@ implementation
 // </summary>
 // <param name="sStatusMessage"></param>
 // <param name="serrorMessage"></param>
-// <param name="objImage"></param>
 // <param name="isMarqueeProgressBarStyle"></param>
 // <param name="fProgressBarValue"></param>
 // <param name="ctlStatusMessage"></param>
 // <param name="ctlErrorMessage"></param>
 // <param name="ctlProgressBar"></param>
-Procedure StartProgressBarWithPicture(sStatusMessage, sErrorMessage : String; isMarqueeProgressBarStyle:Boolean; var ctlStatusMessage, ctlErrorMessage: TLabel;var ctlProgressBar:TProgressBar);//, objImage : TImage, isMarqueeProgressBarStyle : Boolean, fProgressBarValue : Float);//,ctlProgressBar : TProgressBar,ctlActionIconTTImage)
+//// <param name="objImage"></param>
+Procedure StartProgressBarWithPicture
+(
+  sStatusMessage, sErrorMessage : String;
+  isMarqueeProgressBarStyle:Boolean;
+  fProgressBarValue:real;
+  var ctlStatusMessage, ctlErrorMessage: TLabel;
+  var ctlProgressBar:TProgressBar
+);//, objImage : TImage, ;ctlActionIcon:TImage)
 //var
 begin
   try
     try
+       ctlProgressBar.Visible:=True;
        ctlProgressBar.Enabled:=True;
-       if (isMarqueeProgressBarStyle) then ctlProgressBar.Style:=pbstMarquee else ctlProgressBar.Style:=pbstNormal;
-      if not (isMarqueeProgressBarStyle) then
-      begin
-          //    'set to blocks if actual percentage was used.
-          //    ctlProgressBar.Value = fProgressBarValue
-          //    'set to value if percentage used.
-          //    'if Style is not Marquee, then we are marking either a count or percentage
-          //    If fProgressBarValue > 1 Then 'ctlProgressBar.Maximum
-          //        'ctlProgressBar.Step = 1
-          //        ctlProgressBar.Value = 1
-          //    Endif
-          //
-      end;
+       if (isMarqueeProgressBarStyle) then
+       begin
+            //marquee
+            ctlProgressBar.Style:=pbstMarquee;
+            ctlProgressBar.Step := 1;//
+            ctlProgressBar.Position := 33;//one third
+       end
+       else
+       begin
+            //progress
+            ctlProgressBar.Style:=pbstNormal;
+            //set to blocks if actual percentage was used.
+            ctlProgressBar.Smooth:=False;
 
-    if (sStatusMessage=Null) then ctlStatusMessage.Caption := '' else ctlStatusMessage.Caption := sStatusMessage;
+            //set to value if percentage used.
+            ctlProgressBar.Position := fProgressBarValue;
+            //    'if Style is not Marquee, then we are marking either a count or percentage
+            //    If fProgressBarValue > 1 Then 'ctlProgressBar.Maximum
+            //        'ctlProgressBar.Step := 1;
+            //        ctlProgressBar.Position := 1;
+            //    Endif
+            //
 
-    if (sErrorMessage=Null) then ctlErrorMessage.Caption := '' else ctlErrorMessage.Caption := sErrorMessage;
-    ctlErrorMessage.Hint := ctlErrorMessage.Caption;
+       end;
 
-    //
-//    ctlProgressBar.Visible = True
-//
-//    ctlActionIcon.Picture = objImage
-//    ctlActionIcon.Tooltip = sStatusMessage
-//    ctlActionIcon.Visible = True
-//
+      if (sStatusMessage=Null) then ctlStatusMessage.Caption := '' else ctlStatusMessage.Caption := sStatusMessage;
+
+      if (sErrorMessage=Null) then ctlErrorMessage.Caption := '' else ctlErrorMessage.Caption := sErrorMessage;
+      ctlErrorMessage.Hint := ctlErrorMessage.Caption;
+
+      //
+      //    ctlProgressBar.Visible = True
+      //
+      //    ctlActionIcon.Picture = objImage
+      //    ctlActionIcon.Tooltip = sStatusMessage
+      //    ctlActionIcon.Visible = True
+      //
     finally
-      //    'give the app time to draw the eye-candy, even if its only for an instant
-      //    Wait
+      //give the app time to draw the eye-candy, even if its only for an instant
       Application.ProcessMessages;
     end;
   except
@@ -117,8 +135,7 @@ begin
 
 
     finally
-      //'give the app time to draw the eye-candy, even if its only for an instant
-      //Wait
+      //give the app time to draw the eye-candy, even if its only for an instant
         Application.ProcessMessages;
     end;
   except
@@ -148,8 +165,7 @@ begin
        ctlErrorMessage.Hint := ctlErrorMessage.Caption;
 
     finally
-      //    'give the app time to draw the eye-candy, even if its only for an instant
-      //    Wait 'Application.DoEvents();
+      //give the app time to draw the eye-candy, even if its only for an instant
       Application.ProcessMessages;
     end;
 
@@ -199,10 +215,10 @@ begin
         //
 
         finally
-               ctlProgressBar.Enabled:=False;
+           ctlProgressBar.Enabled:=False;
+           ctlProgressBar.Visible:=False;
 
-          //    'give the app time to draw the eye-candy, even if its only for an instant
-          //    Wait 'Application.DoEvents();
+          //give the app time to draw the eye-candy, even if its only for an instant
           Application.ProcessMessages;
         end;
 

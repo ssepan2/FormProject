@@ -201,23 +201,22 @@ end;
 
 { ViewModel  }
 
-//temp
-
-procedure delayFor(const ms: double);
+{Utility}
+procedure delayFor(dt: DWORD);
 var
-   delayUntil:TDateTime;
+  tc : DWORD;
 begin
-   delayUntil:=now + ms;
+  tc := GetTickCount64;
   repeat
     application.ProcessMessages;
-  until now > delayUntil;
+  until (GetTickCount64 > tc + dt) or (Application.Terminated);
 end;
 
 function Something():Boolean;
 begin
-    Sleep(3000);//delayFor(0.001);
+    Application.ProcessMessages;
+    delayFor(3000);
     Something:=True;
-
 end;
 
 
@@ -234,6 +233,7 @@ begin
            //clear status, error messages at beginning of every action
           sStatusMessage:='FileNew...';
           sErrorMessage:='';
+
           //TODO:get progress bar (marquee) working
           //TODO:show action icon (where available) in status bar along with progress
           ssepan_laz_application.StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, lblStatusMessage, lblErrorMessage, ProgressBar);//, sbFileNew.Images[0].Image, True, 33);
