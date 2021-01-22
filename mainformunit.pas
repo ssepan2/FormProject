@@ -234,9 +234,8 @@ begin
           sStatusMessage:='FileNew...';
           sErrorMessage:='';
 
-          //TODO:get progress bar (marquee) working
-          //TODO:show action icon (where available) in status bar along with progress
-          ssepan_laz_application.StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFileNew.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+          //use progress bar (marquee) withaction icon (where available) in status bar
+          StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFileNew.Glyph);//, sbFileNew.Images[0].Image, True, 33);
 
           //perform sender disable/enable in all actions
           TAction(Sender).Enabled := False;
@@ -253,14 +252,14 @@ begin
        finally
          //always do something
          TAction(Sender).Enabled := True;
-         ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar);
+         ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
        end;
 
      except
        on E: Exception do
        begin
           sErrorMessage:=FormatErrorForLog(E.Message , 'FileNew' , E.HelpContext.ToString);
-          ssepan_laz_application.StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
 

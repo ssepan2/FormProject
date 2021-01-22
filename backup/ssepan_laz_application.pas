@@ -20,7 +20,7 @@ Procedure StartProgressBarWithPicture
           var ctlStatusMessage, ctlErrorMessage: TLabel;
           var ctlProgressBar:TProgressBar;
           var ctlActionIcon:TImage;
-          var objImage:TBitmap
+           objImage:TBitmap
 );
 procedure UpdateProgressBar(sStatusMessage : String; var ctlStatusMessage: TLabel;var ctlProgressBar:TProgressBar);
 procedure UpdateStatusBarMessages(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel);
@@ -45,20 +45,19 @@ implementation
 
 
 // <summary>
-// Use for Marquee-style progress bar, or when percentages must be indicated.
-// Picture.
+// Use for Marquee-style progress bar, or when percentages/count must be indicated.
 // </summary>
-// <param name="sStatusMessage"></param>
-// <param name="serrorMessage"></param>
-// <param name="isMarqueeProgressBarStyle"></param>
-// <param name="isCountProgressbar"></param>
-// <param name="iProgressBarValue"></param>
-// <param name="iProgressBarMax">ignored when using marquee or using normal and not count (i.e. - percentage); defaults to 100</param>
-// <param name="ctlStatusMessage"></param>
-// <param name="ctlErrorMessage"></param>
-// <param name="ctlProgressBar"></param>
+// <param name="sStatusMessage">String</param>
+// <param name="serrorMessage">String</param>
+// <param name="isMarqueeProgressBarStyle">Boolean</param>
+// <param name="isCountProgressbar">Boolean</param>
+// <param name="iProgressBarValue">LongInt</param>
+// <param name="iProgressBarMax">LongInt. ignored when using marquee or using normal and not count (i.e. - percentage); defaults to 100</param>
+// <param name="ctlStatusMessage">TLabel</param>
+// <param name="ctlErrorMessage">TLabel</param>
+// <param name="ctlProgressBar">TProgressBar</param>
 // <param name="ctlActionIcon">TImage</param>
-// <param name="objImage">TPicture</param>
+// <param name="objImage">TBitmap</param>
 Procedure StartProgressBarWithPicture
 (
   sStatusMessage, sErrorMessage : String;
@@ -67,9 +66,8 @@ Procedure StartProgressBarWithPicture
   var ctlStatusMessage, ctlErrorMessage: TLabel;
   var ctlProgressBar:TProgressBar;
   var ctlActionIcon:TImage;
-  var objImage:TBitmap
+   objImage:TBitmap
 );
-//var
 begin
   try
     try
@@ -116,9 +114,7 @@ begin
       if (sErrorMessage=Null) then ctlErrorMessage.Caption := '' else ctlErrorMessage.Caption := sErrorMessage;
       ctlErrorMessage.Hint := ctlErrorMessage.Caption;
 
-      if objImage.HandleAllocated then
-         ctlActionIcon.Picture.Assign(objImage);
-      //ctlActionIcon.Picture := objImage.ToPicture();
+      if objImage.HandleAllocated then ctlActionIcon.Picture.Assign(objImage);
       ctlActionIcon.Hint := sStatusMessage;
       ctlActionIcon.Visible := True;
     finally
@@ -131,16 +127,22 @@ begin
     //
     //    Error.Propagate 'Throw  }
   end;
-End; //Sub
+End; //procedure
 
 
 
 // <summary>
 // Update percentage changes.
 // </summary>
-// <param name="sStatusMessage"></param>
-// <param name="fProgressBarValue"></param>
-procedure UpdateProgressBar(sStatusMessage : String; var ctlStatusMessage: TLabel;var ctlProgressBar:TProgressBar);//, fProgressBarValue As Float)
+// <param name="sStatusMessage">String</param>
+// <param name="ctlStatusMessage">TLabel</param>
+// <param name="ctlProgressBar">TProgressBar</param>
+procedure UpdateProgressBar
+(
+          sStatusMessage : String;
+          var ctlStatusMessage: TLabel;
+          var ctlProgressBar:TProgressBar
+);//, fProgressBarValue As Float)
 begin
   try
     try
@@ -173,12 +175,16 @@ end; //Sub
 // Update message(s) only, without changing progress bar.
 // Null parameter will leave a message unchanged;
 // "" will clear it.
-// Optional doEvents flag will determine if
-// messages are processed before continuing.
 // </summary>
-// <param name="sStatusMessage"></param>
-// <param name="errorMessage"></param>
-procedure UpdateStatusBarMessages(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel);
+// <param name="sStatusMessage">String</param>
+// <param name="serrorMessage">String</param>
+// <param name="ctlStatusMessage">TLabel</param>
+// <param name="ctlErrorMessage">TLabel</param>
+procedure UpdateStatusBarMessages
+(
+          sStatusMessage, sErrorMessage : String;
+          var ctlStatusMessage, ctlErrorMessage: TLabel
+);
 begin
   try
     try
@@ -206,9 +212,19 @@ End; //Sub
 // Stop progress bar and display messages.
 // DoEvents will ensure messages are processed before continuing.
 // </summary>
-// <param name="sStatusMessage"></param>
-// <param name="sErrorMessage">Null parameter will leave a message unchanged; "" will clear it.</param>
-procedure StopProgressBar(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel;var ctlProgressBar:TProgressBar);
+// <param name="sStatusMessage">String</param>
+// <param name="serrorMessage">String</param>
+// <param name="ctlStatusMessage">TLabel</param>
+// <param name="ctlErrorMessage">TLabel</param>
+// <param name="ctlProgressBar">TProgressBar</param>
+// <param name="ctlActionIcon">TImage</param>
+procedure StopProgressBar
+(
+          sStatusMessage, sErrorMessage : String;
+          var ctlStatusMessage, ctlErrorMessage: TLabel;
+          var ctlProgressBar:TProgressBar;
+          var ctlActionIcon:TImage
+);
 begin
     try
        try
@@ -220,22 +236,10 @@ begin
           //sync
           ctlErrorMessage.Hint := ctlErrorMessage.Caption;
 
-        //    ctlProgressBar.Pulse = False
-        //    'reset back to marquee (default) in case actual percentage was used
-        //    'ctlProgressBar.Maximum = 100
-        //    'ditto
-        //    ' ctlProgressBar.Step = 10
-        //    'ditto
-        //    ctlProgressBar.Value = 0
-        //    'ditto
-        //    ctlProgressBar.Visible = False
-        //    'false;
-        //    ctlActionIcon.Visible = False
-        //    ' false;
-        //
-        //    ctlActionIcon.Image = Null
-        //    ctlActionIcon.Tooltip = Null
-        //
+          ctlProgressBar.Enabled:=False;
+          ctlProgressBar.Visible:=False;
+
+          ctlActionIcon.Visible := False;
 
         finally
            ctlProgressBar.Enabled:=False;

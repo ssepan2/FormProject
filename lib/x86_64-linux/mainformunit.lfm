@@ -239,6 +239,7 @@ object MainForm: TMainForm
         CC94B8E8BDEF2F97BEF8B1E8F71BB7C47F999B1FD77A0000000049454E44AE42
         6082
       }
+      Visible = False
     end
     object imgDirtyIcon: TImage
       Left = 657
@@ -270,6 +271,7 @@ object MainForm: TMainForm
         CC94B8E8BDEF2F97BEF8B1E8F71BB7C47F999B1FD77A0000000049454E44AE42
         6082
       }
+      Visible = False
     end
   end
   object MainMenu: TMainMenu
