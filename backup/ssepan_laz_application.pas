@@ -219,9 +219,9 @@ procedure UpdateStatusBarMessages
 begin
   try
     try
-       if (sStatusMessage=Null) then ctlStatusMessage.Caption := '' else ctlStatusMessage.Caption := sStatusMessage;
+       if (sStatusMessage=Null) then {ctlStatusMessage.Caption := ''} else ctlStatusMessage.Caption := sStatusMessage;
 
-       if (sErrorMessage=Null) then ctlErrorMessage.Caption := '' else ctlErrorMessage.Caption := sErrorMessage;
+       if (sErrorMessage=Null) then {ctlErrorMessage.Caption := ''} else ctlErrorMessage.Caption := sErrorMessage;
        ctlErrorMessage.Hint := ctlErrorMessage.Caption;
 
     finally

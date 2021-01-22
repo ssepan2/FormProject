@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, ExtCtrls, ActnList, Buttons, IniPropStorage, DividerBevel,
+  StdCtrls, ExtCtrls, ActnList, Buttons, IniPropStorage, CheckLst, DividerBevel,
   RTTICtrls,ssepan_laz_utility,ssepan_laz_application;
 
 type
@@ -234,489 +234,1290 @@ begin
           sStatusMessage:='FileNew...';
           sErrorMessage:='';
 
-          //use progress bar (marquee) withaction icon (where available) in status bar
-          StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFileNew.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+          //use progress bar (marquee) with action icon (where available) in status bar
+          StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFileNew.Glyph);
 
           //perform sender disable/enable in all actions
           TAction(Sender).Enabled := False;
 
-         If Something() Then //TODO:FileNew
-         begin
+          If Something() Then
+          begin
              sStatusMessage := 'FileNew done.'  ;
-         end
-         Else
-         begin
+          end
+          Else
+          begin
              sStatusMessage := 'FileNew cancelled.' ;
-         End;
-
+          End;
        finally
          //always do something
          TAction(Sender).Enabled := True;
          ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
        end;
-
      except
-       on E: Exception do
-       begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'FileNew' , E.HelpContext.ToString);
-          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
-          LogErrorToFile(sErrorMessage);
-       end;
-
+         on E: Exception do
+         begin
+            sErrorMessage:=FormatErrorForLog(E.Message , 'FileNew' , E.HelpContext.ToString);
+            StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+            LogErrorToFile(sErrorMessage);
+         end;
      end;
-
 end;
 
 procedure TMainForm.ActionFileOpenOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='FileOpen';
+         //clear status, error messages at beginning of every action
+        sStatusMessage:='FileOpen...';
+        sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:FileOpen';
+        //use progress bar (marquee) with action icon (where available) in status bar
+        StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFileOpen.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+        //perform sender disable/enable in all actions
+        TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'FileOpen done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'FileOpen cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'Xxx' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
    end;
 
 end;
 
 procedure TMainForm.ActionFileSaveOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='FileSave';
+       //clear status, error messages at beginning of every action
+      sStatusMessage:='FileSave...';
+      sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:FileSave';
+      //use progress bar (marquee) with action icon (where available) in status bar
+      StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFileSave.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+      //perform sender disable/enable in all actions
+      TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'FileSave done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'FileSave cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'v' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 procedure TMainForm.ActionFileSaveAsOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='FileSaveAs';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='FileSaveAs...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:FileSaveAs';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFileSaveAs.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'FileSaveAs done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'FileSaveAs cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'FileSaveAs' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 procedure TMainForm.ActionFilePrintOnExecute(Sender: TObject);
-var sStatusMessage : String;
-
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
 
    try
      try
-     lblStatusMessage.Caption:='FilePrint';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='FilePrint...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:FilePrint';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFilePrint.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'FilePrint done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'FilePrint cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'FilePrint' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 procedure TMainForm.ActionFilePrintSetupOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='FilePrintSetup';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='FilePrintSetup...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:FilePrintSetup';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'FilePrintSetup done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'FilePrintSetup cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'FilePrintSetup' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 procedure TMainForm.ActionFileExitOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='FileExit';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='FileExit...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:FileExit';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'FileExit done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'FileExit cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'FileExit' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 {Edit}
 procedure TMainForm.ActionEditUndoOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='EditUndo';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='EditUndo...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:EditUndo';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbEditUndo.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'EditUndo done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'EditUndo cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'EditUndo' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 procedure TMainForm.ActionEditRedoOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='EditRedo';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='EditRedo...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:EditRedo';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbEditRedo.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'EditRedo done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'EditRedo cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
-   end;
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'EditRedo' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
 
-end;
-
-procedure TMainForm.ActionEditRefreshOnExecute(Sender: TObject);
-begin
-   try
-     try
-     lblStatusMessage.Caption:='EditRefresh';
-
-     except
-       lblErrorMessage.Caption:='Error:EditRefresh';
-     end;
-   finally
-     //always do something
-   end;
-
-end;
-
-procedure TMainForm.ActionEditReplaceOnExecute(Sender: TObject);
-begin
-   try
-     try
-     lblStatusMessage.Caption:='EditReplace';
-
-     except
-       lblErrorMessage.Caption:='Error:EditReplace';
-     end;
-   finally
-     //always do something
    end;
 
 end;
 
 procedure TMainForm.ActionEditSelectAllOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='EditSelectAll';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='EditSelectAll...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:EditSelectAll';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'EditSelectAll done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'EditSelectAll cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'EditSelectAll' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 procedure TMainForm.ActionEditCutOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
     try
      try
-     lblStatusMessage.Caption:='EditCut';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='EditCut...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:EditCut';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbEditCut.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'EditCut done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'EditCut cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
-   end;
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'EditCut' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
 
-end;
-
-procedure TMainForm.ActionEditFindOnExecute(Sender: TObject);
-begin
-    try
-     try
-     lblStatusMessage.Caption:='EditFind';
-
-     except
-       lblErrorMessage.Caption:='Error:EditFind';
-     end;
-   finally
-     //always do something
-   end;
-
-end;
-
-procedure TMainForm.ActionEditGoToOnExecute(Sender: TObject);
-begin
-    try
-     try
-     lblStatusMessage.Caption:='EditGoTo';
-
-     except
-       lblErrorMessage.Caption:='Error:EditGoTo';
-     end;
-   finally
-     //always do something
-   end;
-
-end;
-
-procedure TMainForm.ActionEditPasteExecute(Sender: TObject);
-begin
-    try
-     try
-     lblStatusMessage.Caption:='EditPaste';
-
-     except
-       lblErrorMessage.Caption:='Error:EditPaste';
-     end;
-   finally
-     //always do something
-   end;
-
-end;
-
-procedure TMainForm.ActionEditPasteSpecialOnExecute(Sender: TObject);
-begin
-   try
-     try
-     lblStatusMessage.Caption:='EditPasteSpecial';
-
-     except
-       lblErrorMessage.Caption:='Error:EditPasteSpecial';
-     end;
-   finally
-     //always do something
-   end;
-
-end;
-
-procedure TMainForm.ActionEditPreferencesOnExecute(Sender: TObject);
-begin
-    try
-     try
-     lblStatusMessage.Caption:='EditPreferences';
-
-     except
-       lblErrorMessage.Caption:='Error:EditPreferences';
-     end;
-   finally
-     //always do something
    end;
 
 end;
 
 procedure TMainForm.ActionEditCopyOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='EditCopy';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='EditCopy...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:EditCopy';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbEditCopy.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'EditCopy done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'EditCopy cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'EditCopy' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
+   end;
+
+end;
+
+procedure TMainForm.ActionEditPasteExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
+begin
+    try
+     try
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='EditPaste...';
+    sErrorMessage:='';
+
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbEditPaste.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'EditPaste done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'EditPaste cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+     end;
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'EditPaste' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
+   end;
+
+end;
+
+procedure TMainForm.ActionEditPasteSpecialOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
+begin
+   try
+     try
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='EditPasteSpecial...';
+    sErrorMessage:='';
+
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'EditPasteSpecial done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'EditPasteSpecial cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+     end;
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'EditPasteSpecial' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
+   end;
+
+end;
+
+procedure TMainForm.ActionEditFindOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
+begin
+    try
+     try
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='EditFind...';
+    sErrorMessage:='';
+
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbEditFind.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'EditFind done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'EditFind cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+     end;
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'EditFind' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
+   end;
+
+end;
+
+procedure TMainForm.ActionEditReplaceOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
+begin
+   try
+     try
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='EditReplace...';
+    sErrorMessage:='';
+
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbEditReplace.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'EditReplace done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'EditReplace cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+     end;
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'EditReplace' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
+   end;
+
+end;
+
+procedure TMainForm.ActionEditGoToOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
+begin
+    try
+     try
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='EditGoTo...';
+    sErrorMessage:='';
+
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'EditGoTo done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'EditGoTo cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+     end;
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'EditGoTo' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
+   end;
+
+end;
+
+procedure TMainForm.ActionEditRefreshOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
+begin
+   try
+     try
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='EditRefresh...';
+    sErrorMessage:='';
+
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbEditRefresh.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'EditRefresh done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'EditRefresh cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+     end;
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'EditRefresh' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
+   end;
+
+end;
+
+procedure TMainForm.ActionEditPreferencesOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
+begin
+    try
+     try
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='EditPreferences...';
+    sErrorMessage:='';
+
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbEditPreferences.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'EditPreferences done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'EditPreferences cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+     end;
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'EditPreferences' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 {Window}
 procedure TMainForm.ActionWindowCascadeOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='WindowCascade';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='WindowCascade...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:WindowCascade';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'WindowCascade done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'WindowCascade cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'WindowCascade' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 procedure TMainForm.ActionWindowHideExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='WindowHide';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='WindowHide...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:WindowHide';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'WindowHide done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'WindowHide cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'WindowHide' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 procedure TMainForm.ActionWindowNewWindowOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='WindowNewWindow';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='WindowNewWindow...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:WindowNewWindow';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'WindowNewWindow done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'WindowNewWindow cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'WindowNewWindow' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 procedure TMainForm.ActionWindowShowExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
     try
      try
-     lblStatusMessage.Caption:='WindowShow';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='WindowShow...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:WindowShow';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'WindowShow done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'WindowShow cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'WindowShow' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 procedure TMainForm.ActionWindowTileOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='WindowTile';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='WindowTile...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:WindowTile';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'WindowTile done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'WindowTile cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'WindowTile' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
-
 procedure TMainForm.ActionWindowArrangeAllExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='WindowArrangeAll';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='WindowArrangeAll...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:WindowArrangeAll';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'WindowArrangeAll done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'WindowArrangeAll cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'WindowArrangeAll' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 {Help}
 procedure TMainForm.ActionHelpHelpContentsOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='HelpHelpContents';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='HelpHelpContents...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:HelpHelpContents';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbHelpContents.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'HelpHelpContents done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'HelpHelpContents cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'HelpHelpContents' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 end;
 
 procedure TMainForm.ActionHelpHelpIndexOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='HelpHelpIndex';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='HelpHelpIndex...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:HelpHelpIndex';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'HelpHelpIndex done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'HelpHelpIndex cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'HelpHelpIndex' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 end;
 
 procedure TMainForm.ActionHelpLicenceInformationOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='HelpLicenceInformation';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='HelpLicenceInformation...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:HelpLicenceInformation';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'HelpLicenceInformation done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'HelpLicenceInformation cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'HelpLicenceInformation' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 end;
 
 procedure TMainForm.ActionHelpOnlineHelpOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='HelpOnlineHelp';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='HelpOnlineHelp...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:HelpOnlineHelp';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'HelpOnlineHelp done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'HelpOnlineHelp cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'HelpOnlineHelp' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 end;
 
 procedure TMainForm.ActionHelpCheckForUpdatesOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='HelpCheckForUpdates';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='HelpCheckForUpdates...';
+    sErrorMessage:='';
 
-     except
-       lblErrorMessage.Caption:='Error:HelpCheckForUpdates';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'HelpCheckForUpdates done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'HelpCheckForUpdates cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+       on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'HelpCheckForUpdates' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 
 end;
 
 procedure TMainForm.ActionHelpAboutOnExecute(Sender: TObject);
+var
+   sStatusMessage:String;
+   sErrorMessage:String;
 begin
    try
      try
-     lblStatusMessage.Caption:='HelpAbout';
+     //clear status, error messages at beginning of every action
+    sStatusMessage:='HelpAbout...';
+    sErrorMessage:='';
 
-     except
-       ShowMessage('Error:HelpAbout');
-       lblErrorMessage.Caption:='Error:HelpAbout';
+    //use progress bar (marquee) with action icon (where available) in status bar
+    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, MenuHelpAbout.Bitmap);//, sbFileNew.Images[0].Image, True, 33);
+
+    //perform sender disable/enable in all actions
+    TAction(Sender).Enabled := False;
+
+        If Something() Then
+        begin
+           sStatusMessage := 'HelpAbout done.'  ;
+        end
+        Else
+        begin
+           sStatusMessage := 'HelpAbout cancelled.' ;
+        End;
+     finally
+       //always do something
+       TAction(Sender).Enabled := True;
+       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
-   finally
-     //always do something
+   except
+                on E: Exception do
+       begin
+          sErrorMessage:=FormatErrorForLog(E.Message , 'HelpAbout' , E.HelpContext.ToString);
+          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          LogErrorToFile(sErrorMessage);
+       end;
+
    end;
 end;
 
