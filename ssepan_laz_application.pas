@@ -25,6 +25,8 @@ Procedure StartProgressBarWithPicture
 procedure UpdateProgressBar
 (
           sStatusMessage : String;
+          isMarqueeProgressBarStyle, isCountProgressbar:Boolean;
+          iProgressBarValue:LongInt;
           var ctlStatusMessage: TLabel;
           var ctlProgressBar:TProgressBar
 );
@@ -149,30 +151,45 @@ End; //procedure
 // <summary>
 // Update percentage changes.
 // </summary>
-// <param name="sStatusMessage">String</param>
+// <param name="sStatusMessage">String. If Null, do nothing, otherwise update.</param>
+// <param name="isMarqueeProgressBarStyle">Boolean</param>
+// <param name="isCountProgressbar">Boolean</param>
+// <param name="iProgressBarValue">LongInt. UpdateProgressBar does not manage the value, other than checking that it is within the range, and adjusting the Max for counting mode.</param>
 // <param name="ctlStatusMessage">TLabel</param>
 // <param name="ctlProgressBar">TProgressBar</param>
 procedure UpdateProgressBar
 (
           sStatusMessage : String;
+          isMarqueeProgressBarStyle, isCountProgressbar:Boolean;
+          iProgressBarValue:LongInt;
           var ctlStatusMessage: TLabel;
           var ctlProgressBar:TProgressBar
-);//, fProgressBarValue As Float)
+);
 begin
   try
     try
 
-    if (sStatusMessage=Null) then ctlStatusMessage.Caption := '' else ctlStatusMessage.Caption := sStatusMessage;
+    if (sStatusMessage=Null) then {ctlStatusMessage.Caption := ''} else ctlStatusMessage.Caption := sStatusMessage;
 
-    //if Style is not Marquee, then we are marking either a count or percentage
-    //'if we are simply counting, the progress bar will periodically need to adjust the Maximum.
-    //If fProgressBarValue > 1 Then 'ctlProgressBar.Maximum
-    //    //'ctlProgressBar.Maximum = ctlProgressBar.Maximum * 2
-    //    ctlProgressBar.Value = ctlProgressBar.Value / 2
-    //Endif
-    //
-    //ctlProgressBar.Value = fProgressBarValue
+    if (isMarqueeProgressBarStyle) then
+     begin
+          //do nothing with progressbar
+     end
+     else
+     begin
+         //update count or percentage
+          //if Style is not Marquee, then we are marking either a count or percentage
+          //if we are simply counting, the progress bar will periodically need to adjust the Maximum.
+          if (isCountProgressbar) then
+          begin
+            If (iProgressBarValue > ctlProgressBar.Max) Then
+            begin
+                 ctlProgressBar.Max := iProgressBarValue * 2;
+            end;
+          end;
 
+          ctlProgressBar.Position := iProgressBarValue;
+    end;
 
     finally
       //give the app time to draw the eye-candy, even if its only for an instant
@@ -188,8 +205,7 @@ end; //Sub
 
 // <summary>
 // Update message(s) only, without changing progress bar.
-// Null parameter will leave a message unchanged;
-// "" will clear it.
+// Null parameter will leave a message unchanged; '' will clear it.
 // </summary>
 // <param name="sStatusMessage">String</param>
 // <param name="serrorMessage">String</param>
@@ -203,9 +219,9 @@ procedure UpdateStatusBarMessages
 begin
   try
     try
-       if (sStatusMessage=Null) then ctlStatusMessage.Caption := '' else ctlStatusMessage.Caption := sStatusMessage;
+       if (sStatusMessage=Null) then {ctlStatusMessage.Caption := ''} else ctlStatusMessage.Caption := sStatusMessage;
 
-       if (sErrorMessage=Null) then ctlErrorMessage.Caption := '' else ctlErrorMessage.Caption := sErrorMessage;
+       if (sErrorMessage=Null) then {ctlErrorMessage.Caption := ''} else ctlErrorMessage.Caption := sErrorMessage;
        ctlErrorMessage.Hint := ctlErrorMessage.Caption;
 
     finally
