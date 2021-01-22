@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils,Controls,Forms,ComCtrls,
-  StdCtrls, ExtCtrls,  Ssepan_Laz_Utility;
+  StdCtrls, ExtCtrls, Graphics, Ssepan_Laz_Utility;
 
 //type
 
@@ -18,7 +18,9 @@ Procedure StartProgressBarWithPicture
           isMarqueeProgressBarStyle, isCountProgressbar:Boolean;
           iProgressBarValue, iProgressBarMax:LongInt;
           var ctlStatusMessage, ctlErrorMessage: TLabel;
-          var ctlProgressBar:TProgressBar
+          var ctlProgressBar:TProgressBar;
+          var ctlActionIcon:TImage;
+           objImage:TBitmap
 );
 procedure UpdateProgressBar(sStatusMessage : String; var ctlStatusMessage: TLabel;var ctlProgressBar:TProgressBar);
 procedure UpdateStatusBarMessages(sStatusMessage, sErrorMessage : String; var ctlStatusMessage, ctlErrorMessage: TLabel);
@@ -55,15 +57,18 @@ implementation
 // <param name="ctlStatusMessage"></param>
 // <param name="ctlErrorMessage"></param>
 // <param name="ctlProgressBar"></param>
-//// <param name="objImage"></param>
+// <param name="ctlActionIcon">TImage</param>
+// <param name="objImage">TPicture</param>
 Procedure StartProgressBarWithPicture
 (
   sStatusMessage, sErrorMessage : String;
   isMarqueeProgressBarStyle, isCountProgressbar:Boolean;
   iProgressBarValue, iProgressBarMax:LongInt;
   var ctlStatusMessage, ctlErrorMessage: TLabel;
-  var ctlProgressBar:TProgressBar
-);//, objImage : TImage, ;ctlActionIcon:TImage)
+  var ctlProgressBar:TProgressBar;
+  var ctlActionIcon:TImage;
+   objImage:TBitmap
+);
 //var
 begin
   try
@@ -87,7 +92,7 @@ begin
             if (isCountProgressbar) then
             begin
                  //count
-                 //set to smooth if count was used.
+                 //set to smooth if count is used.
                  ctlProgressBar.Smooth:=True;
                  ctlProgressBar.Max:=iProgressBarMax;
 
@@ -95,7 +100,7 @@ begin
             else
             begin
                  //percentage
-                 //set to blocks if actual percentage was used.
+                 //set to blocks if actual percentage is used.
                  ctlProgressBar.Smooth:=False;
                  ctlProgressBar.Max:=100;//
 
@@ -111,13 +116,11 @@ begin
       if (sErrorMessage=Null) then ctlErrorMessage.Caption := '' else ctlErrorMessage.Caption := sErrorMessage;
       ctlErrorMessage.Hint := ctlErrorMessage.Caption;
 
-      //
-      //    ctlProgressBar.Visible = True
-      //
-      //    ctlActionIcon.Picture = objImage
-      //    ctlActionIcon.Tooltip = sStatusMessage
-      //    ctlActionIcon.Visible = True
-      //
+      if objImage.HandleAllocated then
+         ctlActionIcon.Picture.Assign(objImage);
+      //ctlActionIcon.Picture := objImage.ToPicture();
+      ctlActionIcon.Hint := sStatusMessage;
+      ctlActionIcon.Visible := True;
     finally
       //give the app time to draw the eye-candy, even if its only for an instant
       Application.ProcessMessages;

@@ -236,7 +236,7 @@ begin
 
           //TODO:get progress bar (marquee) working
           //TODO:show action icon (where available) in status bar along with progress
-          ssepan_laz_application.StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar);//, sbFileNew.Images[0].Image, True, 33);
+          ssepan_laz_application.StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, ImageList1[0].Picture);//, sbFileNew.Images[0].Image, True, 33);
 
           //perform sender disable/enable in all actions
           TAction(Sender).Enabled := False;
