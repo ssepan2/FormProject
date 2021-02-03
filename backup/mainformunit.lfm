@@ -11,6 +11,7 @@ object MainForm: TMainForm
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
+  SessionProperties = 'Width;Height;Left;Top'
   LCLVersion = '2.0.10.0'
   object Toolbar: TToolBar
     Left = 0
@@ -1153,6 +1154,9 @@ object MainForm: TMainForm
   end
   object IniPropStorage1: TIniPropStorage
     StoredValues = <>
+    IniFileName = 'FormProject.ini'
+    IniSection = 'Main'
+    OnSaveProperties = IniPropStorageSaveProperties
     OnRestoreProperties = IniPropStorage1RestoreProperties
     Left = 16
     Top = 200

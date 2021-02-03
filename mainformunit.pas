@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, ExtCtrls, ActnList, Buttons, IniPropStorage, CheckLst, DividerBevel,
+  StdCtrls, ExtCtrls, ActnList, Buttons, IniPropStorage, {IniFiles,} CheckLst, DividerBevel,
   RTTICtrls,ssepan_laz_utility,ssepan_laz_application;
 
 type
@@ -153,6 +153,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure IniPropStorage1RestoreProperties(Sender: TObject);
+    procedure IniPropStorageSaveProperties(Sender: TObject);
   private
 
   public
@@ -179,24 +180,53 @@ end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 var
-   objIniFile:TIniPropStorage;
-   sInput:String;
+   //objIniFile:TIniPropStorage;
+   sSomeString:String;
 begin
-       {
-        objIniFile.IniFileName:='TODO';
-        objIniFile.IniSection:='TODO';
-        sInput:=objIniFile.StoredValue['TODO'];
-       }
+
+        //IniPropStorage1.IniFileName:=ExtractFilePath(Application.ExeName)+'.ini';
+        //IniPropStorage1.IniSection:='SomeSection';
+        //sSomeString:=objIniFile.StoredValue['SomeString'];
+        //ShowMessage(sSomeString);
 end;
 
 procedure TMainForm.IniPropStorage1RestoreProperties(Sender: TObject);
 begin
+  try
+    //MainForm.Left   := StrToInt(IniPropStorage1.StoredValue['Left']);
+    //MainForm.Top   := StrToInt(IniPropStorage1.StoredValue['Top']);
+    //MainForm.Width   := StrToInt(IniPropStorage1.StoredValue['Width']);
+    //MainForm.Height   := StrToInt(IniPropStorage1.StoredValue['Height']);
+  except
+      //not a critical error of values missing (""), as they will be the first time;
+      on E: Exception do
+        LogErrorToFile(FormatErrorForLog(E.Message , 'IniPropStorage1RestoreProperties' , E.HelpContext.ToString));
+  end;
+end;
 
+procedure TMainForm.IniPropStorageSaveProperties(Sender: TObject);
+begin
+  try
+  //IniPropStorage1.StoredValue['Left'] := MainForm.Left.ToString();
+  //IniPropStorage1.StoredValue['Top'] := MainForm.Top.ToString();
+  //IniPropStorage1.StoredValue['Width'] := MainForm.Width.ToString();
+  //IniPropStorage1.StoredValue['Height'] := MainForm.Height.ToString();
+  except
+      on E: Exception do
+        LogErrorToFile(FormatErrorForLog(E.Message , 'IniPropStorageSaveProperties' , E.HelpContext.ToString));
+  end;
 end;
 
 procedure TMainForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+var
+   //objIniFile:TIniPropStorage;
+   sSomeString:String;
 begin
-
+    // sSomeString:=sSomeString+'*';
+    //IniPropStorage1.IniFileName:=ExtractFilePath(Application.ExeName)+'.ini';
+    //IniPropStorage1.IniSection:='SomeSection';
+    //IniPropStorage1.StoredValue['SomeString']:=sSomeString;
+    //IniPropStorage1.Save;
 end;
 
 { ViewModel  }
