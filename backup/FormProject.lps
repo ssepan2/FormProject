@@ -7,8 +7,7 @@
       <Unit0>
         <Filename Value="FormProject.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <CursorPos X="60" Y="14"/>
+        <CursorPos X="51" Y="3"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -19,9 +18,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainFormUnit"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="197"/>
-        <CursorPos X="4" Y="223"/>
+        <TopLine Value="255"/>
+        <CursorPos X="4" Y="261"/>
         <FoldState Value=" T7FE{;G"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -33,7 +33,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="110"/>
         <CursorPos Y="147"/>
-        <UsageCount Value="126"/>
+        <UsageCount Value="135"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
@@ -43,14 +43,14 @@
         <EditorIndex Value="2"/>
         <TopLine Value="22"/>
         <CursorPos X="75" Y="28"/>
-        <UsageCount Value="106"/>
+        <UsageCount Value="115"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="mainformunit.lfm"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="54" Y="21"/>
-        <UsageCount Value="18"/>
+        <UsageCount Value="17"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit4>
       <Unit5>
@@ -58,7 +58,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="499"/>
         <CursorPos Y="526"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit5>
       <Unit6>
         <Filename Value="/usr/share/lazarus/2.0.10/lcl/propertystorage.pas"/>
@@ -66,14 +66,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="543"/>
         <CursorPos Y="572"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
       </Unit6>
       <Unit7>
         <Filename Value="/usr/share/lazarus/2.0.10/lcl/include/customform.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="3238"/>
         <CursorPos Y="3265"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit7>
       <Unit8>
         <Filename Value="/usr/share/lazarus/2.0.10/components/lazutils/lazmethodlist.pas"/>
@@ -81,10 +81,10 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="266"/>
         <CursorPos Y="314"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit8>
     </Units>
-    <JumpHistory Count="19" HistoryIndex="18">
+    <JumpHistory Count="21" HistoryIndex="20">
       <Position1>
         <Filename Value="mainformunit.pas"/>
         <Caret Line="206" TopLine="162"/>
@@ -161,6 +161,14 @@
         <Filename Value="ssepan_laz_utility.pas"/>
         <Caret Line="28" Column="75" TopLine="22"/>
       </Position19>
+      <Position20>
+        <Filename Value="mainformunit.pas"/>
+        <Caret Line="223" Column="4" TopLine="197"/>
+      </Position20>
+      <Position21>
+        <Filename Value="mainformunit.pas"/>
+        <Caret Line="791" Column="58" TopLine="759"/>
+      </Position21>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

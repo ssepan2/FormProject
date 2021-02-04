@@ -17,7 +17,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="3"/>
+      <BuildNr Value="5"/>
       <Attributes pvaPreRelease="True"/>
       <StringTable CompanyName="StephenJSepan" FileDescription="LazarusGuiTemplate" LegalCopyright="Copyright 2019 Stephen J Sepan All Rights Reserved" ProductName="Lazarus GUI Template"/>
     </VersionInfo>
