@@ -326,7 +326,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'Xxx' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'FileOpen' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -367,7 +367,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'v' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'FileSave' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;

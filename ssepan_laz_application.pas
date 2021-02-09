@@ -244,7 +244,7 @@ End; //Sub
 
 // <summary>
 // Stop progress bar and display messages.
-// DoEvents will ensure messages are processed before continuing.
+// Application.ProcessMessages will ensure messages are processed before continuing.
 // </summary>
 // <param name="sStatusMessage">String</param>
 // <param name="serrorMessage">String</param>

@@ -131,9 +131,12 @@ begin
       if (sErrorMessage=Null) then ctlErrorMessage.Caption := '' else ctlErrorMessage.Caption := sErrorMessage;
       ctlErrorMessage.Hint := ctlErrorMessage.Caption;
 
-      if objImage.HandleAllocated then ctlActionIcon.Picture.Assign(objImage);
-      ctlActionIcon.Hint := sStatusMessage;
-      ctlActionIcon.Visible := True;
+      if (objImage <> nil) then
+      begin
+        if objImage.HandleAllocated then ctlActionIcon.Picture.Assign(objImage);
+        ctlActionIcon.Hint := sStatusMessage;
+        ctlActionIcon.Visible := True;
+      end;
     finally
       //give the app time to draw the eye-candy, even if its only for an instant
       Application.ProcessMessages;

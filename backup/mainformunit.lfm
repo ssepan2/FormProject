@@ -50,8 +50,6 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionFileNew
-      Images = ImageList1
-      ImageIndex = 0
       ShowCaption = False
     end
     object sbFileOpen: TSpeedButton
@@ -60,8 +58,6 @@ object MainForm: TMainForm
       Top = 2
       Width = 22
       Action = ActionFileOpen
-      Images = ImageList1
-      ImageIndex = 1
       ShowCaption = False
     end
     object sbFileSave: TSpeedButton
@@ -450,7 +446,6 @@ object MainForm: TMainForm
       Hint = 'Save As...'
       ImageIndex = 3
       OnExecute = ActionFileSaveAsOnExecute
-      ShortCut = 16449
     end
     object ActionFilePrint: TAction
       Category = 'File'
