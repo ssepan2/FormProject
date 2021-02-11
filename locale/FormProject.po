@@ -1,0 +1,303 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: tmainform.actioneditcopy.caption
+msgid "C&opy"
+msgstr ""
+
+#: tmainform.actioneditcopy.hint
+msgid "Copy"
+msgstr ""
+
+#: tmainform.actioneditcut.caption
+msgid "C&ut"
+msgstr ""
+
+#: tmainform.actioneditcut.hint
+msgid "Cut"
+msgstr ""
+
+#: tmainform.actioneditfind.caption
+msgid "F&ind"
+msgstr ""
+
+#: tmainform.actioneditfind.hint
+msgid "Find"
+msgstr ""
+
+#: tmainform.actioneditgoto.caption
+msgid "&Go to ..."
+msgstr ""
+
+#: tmainform.actioneditgoto.hint
+msgid "Go to..."
+msgstr ""
+
+#: tmainform.actioneditpaste.caption
+msgid "P&aste"
+msgstr ""
+
+#: tmainform.actioneditpaste.hint
+msgid "Paste"
+msgstr ""
+
+#: tmainform.actioneditpastespecial.caption
+msgid "Paste &Special..."
+msgstr ""
+
+#: tmainform.actioneditpastespecial.hint
+msgid "Paste Special"
+msgstr ""
+
+#: tmainform.actioneditpreferences.caption
+msgid "Prefere&nces..."
+msgstr ""
+
+#: tmainform.actioneditpreferences.hint
+msgid "Preferences..."
+msgstr ""
+
+#: tmainform.actioneditredo.caption
+msgid "&Redo"
+msgstr ""
+
+#: tmainform.actioneditredo.hint
+msgid "Redo"
+msgstr ""
+
+#: tmainform.actioneditrefresh.caption
+msgid "R&efresh"
+msgstr ""
+
+#: tmainform.actioneditrefresh.hint
+msgid "Refresh"
+msgstr ""
+
+#: tmainform.actioneditreplace.caption
+msgid "R&eplace..."
+msgstr ""
+
+#: tmainform.actioneditreplace.hint
+msgid "Replace..."
+msgstr ""
+
+#: tmainform.actioneditselectall.caption
+msgid "Select &All"
+msgstr ""
+
+#: tmainform.actioneditselectall.hint
+msgid "Select All"
+msgstr ""
+
+#: tmainform.actioneditundo.caption
+msgid "&Undo"
+msgstr ""
+
+#: tmainform.actioneditundo.hint
+msgid "Undo"
+msgstr ""
+
+#: tmainform.actionfileexit.caption
+msgid "E&xit"
+msgstr ""
+
+#: tmainform.actionfileexit.hint
+msgid "Exit"
+msgstr ""
+
+#: tmainform.actionfilenew.caption
+msgid "&New"
+msgstr ""
+
+#: tmainform.actionfilenew.hint
+msgid "New"
+msgstr ""
+
+#: tmainform.actionfileopen.caption
+msgid "&Open..."
+msgstr ""
+
+#: tmainform.actionfileopen.hint
+msgid "Open..."
+msgstr ""
+
+#: tmainform.actionfileprint.caption
+msgid "&Print"
+msgstr ""
+
+#: tmainform.actionfileprint.hint
+msgid "Print"
+msgstr ""
+
+#: tmainform.actionfileprintsetup.caption
+msgid "P&rint Setup ..."
+msgstr ""
+
+#: tmainform.actionfileprintsetup.hint
+msgid "Print Setup..."
+msgstr ""
+
+#: tmainform.actionfilesave.caption
+msgid "&Save"
+msgstr ""
+
+#: tmainform.actionfilesave.hint
+msgid "File Save"
+msgstr ""
+
+#: tmainform.actionfilesaveas.caption
+msgid "Save &As..."
+msgstr ""
+
+#: tmainform.actionfilesaveas.hint
+msgid "Save As..."
+msgstr ""
+
+#: tmainform.actionhelpabout.caption
+msgid "&About"
+msgstr ""
+
+#: tmainform.actionhelpabout.hint
+msgid "About"
+msgstr ""
+
+#: tmainform.actionhelpcheckforupdates.caption
+msgid "&Check for Updates"
+msgstr ""
+
+#: tmainform.actionhelpcheckforupdates.hint
+msgid "Check for Updates"
+msgstr ""
+
+#: tmainform.actionhelphelpcontents.caption
+msgid "Help &Contents"
+msgstr ""
+
+#: tmainform.actionhelphelpcontents.hint
+msgid "Help Contents"
+msgstr ""
+
+#: tmainform.actionhelphelpindex.caption
+msgid "Help &Index"
+msgstr ""
+
+#: tmainform.actionhelphelpindex.hint
+msgid "Help Index"
+msgstr ""
+
+#: tmainform.actionhelplicenceinformation.caption
+msgid "&Licence Information"
+msgstr ""
+
+#: tmainform.actionhelplicenceinformation.hint
+msgid "Licence Information"
+msgstr ""
+
+#: tmainform.actionhelponlinehelp.caption
+msgid "&Online Help"
+msgstr ""
+
+#: tmainform.actionhelponlinehelp.hint
+msgid "Online Help"
+msgstr ""
+
+#: tmainform.actionwindowarrangeall.caption
+msgid "&Arrange All"
+msgstr ""
+
+#: tmainform.actionwindowarrangeall.hint
+msgid "Arrange All"
+msgstr ""
+
+#: tmainform.actionwindowcascade.caption
+msgid "&Cascade"
+msgstr ""
+
+#: tmainform.actionwindowcascade.hint
+msgid "Cascade"
+msgstr ""
+
+#: tmainform.actionwindowhide.caption
+msgid "&Hide"
+msgstr ""
+
+#: tmainform.actionwindowhide.hint
+msgid "Hide"
+msgstr ""
+
+#: tmainform.actionwindownewwindow.caption
+msgid "&New Window"
+msgstr ""
+
+#: tmainform.actionwindownewwindow.hint
+msgid "New Window"
+msgstr ""
+
+#: tmainform.actionwindowshow.caption
+msgid "&Show"
+msgstr ""
+
+#: tmainform.actionwindowshow.hint
+msgid "Show"
+msgstr ""
+
+#: tmainform.actionwindowtile.caption
+msgid "&Tile"
+msgstr ""
+
+#: tmainform.actionwindowtile.hint
+msgid "Tile"
+msgstr ""
+
+#: tmainform.caption
+msgid "MainForm"
+msgstr ""
+
+#: tmainform.dividerbevel1.caption
+msgid "DividerBevel1"
+msgstr ""
+
+#: tmainform.dividerbevel2.caption
+msgid "DividerBevel2"
+msgstr ""
+
+#: tmainform.menuedit.caption
+msgid "&Edit"
+msgstr ""
+
+#: tmainform.menueditpaste.caption
+msgid "&Paste"
+msgstr ""
+
+#: tmainform.menufile.caption
+msgid "&File"
+msgstr ""
+
+#: tmainform.menuhelp.caption
+msgid "&Help"
+msgstr ""
+
+#: tmainform.menuwindow.caption
+msgid "&Window"
+msgstr ""
+
+#: tmainform.somebooleancheckbox.caption
+msgid "Some Boolean:"
+msgstr ""
+
+#: tmainform.somedatelabel.caption
+msgid "Some Date:"
+msgstr ""
+
+#: tmainform.someintegerlabel.caption
+msgid "Some Integer:"
+msgstr ""
+
+#: tmainform.somestringlabel.caption
+msgid "Some String:"
+msgstr ""
+
+#: tmainform.toolbar.caption
+msgid "ToolBar"
+msgstr ""
+

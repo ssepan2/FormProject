@@ -14,10 +14,14 @@
       </XPManifest>
       <Icon Value="0"/>
     </General>
+    <i18n>
+      <EnableI18N Value="True"/>
+      <OutDir Value="locale"/>
+    </i18n>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="6"/>
+      <BuildNr Value="11"/>
       <Attributes pvaPreRelease="True"/>
       <StringTable CompanyName="StephenJSepan" FileDescription="LazarusGuiTemplate" LegalCopyright="Copyright 2019 Stephen J Sepan All Rights Reserved" ProductName="Lazarus GUI Template"/>
     </VersionInfo>
@@ -46,7 +50,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="6">
       <Unit0>
         <Filename Value="FormProject.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -68,6 +72,16 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Ssepan_Laz_Utility"/>
       </Unit3>
+      <Unit4>
+        <Filename Value="modelbase.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ModelBase"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="somemodel.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SomeModel"/>
+      </Unit5>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

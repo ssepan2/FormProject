@@ -6,8 +6,9 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, ExtCtrls, ActnList, Buttons, IniPropStorage, {IniFiles,} CheckLst, DividerBevel,
-  RTTICtrls,ssepan_laz_utility,ssepan_laz_application;
+  StdCtrls, ExtCtrls, ActnList, Buttons, IniPropStorage, CheckLst, ExtDlgs,
+  EditBtn, DividerBevel, RTTICtrls, ssepan_laz_utility, ssepan_laz_application,
+  SomeModel,DefaultTranslator ;
 
 type
 
@@ -46,9 +47,16 @@ type
     ActionFileOpen: TAction;
     ActionFileNew: TAction;
     ActionList1: TActionList;
+    SomeBooleanCheckBox: TCheckBox;
+    SomeDateDateEdit: TDateEdit;
     DividerBevel1: TDividerBevel;
     DividerBevel2: TDividerBevel;
+    SomeStringEdit: TEdit;
+    SomeIntegerEdit: TEdit;
     IniPropStorage1: TIniPropStorage;
+    SomeStringLabel: TLabel;
+    SomeIntegerLabel: TLabel;
+    SomeDateLabel: TLabel;
     sbEditCopy: TSpeedButton;
     sbEditCut: TSpeedButton;
     sbEditFind: TSpeedButton;
@@ -426,15 +434,15 @@ begin
 
    try
      try
-     //clear status, error messages at beginning of every action
-    sStatusMessage:='FilePrint...';
-    sErrorMessage:='';
+         //clear status, error messages at beginning of every action
+        sStatusMessage:='FilePrint...';
+        sErrorMessage:='';
 
-    //use progress bar (marquee) with action icon (where available) in status bar
-    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFilePrint.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+        //use progress bar (marquee) with action icon (where available) in status bar
+        StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFilePrint.Glyph);//, sbFileNew.Images[0].Image, True, 33);
 
-    //perform sender disable/enable in all actions
-    TAction(Sender).Enabled := False;
+        //perform sender disable/enable in all actions
+        TAction(Sender).Enabled := False;
 
         If Something() Then
         begin
@@ -510,24 +518,25 @@ var
 begin
    try
      try
-     //clear status, error messages at beginning of every action
-    sStatusMessage:='FileExit...';
-    sErrorMessage:='';
+         //clear status, error messages at beginning of every action
+        sStatusMessage:='FileExit...';
+        sErrorMessage:='';
 
-    //use progress bar (marquee) with action icon (where available) in status bar
-    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+        //use progress bar (marquee) with action icon (where available) in status bar
+        StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
 
-    //perform sender disable/enable in all actions
-    TAction(Sender).Enabled := False;
+        //perform sender disable/enable in all actions
+        TAction(Sender).Enabled := False;
 
-        If Something() Then
-        begin
-           sStatusMessage := 'FileExit done.'  ;
-        end
-        Else
-        begin
-           sStatusMessage := 'FileExit cancelled.' ;
-        End;
+        Self.Close();
+        //If Something() Then
+        //begin
+        //   sStatusMessage := 'FileExit done.'  ;
+        //end
+        //Else
+        //begin
+        //   sStatusMessage := 'FileExit cancelled.' ;
+        //End;
      finally
        //always do something
        TAction(Sender).Enabled := True;
@@ -1522,7 +1531,20 @@ begin
     sErrorMessage:='';
 
     //use progress bar (marquee) with action icon (where available) in status bar
-    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, MenuHelpAbout.Bitmap);//, sbFileNew.Images[0].Image, True, 33);
+    StartProgressBarWithPicture
+    (
+     sStatusMessage,
+     sErrorMessage,
+     True,
+     False,
+     0,
+     100,
+     lblStatusMessage,
+     lblErrorMessage,
+     ProgressBar,
+     imgActionIcon,
+     MenuHelpAbout.Bitmap
+     );//, sbFileNew.Images[0].Image, True, 33);
 
     //perform sender disable/enable in all actions
     TAction(Sender).Enabled := False;
@@ -1538,13 +1560,29 @@ begin
      finally
        //always do something
        TAction(Sender).Enabled := True;
-       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+       StopProgressBar
+       (
+        sStatusMessage,
+        sErrorMessage,
+        lblStatusMessage,
+        lblErrorMessage,
+        ProgressBar,
+        imgActionIcon
+        );
      end;
    except
-                on E: Exception do
+         on E: Exception do
        begin
           sErrorMessage:=FormatErrorForLog(E.Message , 'HelpAbout' , E.HelpContext.ToString);
-          StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+          StopProgressBar
+          (
+           '',
+           sErrorMessage,
+           lblStatusMessage,
+           lblErrorMessage,
+           ProgressBar,
+           imgActionIcon
+           );
           LogErrorToFile(sErrorMessage);
        end;
 

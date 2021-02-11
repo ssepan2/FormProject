@@ -7,7 +7,8 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, lazcontrols, runtimetypeinfocontrols, MainFormUnit, Ssepan.Laz.utility
+  Forms, lazcontrols, runtimetypeinfocontrols, MainFormUnit, Ssepan_Laz_utility,
+  SomeModel
   { you can add units after this };
 
 {$R *.res}
