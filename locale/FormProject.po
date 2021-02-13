@@ -250,7 +250,7 @@ msgid "Tile"
 msgstr ""
 
 #: tmainform.caption
-msgid "MainForm"
+msgid "FormProject"
 msgstr ""
 
 #: tmainform.dividerbevel1.caption

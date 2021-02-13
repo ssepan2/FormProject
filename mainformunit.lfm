@@ -3,7 +3,7 @@ object MainForm: TMainForm
   Height = 480
   Top = 124
   Width = 640
-  Caption = 'MainForm'
+  Caption = 'FormProject'
   ClientHeight = 457
   ClientWidth = 640
   Menu = MainMenu
@@ -303,6 +303,7 @@ object MainForm: TMainForm
     Height = 28
     Top = 40
     Width = 80
+    OnChange = SomeStringEditChange
     TabOrder = 2
   end
   object SomeIntegerEdit: TEdit
@@ -311,6 +312,7 @@ object MainForm: TMainForm
     Top = 72
     Width = 80
     NumbersOnly = True
+    OnChange = SomeIntegerEditChange
     TabOrder = 3
   end
   object SomeBooleanCheckBox: TCheckBox
@@ -320,6 +322,7 @@ object MainForm: TMainForm
     Width = 110
     BidiMode = bdRightToLeft
     Caption = 'Some Boolean:'
+    OnChange = SomeBooleanCheckBoxChange
     ParentBidiMode = False
     TabOrder = 4
   end
@@ -329,11 +332,11 @@ object MainForm: TMainForm
     Top = 128
     Width = 103
     CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
-    DefaultToday = True
     DateOrder = doNone
     ButtonWidth = 23
     NumGlyphs = 1
     MaxLength = 0
+    OnChange = SomeDateDateEditChange
     TabOrder = 5
   end
   object MainMenu: TMainMenu

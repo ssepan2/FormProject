@@ -48,9 +48,9 @@ type
     ActionFileNew: TAction;
     ActionList1: TActionList;
     SomeBooleanCheckBox: TCheckBox;
-    SomeDateDateEdit: TDateEdit;
     DividerBevel1: TDividerBevel;
     DividerBevel2: TDividerBevel;
+    SomeDateDateEdit: TDateEdit;
     SomeStringEdit: TEdit;
     SomeIntegerEdit: TEdit;
     IniPropStorage1: TIniPropStorage;
@@ -162,14 +162,23 @@ type
     procedure FormShow(Sender: TObject);
     procedure IniPropStorage1RestoreProperties(Sender: TObject);
     procedure IniPropStorageSaveProperties(Sender: TObject);
+    procedure SomeBooleanCheckBoxChange(Sender: TObject);
+    procedure SomeDateDateEditChange(Sender: TObject);
+    procedure SomeIntegerEditChange(Sender: TObject);
+    procedure SomeStringEditChange(Sender: TObject);
   private
 
   public
 
   end;
 
+const
+    APP_TITLE_FORMAT : String = '''%s'' - Lazarus FreePascal GUI Generic';
+
 var
   MainForm: TMainForm;
+  objModel : TSomeModel;
+  bStopControlEvents : Boolean;
 
 implementation
 
@@ -178,11 +187,18 @@ implementation
 { TMainForm }
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
+     bStopControlEvents := False;
+
+  
+      //temporary; do in File New action
+      objModel := TSomeModel.Create();
+      //objModel.RefreshModel(False); //to update view
 
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin
+  objModel := Nil;
 
 end;
 
@@ -196,6 +212,7 @@ begin
         //IniPropStorage1.IniSection:='SomeSection';
         //sSomeString:=objIniFile.StoredValue['SomeString'];
         //ShowMessage(sSomeString);
+
 end;
 
 procedure TMainForm.IniPropStorage1RestoreProperties(Sender: TObject);
@@ -230,7 +247,8 @@ var
    //objIniFile:TIniPropStorage;
    sSomeString:String;
 begin
-    // sSomeString:=sSomeString+'*';
+
+  // sSomeString:=sSomeString+'*';
     //IniPropStorage1.IniFileName:=ExtractFilePath(Application.ExeName)+'.ini';
     //IniPropStorage1.IniSection:='SomeSection';
     //IniPropStorage1.StoredValue['SomeString']:=sSomeString;
@@ -257,6 +275,166 @@ begin
     Something:=True;
 end;
 
+{ Events }
+  
+procedure TMainForm.SomeStringEditChange(Sender: TObject);
+var
+     sErrorMessage, formatResult:String;
+begin
+  try
+    try
+    If not bStopControlEvents Then
+    begin
+        objModel.SomeString := SomeStringEdit.Text;
+    End;
+    finally
+      //
+    end;
+    except
+      on E: Exception do
+      begin
+         sErrorMessage:=FormatErrorForLog(E.Message , 'SomeStringEditChange' , E.HelpContext.ToString);
+         LogErrorToFile(sErrorMessage);
+      end;
+    end;
+end;
+  
+procedure TMainForm.SomeIntegerEditChange(Sender: TObject);
+var
+     sErrorMessage, formatResult:String;
+     value:LongInt;
+begin
+  try
+    try
+      If not bStopControlEvents Then
+      begin
+            value := StrToInt(SomeIntegerEdit.Text);
+      End;
+    finally
+      objModel.SomeInteger := value;
+    end;
+    except
+      on E: Exception do
+      begin
+         sErrorMessage:=FormatErrorForLog(E.Message , 'SomeIntegerEditChange' , E.HelpContext.ToString);
+         LogErrorToFile(sErrorMessage);
+      end;
+    end;
+end;
+ 
+procedure TMainForm.SomeBooleanCheckBoxChange(Sender: TObject);
+var
+     sErrorMessage, formatResult:String;
+begin
+  try
+    try
+      If not bStopControlEvents Then
+      begin
+            objModel.SomeBoolean := SomeBooleanCheckBox.Checked;
+      End;
+    finally
+      //
+    end;
+    except
+      on E: Exception do
+      begin
+         sErrorMessage:=FormatErrorForLog(E.Message , 'SomeBooleanCheckBoxChange' , E.HelpContext.ToString);
+         LogErrorToFile(sErrorMessage);
+      end;
+    end;
+end;
+
+procedure TMainForm.SomeDateDateEditChange(Sender: TObject);
+var
+     sErrorMessage, formatResult:String;
+     value:TDateTime;
+begin
+  try
+    try
+      If not bStopControlEvents Then
+      begin
+            value := StrToDateTime(SomeDateDateEdit.Text);
+      End;
+    finally
+      objModel.SomeDateTime := value;
+    end;
+    except
+      on E: Exception do
+      begin
+         sErrorMessage:=FormatErrorForLog(E.Message , 'SomeDateDateEditChange' , E.HelpContext.ToString);
+         LogErrorToFile(sErrorMessage);
+      end;
+    end;
+end;
+
+{%Region PropertyChanged Handlers}
+{
+<summary>
+ Handler for PropertyChanged on the model field 'Dirty' and others.
+</summary>
+}
+procedure objModel_PropertyChanged(propertyName : String);
+var
+     sErrorMessage, formatResult:String;
+begin
+  try
+    try
+        bStopControlEvents := True;
+        //TODO:consider using Object.Lock(controlname)/Object.Unlock(controlname)
+        case propertyName  of
+            'Key':
+            begin
+                //(usually)do nothing unless Key can be directly edited
+                FmtStr(formatResult,APP_TITLE_FORMAT,[objModel.Key]);
+                MainForm.Caption := formatResult;
+                // Debug Subst(("&1: &2"), propertyName, $objModel.Key)
+            end;
+            'SomeString':
+            begin
+                MainForm.SomeStringEdit.Text := objModel.SomeString;
+                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeString)
+            end;
+            'SomeInteger':
+            begin
+                MainForm.SomeIntegerEdit.Text := IntToStr(objModel.SomeInteger);
+                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeInteger)
+            end;
+            'SomeBoolean':
+            begin
+                MainForm.SomeBooleanCheckBox.Checked := objModel.SomeBoolean;
+                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeBoolean)
+            end;
+            'SomeDateTime':
+            begin
+                MainForm.SomeDateDateEdit.Text := FormatDateTime('c',objModel.SomeDateTime);
+                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeDateTime)
+            end;
+            'Dirty':
+            begin
+                //StatusDirtyIcon.Visible = $objModel.Dirty 'use wrapper sub in viewmodel
+                //objStatusBarViewModel.SetDirtyIndicator(objModel.Dirty);
+                //Debug Subst(("&1: &2"), propertyName, $objModel.Dirty)
+            end;
+            Else
+            begin
+                FmtStr(formatResult,'unhandled event: ''%s''',[propertyName]);
+                WriteLn(formatResult);
+            end;
+        End; //case
+        //Debug Subst(("PropertyChanged handled: &1"), propertyName)
+
+    finally
+           bStopControlEvents := False;
+    end;
+    except
+      on E: Exception do
+      begin
+         sErrorMessage:=FormatErrorForLog(E.Message , 'objModel_PropertyChanged' , E.HelpContext.ToString);
+         LogErrorToFile(sErrorMessage);
+      end;
+    end;
+End;
+{%EndRegion}
 
 {Actions}
 
@@ -518,24 +696,25 @@ var
 begin
    try
      try
-     //clear status, error messages at beginning of every action
-    sStatusMessage:='FileExit...';
-    sErrorMessage:='';
+         //clear status, error messages at beginning of every action
+        sStatusMessage:='FileExit...';
+        sErrorMessage:='';
 
-    //use progress bar (marquee) with action icon (where available) in status bar
-    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+        //use progress bar (marquee) with action icon (where available) in status bar
+        StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
 
-    //perform sender disable/enable in all actions
-    TAction(Sender).Enabled := False;
+        //perform sender disable/enable in all actions
+        TAction(Sender).Enabled := False;
 
-        If Something() Then
-        begin
-           sStatusMessage := 'FileExit done.'  ;
-        end
-        Else
-        begin
-           sStatusMessage := 'FileExit cancelled.' ;
-        End;
+        Self.Close();
+        //If Something() Then
+        //begin
+        //   sStatusMessage := 'FileExit done.'  ;
+        //end
+        //Else
+        //begin
+        //   sStatusMessage := 'FileExit cancelled.' ;
+        //End;
      finally
        //always do something
        TAction(Sender).Enabled := True;

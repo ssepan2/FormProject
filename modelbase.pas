@@ -11,30 +11,39 @@ type
   TModelBase=class//(TObject)
   private
     {
-    Properties
+    Fields
     }
+
     FDirty: Boolean;
     FKey : String;
     FHandlers: TObjectList;
+    {
+    Properties
+    }
   protected
     {
     Events
     }
-    //Event PropertyChanged(propertyName : String) //: Boolean
-    procedure NotifyPropertyChanged(propertyName : String);
     {
     Properties
     }
+
     function GetDirty():Boolean;
     procedure SetDirty(Value: Boolean);
     function GetKey():String;
     procedure SetKey(Value: String);
   public
+
     {
     ctor
     }
-    constructor Create();
+    constructor Create(); virtual;
     destructor Destroy; override;
+    {
+    Events
+    }
+    procedure NotifyPropertyChanged(propertyName : String);
+
 
     {
     Methods
@@ -89,7 +98,7 @@ implementation
          FmtStr(formatResult,'PropertyChanged fired: ''%s''',[propertyName]);
          WriteLn(formatResult);
 
-         OnNotifyPropertyChanged(propertyName);
+         //OnNotifyPropertyChanged(propertyName);
          //bResult := Raise PropertyChanged(propertyName); //: BResult
          //WriteLn(bResult);
 

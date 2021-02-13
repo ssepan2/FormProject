@@ -12,12 +12,15 @@ type
     FForceNotify : Boolean; //:= False;
 
     {
-    Properties
+    Fields
     }
     FSomeString : String;// := '';
     FSomeBoolean : Boolean;// := False;
     FSomeInteger : LongInt;// := 0;
     FSomeDateTime : TDateTime;// := Now();
+    {
+    Properties
+    }
 
   protected
     {
@@ -39,10 +42,14 @@ type
     {
     ctor
     }
+    constructor Create(); override;
+    destructor Destroy; //override;
 
     {
     Properties
     }
+
+
     Property SomeString : String read GetSomeString write SetSomeString;
     Property SomeBoolean : Boolean read GetSomeBoolean write SetSomeBoolean;
     Property SomeInteger : LongInt read GetSomeInteger write SetSomeInteger;
@@ -68,6 +75,18 @@ implementation
   {
   ctor
   }
+  constructor TSomeModel.Create();
+  begin
+      Inherited Create();
+
+      WriteLn('FSomeDateTime', FSomeDateTime);
+      //FSomeDateTime:=0;
+  end;
+
+  destructor TSomeModel.Destroy;
+  begin
+       Inherited Destroy;
+  end;
 
   {
   Properties
@@ -80,14 +99,28 @@ implementation
 
   End;
   procedure TSomeModel.SetSomeString(Value : String);
+  var
+       sErrorMessage, formatResult:String;
   begin
+      try
+        try
 
-      If (FSomeString <> Value) Or FForceNotify Then
+          If (FSomeString <> Value) Or FForceNotify Then
+          begin
+              FSomeString := Value;
+              Dirty := true;
+              NotifyPropertyChanged('SomeString');
+          End;
+      finally
+        //
+      end;
+    except
+      on E: Exception do
       begin
-          FSomeString := Value;
-          Dirty := true;
-          NotifyPropertyChanged('SomeString');
-      End;
+         sErrorMessage:=FormatErrorForLog(E.Message , 'SetSomeString' , E.HelpContext.ToString);
+         LogErrorToFile(sErrorMessage);
+      end;
+    end;
 
   End;
 
@@ -98,14 +131,28 @@ implementation
 
   End;
   procedure TSomeModel.SetSomeBoolean(Value : Boolean);
+  var
+       sErrorMessage, formatResult:String;
   begin
+      try
+        try
 
-      If (FSomeBoolean <> Value) Or FForceNotify Then
+          If (FSomeBoolean <> Value) Or FForceNotify Then
+          begin
+              FSomeBoolean := Value;
+              Dirty := true;
+              NotifyPropertyChanged('SomeBoolean');
+          End;
+      finally
+        //
+      end;
+    except
+      on E: Exception do
       begin
-          FSomeBoolean := Value;
-          Dirty := true;
-          NotifyPropertyChanged('SomeBoolean');
-      End;
+         sErrorMessage:=FormatErrorForLog(E.Message , 'SetSomeBoolean' , E.HelpContext.ToString);
+         LogErrorToFile(sErrorMessage);
+      end;
+    end;
 
   End;
 
@@ -116,14 +163,28 @@ implementation
 
   End;
   procedure TSomeModel.SetSomeInteger(Value : LongInt);
+  var
+       sErrorMessage, formatResult:String;
   begin
+      try
+        try
 
-      If (FSomeInteger <> Value) Or FForceNotify Then
+          If (FSomeInteger <> Value) Or FForceNotify Then
+          begin
+              FSomeInteger := Value;
+              Dirty := true;
+              NotifyPropertyChanged('SomeInteger');
+          End;
+      finally
+        //
+      end;
+    except
+      on E: Exception do
       begin
-          FSomeInteger := Value;
-          Dirty := true;
-          NotifyPropertyChanged('SomeInteger');
-      End;
+         sErrorMessage:=FormatErrorForLog(E.Message , 'SetSomeInteger' , E.HelpContext.ToString);
+         LogErrorToFile(sErrorMessage);
+      end;
+    end;
 
   End;
 
@@ -134,14 +195,31 @@ implementation
 
   End;
   procedure TSomeModel.SetSomeDateTime(Value : TDateTime);
+  var
+       sErrorMessage, formatResult:String;
   begin
-
-      If (FSomeDateTime <> Value) Or FForceNotify Then
+    //Watch out for TDateEdit.DefaultToday set to True;
+    //causes changed property to fire before Create of TSomeModel,
+    //which causes an access violation in the corresponding set-property of the model
+    try
+      try
+         WriteLn('SetSomeDateTime');
+        If (FSomeDateTime <> Value) Or FForceNotify Then
+        begin
+            FSomeDateTime := Value ;
+            Dirty := true;
+            NotifyPropertyChanged('SetSomeDateTime');
+        End;
+      finally
+        //
+      end;
+    except
+      on E: Exception do
       begin
-          FSomeDateTime := Value ;
-          Dirty := true;
-          NotifyPropertyChanged('SomeDateTime');
-      End;
+         sErrorMessage:=FormatErrorForLog(E.Message , 'SetSomeDateTime' , E.HelpContext.ToString);
+         LogErrorToFile(sErrorMessage);
+      end;
+    end;
 
   End;
 

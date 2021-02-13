@@ -1,5 +1,5 @@
 {"version":1,"strings":[
-{"hash":134403005,"name":"tmainform.caption","sourcebytes":[77,97,105,110,70,111,114,109],"value":"MainForm"},
+{"hash":131687044,"name":"tmainform.caption","sourcebytes":[70,111,114,109,80,114,111,106,101,99,116],"value":"FormProject"},
 {"hash":191236306,"name":"tmainform.toolbar.caption","sourcebytes":[84,111,111,108,66,97,114],"value":"ToolBar"},
 {"hash":226505073,"name":"tmainform.dividerbevel1.caption","sourcebytes":[68,105,118,105,100,101,114,66,101,118,101,108,49],"value":"DividerBevel1"},
 {"hash":226505074,"name":"tmainform.dividerbevel2.caption","sourcebytes":[68,105,118,105,100,101,114,66,101,118,101,108,50],"value":"DividerBevel2"},
