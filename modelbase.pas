@@ -5,7 +5,7 @@ unit ModelBase;
 interface
 
 uses
-  Classes, SysUtils, ssepan_laz_utility;
+  Classes, SysUtils,contnrs, ssepan_laz_utility;
 
 type
   TModelBase=class//(TObject)
@@ -15,6 +15,7 @@ type
     }
     FDirty: Boolean;
     FKey : String;
+    FHandlers: TObjectList;
   protected
     {
     Events
@@ -29,7 +30,18 @@ type
     function GetKey():String;
     procedure SetKey(Value: String);
   public
+    {
+    ctor
+    }
     constructor Create();
+    destructor Destroy; override;
+
+    {
+    Methods
+    }
+    procedure AddHandler(obj: TObject);
+    procedure RemoveHandler(obj: TObject);
+    procedure OnNotifyPropertyChanged( var msg );
 
     {
     Properties
@@ -46,15 +58,20 @@ const
 implementation
 
   {
-  Constructors
+  ctor
   }
   //default constructor
   constructor TModelBase.Create();
   begin
      FDirty := false;
      FKey := KEY_NEW;
+     FHandlers := TObjectList.Create;
   end;
 
+  destructor TModelBase.Destroy;
+  begin
+       FHandlers.Free;
+  end;
   {
   Events
   }
@@ -69,23 +86,25 @@ implementation
       try
          bResult := False;
 
-         FmtStr(formatResult,'PropertyChanged fired: : ''%s''',[propertyName]);
+         FmtStr(formatResult,'PropertyChanged fired: ''%s''',[propertyName]);
          WriteLn(formatResult);
 
+         OnNotifyPropertyChanged(propertyName);
          //bResult := Raise PropertyChanged(propertyName); //: BResult
          //WriteLn(bResult);
 
-         If bResult Then
-         begin
-           FmtStr(formatResult,'PropertyChanged cancelled: : ''%s''',[propertyName]);
-           WriteLn(formatResult);
-         End;
+         //If bResult Then
+         //begin
+         //  FmtStr(formatResult,'PropertyChanged cancelled: ''%s''',[propertyName]);
+         //  WriteLn(formatResult);
+         //End;
        finally
+
        end;
        except
          on E: Exception do
          begin
-            sErrorMessage:=FormatErrorForLog(E.Message , 'SaveToSettings' , E.HelpContext.ToString);
+            sErrorMessage:=FormatErrorForLog(E.Message , 'NotifyPropertyChanged' , E.HelpContext.ToString);
             LogErrorToFile(sErrorMessage);
          end;
        end;
@@ -101,6 +120,7 @@ implementation
   procedure TModelBase.SetDirty(Value: Boolean);
   begin
     FDirty := Value;
+    NotifyPropertyChanged('Dirty');
   end;
 
   function TModelBase.GetKey():String;
@@ -110,7 +130,70 @@ implementation
   procedure TModelBase.SetKey(Value: String);
   begin
     FKey := Value;
+    NotifyPropertyChanged('Key');
   end;
+
+  {
+  Methods
+  }
+
+  procedure TModelBase.AddHandler(obj: TObject);
+  var
+    sErrorMessage, formatResult:String;
+  begin
+    try
+      try
+        if FHandlers.IndexOf(obj) = -1 then
+        begin
+             FHandlers.Add(obj);
+        end;
+
+        FmtStr(formatResult,'FHandlers.Count: ''%s''',[FHandlers.Count]);
+        WriteLn(formatResult);
+      finally
+           //
+      end;
+      except
+        on E: Exception do
+        begin
+           sErrorMessage:=FormatErrorForLog(E.Message , 'AddHandler' , E.HelpContext.ToString);
+           LogErrorToFile(sErrorMessage);
+        end;
+      end;
+  end;
+
+  procedure TModelBase.RemoveHandler(obj: TObject);
+  var
+    sErrorMessage, formatResult:String;
+  begin
+    try
+      try
+        FHandlers.Extract(obj);
+
+        FmtStr(formatResult,'FHandlers.Count: ''%s''',[FHandlers.Count]);
+        WriteLn(formatResult);
+      finally
+           //
+      end;
+      except
+        on E: Exception do
+        begin
+           sErrorMessage:=FormatErrorForLog(E.Message , 'RemoveHandler' , E.HelpContext.ToString);
+           LogErrorToFile(sErrorMessage);
+        end;
+      end;
+  end;
+
+
+  procedure TModelBase.OnNotifyPropertyChanged( var msg );
+  var handler : Pointer;
+  begin
+    for handler in FHandlers do
+    begin
+        TObject(handler).DispatchStr( msg );
+    end;
+  end;
+
 
 end.
 
