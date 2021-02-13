@@ -19,6 +19,7 @@ type
     {
     Events
     }
+    //Event PropertyChanged(propertyName : String) //: Boolean
     procedure NotifyPropertyChanged(propertyName : String);
     {
     Properties
@@ -40,8 +41,8 @@ end;
 const
  KEY_NEW = '(new)';
 
-var
-  test1:string;
+//var
+//  test1:string;
 implementation
 
   {
@@ -59,8 +60,34 @@ implementation
   }
   //re-visit http://docwiki.appmethod.com/appmethod/1.13/topics/en/Events
   //to sort out its event alternative;
-  procedure NotifyPropertyChanged(propertyName : String);
+  procedure TModelBase.NotifyPropertyChanged(propertyName : String);
+  var
+    sErrorMessage, formatResult:String;
+    bResult : Boolean;
   begin
+    try
+      try
+         bResult := False;
+
+         FmtStr(formatResult,'PropertyChanged fired: : ''%s''',[propertyName]);
+         WriteLn(formatResult);
+
+         //bResult := Raise PropertyChanged(propertyName); //: BResult
+         //WriteLn(bResult);
+
+         If bResult Then
+         begin
+              //Debug Subst(("PropertyChanged cancelled: '&1'"), propertyName);
+         End;
+       finally
+       end;
+       except
+         on E: Exception do
+         begin
+            sErrorMessage:=FormatErrorForLog(E.Message , 'SaveToSettings' , E.HelpContext.ToString);
+            LogErrorToFile(sErrorMessage);
+         end;
+       end;
   end;
 
   {
