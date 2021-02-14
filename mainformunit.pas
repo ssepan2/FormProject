@@ -8,12 +8,11 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, ExtCtrls, ActnList, Buttons, IniPropStorage, CheckLst, ExtDlgs,
   EditBtn, DividerBevel, RTTICtrls, ssepan_laz_utility, ssepan_laz_application,
-  SomeModel,DefaultTranslator ;
+  ModelBase,SomeModel,DefaultTranslator ;
 
 type
 
   { TMainForm }
-
   TMainForm = class(TForm)
     ActionWindowNewWindow: TAction;
     ActionHelpLicenceInformation: TAction;
@@ -181,7 +180,74 @@ var
   bStopControlEvents : Boolean;
 
 implementation
+{%Region PropertyChanged Handlers}
+{
+<summary>
+ Handler for PropertyChanged on the model field 'Dirty' and others.
+</summary>
+}
+procedure objModel_PropertyChanged(propertyName : String);
+var
+     sErrorMessage, formatResult:String;
+begin
+  try
+    try
+        bStopControlEvents := True;
+        //TODO:consider using Object.Lock(controlname)/Object.Unlock(controlname)
+        case propertyName  of
+            'Key':
+            begin
+                //(usually)do nothing unless Key can be directly edited
+                FmtStr(formatResult,APP_TITLE_FORMAT,[objModel.Key]);
+                MainForm.Caption := formatResult;
+                // Debug Subst(("&1: &2"), propertyName, $objModel.Key)
+            end;
+            'SomeString':
+            begin
+                MainForm.SomeStringEdit.Text := objModel.SomeString;
+                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeString)
+            end;
+            'SomeInteger':
+            begin
+                MainForm.SomeIntegerEdit.Text := IntToStr(objModel.SomeInteger);
+                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeInteger)
+            end;
+            'SomeBoolean':
+            begin
+                MainForm.SomeBooleanCheckBox.Checked := objModel.SomeBoolean;
+                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeBoolean)
+            end;
+            'SomeDateTime':
+            begin
+                MainForm.SomeDateDateEdit.Text := FormatDateTime('c',objModel.SomeDateTime);
+                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeDateTime)
+            end;
+            'Dirty':
+            begin
+                //StatusDirtyIcon.Visible = $objModel.Dirty 'use wrapper sub in viewmodel
+                //objStatusBarViewModel.SetDirtyIndicator(objModel.Dirty);
+                //Debug Subst(("&1: &2"), propertyName, $objModel.Dirty)
+            end;
+            Else
+            begin
+                FmtStr(formatResult,'unhandled event: ''%s''',[propertyName]);
+                WriteLn(formatResult);
+            end;
+        End; //case
+        //Debug Subst(("PropertyChanged handled: &1"), propertyName)
 
+    finally
+           bStopControlEvents := False;
+    end;
+    except
+      on E: Exception do
+      begin
+         sErrorMessage:=FormatErrorForLog(E.Message , 'objModel_PropertyChanged' , E.HelpContext.ToString);
+         LogErrorToFile(sErrorMessage);
+      end;
+    end;
+End;
+{%EndRegion}
 {$R *.lfm}
 
 { TMainForm }
@@ -192,6 +258,7 @@ begin
   
       //temporary; do in File New action
       objModel := TSomeModel.Create();
+      objModel.AddHandler(@objModel_PropertyChanged);
       objModel.RefreshModel(False); //to update view
 
 end;
@@ -366,75 +433,6 @@ begin
       end;
     end;
 end;
-
-{%Region PropertyChanged Handlers}
-{
-<summary>
- Handler for PropertyChanged on the model field 'Dirty' and others.
-</summary>
-}
-procedure objModel_PropertyChanged(propertyName : String);
-var
-     sErrorMessage, formatResult:String;
-begin
-  try
-    try
-        bStopControlEvents := True;
-        //TODO:consider using Object.Lock(controlname)/Object.Unlock(controlname)
-        case propertyName  of
-            'Key':
-            begin
-                //(usually)do nothing unless Key can be directly edited
-                FmtStr(formatResult,APP_TITLE_FORMAT,[objModel.Key]);
-                MainForm.Caption := formatResult;
-                // Debug Subst(("&1: &2"), propertyName, $objModel.Key)
-            end;
-            'SomeString':
-            begin
-                MainForm.SomeStringEdit.Text := objModel.SomeString;
-                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeString)
-            end;
-            'SomeInteger':
-            begin
-                MainForm.SomeIntegerEdit.Text := IntToStr(objModel.SomeInteger);
-                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeInteger)
-            end;
-            'SomeBoolean':
-            begin
-                MainForm.SomeBooleanCheckBox.Checked := objModel.SomeBoolean;
-                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeBoolean)
-            end;
-            'SomeDateTime':
-            begin
-                MainForm.SomeDateDateEdit.Text := FormatDateTime('c',objModel.SomeDateTime);
-                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeDateTime)
-            end;
-            'Dirty':
-            begin
-                //StatusDirtyIcon.Visible = $objModel.Dirty 'use wrapper sub in viewmodel
-                //objStatusBarViewModel.SetDirtyIndicator(objModel.Dirty);
-                //Debug Subst(("&1: &2"), propertyName, $objModel.Dirty)
-            end;
-            Else
-            begin
-                FmtStr(formatResult,'unhandled event: ''%s''',[propertyName]);
-                WriteLn(formatResult);
-            end;
-        End; //case
-        //Debug Subst(("PropertyChanged handled: &1"), propertyName)
-
-    finally
-           bStopControlEvents := False;
-    end;
-    except
-      on E: Exception do
-      begin
-         sErrorMessage:=FormatErrorForLog(E.Message , 'objModel_PropertyChanged' , E.HelpContext.ToString);
-         LogErrorToFile(sErrorMessage);
-      end;
-    end;
-End;
-{%EndRegion}
 
 {Actions}
 
@@ -1160,15 +1158,18 @@ var
 begin
    try
      try
-     //clear status, error messages at beginning of every action
-    sStatusMessage:='EditRefresh...';
-    sErrorMessage:='';
+         //clear status, error messages at beginning of every action
+        sStatusMessage:='EditRefresh...';
+        sErrorMessage:='';
 
-    //use progress bar (marquee) with action icon (where available) in status bar
-    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbEditRefresh.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+        //use progress bar (marquee) with action icon (where available) in status bar
+        StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbEditRefresh.Glyph);//, sbFileNew.Images[0].Image, True, 33);
 
-    //perform sender disable/enable in all actions
-    TAction(Sender).Enabled := False;
+        //perform sender disable/enable in all actions
+        TAction(Sender).Enabled := False;
+
+        //TODO:replace Something() with this?
+        objModel.RefreshModel(False); //to update view
 
         If Something() Then
         begin

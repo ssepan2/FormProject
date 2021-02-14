@@ -12,3 +12,6 @@ Error: Access violation\r\nContext: SetSomeDateTime\r\nHelp:0.
 Error: Access violation\r\nContext: SetSomeDateTime\r\nHelp:0.
 Error: Access violation\r\nContext: SetSomeDateTime\r\nHelp:0.
 Error: Access violation\r\nContext: SetSomeDateTime\r\nHelp:0.
+Error: Invalid argument index in format "FHandlers.Count: '%s'"\r\nContext: AddHandler\r\nHelp:0.
+Error: Invalid argument index in format "FHandlers.Count: '%s'"\r\nContext: AddHandler\r\nHelp:0.
+Error: Invalid argument index in format "FHandlers.Count: '%s'"\r\nContext: AddHandler\r\nHelp:0.

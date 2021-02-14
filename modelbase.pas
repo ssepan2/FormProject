@@ -8,6 +8,8 @@ uses
   Classes, SysUtils,contnrs, ssepan_laz_utility;
 
 type
+  TProcArgString = procedure(propertyName : String);// of object;
+
   TModelBase=class//(TObject)
   private
     {
@@ -16,7 +18,7 @@ type
 
     FDirty: Boolean;
     FKey : String;
-    FHandlers: TObjectList;
+    FHandlers: TList;//TObjectList;
     {
     Properties
     }
@@ -48,9 +50,9 @@ type
     {
     Methods
     }
-    procedure AddHandler(obj: TObject);
-    procedure RemoveHandler(obj: TObject);
-    procedure OnNotifyPropertyChanged( var msg );
+    procedure AddHandler(f:TProcArgString);//obj: TObject);
+    procedure RemoveHandler(f:TProcArgString);//obj: TObject);
+    procedure OnNotifyPropertyChanged(msg:String);
 
     {
     Properties
@@ -146,18 +148,20 @@ implementation
   Methods
   }
 
-  procedure TModelBase.AddHandler(obj: TObject);
+  procedure TModelBase.AddHandler(f:TProcArgString);//obj: TObject);
   var
     sErrorMessage, formatResult:String;
   begin
     try
       try
-        if FHandlers.IndexOf(obj) = -1 then
+        //test f
+        f('SomeString');
+        if FHandlers.IndexOf(@f{obj}) = -1 then
         begin
-             FHandlers.Add(obj);
+             FHandlers.Add(@f{obj});
         end;
 
-        FmtStr(formatResult,'FHandlers.Count: ''%s''',[FHandlers.Count]);
+        FmtStr(formatResult,'FHandlers.Count: ''%d''',[FHandlers.Count]);
         WriteLn(formatResult);
       finally
            //
@@ -171,15 +175,15 @@ implementation
       end;
   end;
 
-  procedure TModelBase.RemoveHandler(obj: TObject);
+  procedure TModelBase.RemoveHandler(f:TProcArgString);//obj: TObject);
   var
     sErrorMessage, formatResult:String;
   begin
     try
       try
-        FHandlers.Extract(obj);
+        FHandlers.Extract(@f{obj});
 
-        FmtStr(formatResult,'FHandlers.Count: ''%s''',[FHandlers.Count]);
+        FmtStr(formatResult,'FHandlers.Count: ''%d''',[FHandlers.Count]);
         WriteLn(formatResult);
       finally
            //
@@ -194,12 +198,16 @@ implementation
   end;
 
 
-  procedure TModelBase.OnNotifyPropertyChanged( var msg );
-  var handler : Pointer;
+  procedure TModelBase.OnNotifyPropertyChanged(msg:String);
+  var
+    handler : Pointer;
+    proc:  TProcArgString;
   begin
     for handler in FHandlers do
     begin
-        TObject(handler).DispatchStr( msg );
+        //TObject(handler).DispatchStr( msg );
+         proc:=TProcArgString(handler^);
+         proc(msg);
     end;
   end;
 
