@@ -215,6 +215,8 @@ begin
             'SomeBoolean':
             begin
                 MainForm.SomeBooleanCheckBox.Checked := objModel.SomeBoolean;
+                FmtStr(formatResult,'handled event: ''%s'' = ''%u'' ',[propertyName,objModel.SomeBoolean]);
+                WriteLn(formatResult);
                 //Debug Subst(("&1: &2"), propertyName, $objModel.SomeBoolean)
             end;
             'SomeDateTime':
@@ -224,7 +226,7 @@ begin
             end;
             'Dirty':
             begin
-                //StatusDirtyIcon.Visible = $objModel.Dirty 'use wrapper sub in viewmodel
+                MainForm.imgDirtyIcon.Visible := objModel.Dirty; //use wrapper sub in viewmodel
                 //objStatusBarViewModel.SetDirtyIndicator(objModel.Dirty);
                 //Debug Subst(("&1: &2"), propertyName, $objModel.Dirty)
             end;
@@ -252,19 +254,27 @@ End;
 
 { TMainForm }
 procedure TMainForm.FormCreate(Sender: TObject);
+var
+   proc:  TProcArgString;
 begin
      bStopControlEvents := False;
 
   
       //temporary; do in File New action
+      proc := @objModel_PropertyChanged;
       objModel := TSomeModel.Create();
-      objModel.AddHandler(objModel_PropertyChanged);
+      objModel.AddHandler(proc);
+      //objModel.Key:=ModelBase.KEY_NEW;
       objModel.RefreshModel(False); //to update view
 
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
+var
+   proc:  TProcArgString;
 begin
+  proc := @objModel_PropertyChanged;
+  objModel.RemoveHandler(proc);
   objModel := Nil;
 
 end;

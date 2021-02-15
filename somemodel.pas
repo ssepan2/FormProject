@@ -79,8 +79,6 @@ implementation
   begin
       Inherited Create();
 
-      WriteLn('FSomeDateTime', FSomeDateTime);
-      //FSomeDateTime:=0;
   end;
 
   destructor TSomeModel.Destroy;
@@ -203,7 +201,6 @@ implementation
     //which causes an access violation in the corresponding set-property of the model
     try
       try
-         WriteLn('SetSomeDateTime');
         If (FSomeDateTime <> Value) Or FForceNotify Then
         begin
             FSomeDateTime := Value ;

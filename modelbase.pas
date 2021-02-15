@@ -5,11 +5,11 @@ unit ModelBase;
 interface
 
 uses
-  Classes, SysUtils,contnrs, ssepan_laz_utility;
+  Classes, SysUtils,contnrs, fgl, ssepan_laz_utility;
 
 type
   TProcArgString = procedure(propertyName : String);// of object;
-
+  THandlers = specialize TFPGList<TProcArgString>;
   TModelBase=class//(TObject)
   private
     {
@@ -18,7 +18,7 @@ type
 
     FDirty: Boolean;
     FKey : String;
-    FHandlers: TList;//TObjectList;
+    FHandlers: THandlers;
     {
     Properties
     }
@@ -50,8 +50,8 @@ type
     {
     Methods
     }
-    procedure AddHandler(f:TProcArgString);//obj: TObject);
-    procedure RemoveHandler(f:TProcArgString);//obj: TObject);
+    procedure AddHandler(f:TProcArgString);
+    procedure RemoveHandler(f:TProcArgString);
     procedure OnNotifyPropertyChanged(msg:String);
 
     {
@@ -76,7 +76,7 @@ implementation
   begin
      FDirty := false;
      FKey := KEY_NEW;
-     FHandlers := TObjectList.Create;
+     FHandlers := THandlers.Create;
   end;
 
   destructor TModelBase.Destroy;
@@ -100,15 +100,8 @@ implementation
          FmtStr(formatResult,'PropertyChanged fired: ''%s''',[propertyName]);
          WriteLn(formatResult);
 
-         //OnNotifyPropertyChanged(propertyName);
-         //bResult := Raise PropertyChanged(propertyName); //: BResult
-         //WriteLn(bResult);
+         OnNotifyPropertyChanged(propertyName);//SIGSEV
 
-         //If bResult Then
-         //begin
-         //  FmtStr(formatResult,'PropertyChanged cancelled: ''%s''',[propertyName]);
-         //  WriteLn(formatResult);
-         //End;
        finally
 
        end;
@@ -148,20 +141,22 @@ implementation
   Methods
   }
 
-  procedure TModelBase.AddHandler(f:TProcArgString);//obj: TObject);
+  procedure TModelBase.AddHandler(f:TProcArgString);
   var
     sErrorMessage, formatResult:String;
   begin
     try
       try
-        //test f
-        f('SomeString');
-        if FHandlers.IndexOf(@f{obj}) = -1 then
+        FmtStr(formatResult,'FHandlers.Count (before): ''%d''',[FHandlers.Count]);
+        WriteLn(formatResult);
+
+        f('Key');//TODO:passed function worked BEFORE being stuffed into list, but not AFTER being retrieved (SIGSEGV)
+        if FHandlers.IndexOf(f) = -1 then
         begin
-             FHandlers.Add(@f{obj});
+             FHandlers.Add(f);
         end;
 
-        FmtStr(formatResult,'FHandlers.Count: ''%d''',[FHandlers.Count]);
+        FmtStr(formatResult,'FHandlers.Count (after): ''%d''',[FHandlers.Count]);
         WriteLn(formatResult);
       finally
            //
@@ -175,16 +170,28 @@ implementation
       end;
   end;
 
-  procedure TModelBase.RemoveHandler(f:TProcArgString);//obj: TObject);
+  procedure TModelBase.RemoveHandler(f:TProcArgString);
   var
     sErrorMessage, formatResult:String;
+    extracted: Pointer;
   begin
     try
       try
-        FHandlers.Extract(@f{obj});
-
-        FmtStr(formatResult,'FHandlers.Count: ''%d''',[FHandlers.Count]);
+        FmtStr(formatResult,'FHandlers.Count (before): ''%d''',[FHandlers.Count]);
         WriteLn(formatResult);
+
+        extracted := FHandlers.Extract(f);
+        if extracted=nil Then
+        begin
+          FmtStr(formatResult,'item not extracted from FHandlers: ''%d''',[FHandlers.Count]);
+          WriteLn(formatResult);
+        end
+        else
+        begin
+          FmtStr(formatResult,'FHandlers.Count (after): ''%d''',[FHandlers.Count]);
+          WriteLn(formatResult);
+        end;
+
       finally
            //
       end;
@@ -200,14 +207,13 @@ implementation
 
   procedure TModelBase.OnNotifyPropertyChanged(msg:String);
   var
-    handler : Pointer;
+    //handler : Pointer;
     proc:  TProcArgString;
   begin
-    for handler in FHandlers do
+    for proc{handler} in FHandlers do
     begin
-        //TObject(handler).DispatchStr( msg );
-         proc:=TProcArgString(handler^);
-         proc(msg);
+         //proc:={TProcArgString(}handler{^}{)};
+         proc(msg);//TODO:passed function worked BEFORE being stuffed into list, but not AFTER being retrieved (SIGSEGV)
     end;
   end;
 

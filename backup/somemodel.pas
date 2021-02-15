@@ -26,6 +26,17 @@ type
     {
     Properties
     }
+    Function GetSomeString() : String;
+    procedure SetSomeString(Value : String);
+
+    Function GetSomeBoolean() : Boolean;
+    procedure SetSomeBoolean(Value : Boolean);
+
+    Function GetSomeInteger() : LongInt;
+    procedure SetSomeInteger(Value : LongInt);
+
+    Function GetSomeDateTime() : TDateTime;
+    procedure SetSomeDateTime(Value : TDateTime);
 
   public
     {
@@ -38,17 +49,6 @@ type
     Properties
     }
 
-    Function GetSomeString() : String;
-    procedure SetSomeString(Value : String);
-
-    Function GetSomeBoolean() : Boolean;
-    procedure SetSomeBoolean(Value : Boolean);
-
-    Function GetSomeInteger() : LongInt;
-    procedure SetSomeInteger(Value : LongInt);
-
-    Function GetSomeDateTime() : TDateTime;
-    procedure SetSomeDateTime(Value : TDateTime);
 
     Property SomeString : String read GetSomeString write SetSomeString;
     Property SomeBoolean : Boolean read GetSomeBoolean write SetSomeBoolean;
@@ -203,7 +203,6 @@ implementation
     //which causes an access violation in the corresponding set-property of the model
     try
       try
-         WriteLn('SetSomeDateTime');
         If (FSomeDateTime <> Value) Or FForceNotify Then
         begin
             FSomeDateTime := Value ;
