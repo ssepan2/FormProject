@@ -197,38 +197,48 @@ begin
         case propertyName  of
             'Key':
             begin
-                //(usually)do nothing unless Key can be directly edited
+                //update when Key directly edited or when new/open/save/saveas
                 FmtStr(formatResult,APP_TITLE_FORMAT,[objModel.Key]);
                 MainForm.Caption := formatResult;
-                // Debug Subst(("&1: &2"), propertyName, $objModel.Key)
+
+                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.Key]);
+                WriteLn(formatResult);
             end;
             'SomeString':
             begin
                 MainForm.SomeStringEdit.Text := objModel.SomeString;
-                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeString)
+
+                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.SomeString]);
+                WriteLn(formatResult);
             end;
             'SomeInteger':
             begin
                 MainForm.SomeIntegerEdit.Text := IntToStr(objModel.SomeInteger);
-                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeInteger)
+
+                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.SomeInteger.ToString()]);
+                WriteLn(formatResult);
             end;
             'SomeBoolean':
             begin
                 MainForm.SomeBooleanCheckBox.Checked := objModel.SomeBoolean;
-                FmtStr(formatResult,'handled event: ''%s'' = ''%u'' ',[propertyName,objModel.SomeBoolean]);
+
+                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.SomeBoolean.ToString()]);
                 WriteLn(formatResult);
-                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeBoolean)
             end;
             'SomeDateTime':
             begin
-                MainForm.SomeDateDateEdit.Text := FormatDateTime('c',objModel.SomeDateTime);
-                //Debug Subst(("&1: &2"), propertyName, $objModel.SomeDateTime)
+                formatResult := FormatDateTime('c',objModel.SomeDateTime);
+                MainForm.SomeDateDateEdit.Text := formatResult;
+
+                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,formatResult]);
+                WriteLn(formatResult);
             end;
             'Dirty':
             begin
                 MainForm.imgDirtyIcon.Visible := objModel.Dirty; //use wrapper sub in viewmodel
-                //objStatusBarViewModel.SetDirtyIndicator(objModel.Dirty);
-                //Debug Subst(("&1: &2"), propertyName, $objModel.Dirty)
+
+                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.Dirty.ToString()]);
+                WriteLn(formatResult);
             end;
             Else
             begin
@@ -236,7 +246,6 @@ begin
                 WriteLn(formatResult);
             end;
         End; //case
-        //Debug Subst(("PropertyChanged handled: &1"), propertyName)
 
     finally
            bStopControlEvents := False;
@@ -250,6 +259,30 @@ begin
     end;
 End;
 {%EndRegion}
+
+
+function FileNew():Boolean;
+var
+   proc:  TProcArgString;
+begin
+    Application.ProcessMessages;
+
+    proc := @objModel_PropertyChanged;
+
+    if (objModel<>nil) then
+    begin
+       objModel.RemoveHandler(proc);
+       objModel.Free;
+    end;
+    objModel := TSomeModel.Create();
+    objModel.AddHandler(proc);
+
+    objModel.RefreshModel(False); //to update view
+
+    FileNew:=True;
+end;
+
+
 {$R *.lfm}
 
 { TMainForm }
@@ -259,13 +292,17 @@ var
 begin
      bStopControlEvents := False;
 
-  
+      WriteLn('-------------------------------------');
       //temporary; do in File New action
-      proc := @objModel_PropertyChanged;
-      objModel := TSomeModel.Create();
-      objModel.AddHandler(proc);
-      //objModel.Key:=ModelBase.KEY_NEW;
-      objModel.RefreshModel(False); //to update view
+      If (Not FileNew()) Then
+      begin
+         //
+      end;
+      //proc := @objModel_PropertyChanged;
+      //objModel := TSomeModel.Create();
+      //objModel.AddHandler(proc);
+      ////objModel.Key:=ModelBase.KEY_NEW;
+      //objModel.RefreshModel(False); //to update view
 
 end;
 
@@ -334,6 +371,7 @@ end;
 
 { ViewModel  }
 
+
 {Utility}
 procedure delayFor(dt: DWORD);
 var
@@ -378,14 +416,19 @@ end;
   
 procedure TMainForm.SomeIntegerEditChange(Sender: TObject);
 var
-     sErrorMessage, formatResult:String;
+     sErrorMessage, formatResult, blah:String;
+     //BUG:removing unused 'blah' causes Sender to have value '1' in Text during New (stack corruption?)
      value:LongInt;
 begin
   try
     try
       If not bStopControlEvents Then
       begin
-            value := StrToInt(SomeIntegerEdit.Text);
+            value := StrToInt(TEdit(sender).Text);
+           //if (Value=1) then
+           //begin
+           //    WriteLn('value=1');
+           //end;
       End;
     finally
       objModel.SomeInteger := value;
@@ -464,7 +507,8 @@ begin
           //perform sender disable/enable in all actions
           TAction(Sender).Enabled := False;
 
-          If Something() Then
+          //TODO: check dirty and save 1st
+         If (FileNew()) Then
           begin
              sStatusMessage := 'FileNew done.'  ;
           end
@@ -473,7 +517,7 @@ begin
              sStatusMessage := 'FileNew cancelled.' ;
           End;
        finally
-         //always do something
+         //always do this
          TAction(Sender).Enabled := True;
          ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
        end;
@@ -513,7 +557,7 @@ begin
            sStatusMessage := 'FileOpen cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -554,7 +598,7 @@ begin
            sStatusMessage := 'FileSave cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -596,7 +640,7 @@ begin
            sStatusMessage := 'FileSaveAs cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -639,7 +683,7 @@ begin
            sStatusMessage := 'FilePrint cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -681,7 +725,7 @@ begin
            sStatusMessage := 'FilePrintSetup cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -724,7 +768,7 @@ begin
         //   sStatusMessage := 'FileExit cancelled.' ;
         //End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -767,7 +811,7 @@ begin
            sStatusMessage := 'EditUndo cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -809,7 +853,7 @@ begin
            sStatusMessage := 'EditRedo cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -851,7 +895,7 @@ begin
            sStatusMessage := 'EditSelectAll cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -893,7 +937,7 @@ begin
            sStatusMessage := 'EditCut cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -935,7 +979,7 @@ begin
            sStatusMessage := 'EditCopy cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -977,7 +1021,7 @@ begin
            sStatusMessage := 'EditPaste cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1019,7 +1063,7 @@ begin
            sStatusMessage := 'EditPasteSpecial cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1061,7 +1105,7 @@ begin
            sStatusMessage := 'EditFind cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1103,7 +1147,7 @@ begin
            sStatusMessage := 'EditReplace cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1145,7 +1189,7 @@ begin
            sStatusMessage := 'EditGoTo cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1190,7 +1234,7 @@ begin
            sStatusMessage := 'EditRefresh cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1232,7 +1276,7 @@ begin
            sStatusMessage := 'EditPreferences cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1275,7 +1319,7 @@ begin
            sStatusMessage := 'WindowCascade cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1317,7 +1361,7 @@ begin
            sStatusMessage := 'WindowHide cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1359,7 +1403,7 @@ begin
            sStatusMessage := 'WindowNewWindow cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1401,7 +1445,7 @@ begin
            sStatusMessage := 'WindowShow cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1443,7 +1487,7 @@ begin
            sStatusMessage := 'WindowTile cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1485,7 +1529,7 @@ begin
            sStatusMessage := 'WindowArrangeAll cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1528,7 +1572,7 @@ begin
            sStatusMessage := 'HelpHelpContents cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1569,7 +1613,7 @@ begin
            sStatusMessage := 'HelpHelpIndex cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1610,7 +1654,7 @@ begin
            sStatusMessage := 'HelpLicenceInformation cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1651,7 +1695,7 @@ begin
            sStatusMessage := 'HelpOnlineHelp cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1692,7 +1736,7 @@ begin
            sStatusMessage := 'HelpCheckForUpdates cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
@@ -1747,7 +1791,7 @@ begin
            sStatusMessage := 'HelpAbout cancelled.' ;
         End;
      finally
-       //always do something
+       //always do this
        TAction(Sender).Enabled := True;
        StopProgressBar
        (

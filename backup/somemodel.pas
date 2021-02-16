@@ -79,8 +79,10 @@ implementation
   begin
       Inherited Create();
 
-      WriteLn('FSomeDateTime', FSomeDateTime);
-      //FSomeDateTime:=0;
+      SomeString:='';
+      SomeInteger:=0;
+      SomeBoolean:=False;
+      SomeDateTime:=Date;
   end;
 
   destructor TSomeModel.Destroy;
@@ -108,8 +110,8 @@ implementation
           If (FSomeString <> Value) Or FForceNotify Then
           begin
               FSomeString := Value;
-              Dirty := true;
               NotifyPropertyChanged('SomeString');
+              Dirty := true;
           End;
       finally
         //
@@ -140,8 +142,8 @@ implementation
           If (FSomeBoolean <> Value) Or FForceNotify Then
           begin
               FSomeBoolean := Value;
-              Dirty := true;
               NotifyPropertyChanged('SomeBoolean');
+              Dirty := true;
           End;
       finally
         //
@@ -169,12 +171,12 @@ implementation
       try
         try
 
-          If (FSomeInteger <> Value) Or FForceNotify Then
-          begin
+          //If (FSomeInteger <> Value) Or FForceNotify Then
+          //begin
               FSomeInteger := Value;
-              Dirty := true;
               NotifyPropertyChanged('SomeInteger');
-          End;
+              Dirty := true;
+          //End;
       finally
         //
       end;
@@ -206,8 +208,8 @@ implementation
         If (FSomeDateTime <> Value) Or FForceNotify Then
         begin
             FSomeDateTime := Value ;
+            NotifyPropertyChanged('SomeDateTime');
             Dirty := true;
-            NotifyPropertyChanged('SetSomeDateTime');
         End;
       finally
         //
@@ -271,7 +273,7 @@ implementation
   begin
       try
          try
-            FForceNotify := True;
+            FForceNotify := True;//will get past <> check in property set
 
             SaveDirty := Dirty;
             //setting these will set Dirty property...
@@ -284,7 +286,7 @@ implementation
             //...so clear dirty flag after refreshing values
             If (bPreserveDirty) then Dirty := SaveDirty else Dirty := False;
          finally
-           FForceNotify := False;
+           FForceNotify := False;//don't want this on all the time
          end;
       except
         on E: Exception do
@@ -439,7 +441,7 @@ implementation
       except
         on E: Exception do
         begin
-           sErrorMessage:=FormatErrorForLog(E.Message , 'VerifyKey' , E.HelpContext.ToString);
+           sErrorMessage:=FormatErrorForLog(E.Message , 'OpenFromSettings' , E.HelpContext.ToString);
            LogErrorToFile(sErrorMessage);
         end;
       end;

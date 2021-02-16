@@ -311,7 +311,6 @@ object MainForm: TMainForm
     Height = 28
     Top = 72
     Width = 80
-    NumbersOnly = True
     OnChange = SomeIntegerEditChange
     TabOrder = 3
   end

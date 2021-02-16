@@ -18,3 +18,5 @@ Error: Invalid argument index in format "FHandlers.Count: '%s'"\r\nContext: AddH
 Error: "" is an invalid integer\r\nContext: SomeIntegerEditChange\r\nHelp:0.
 Error: Invalid argument index in format "handled event: '%s' = '%d' "\r\nContext: objModel_PropertyChanged\r\nHelp:0.
 Error: Invalid argument index in format "handled event: '%s' = '%u' "\r\nContext: objModel_PropertyChanged\r\nHelp:0.
+Error: "-" is an invalid integer\r\nContext: SomeIntegerEditChange\r\nHelp:0.
+Error: "-" is an invalid integer\r\nContext: SomeIntegerEditChange\r\nHelp:0.

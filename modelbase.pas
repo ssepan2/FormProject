@@ -52,7 +52,7 @@ type
     }
     procedure AddHandler(f:TProcArgString);
     procedure RemoveHandler(f:TProcArgString);
-    procedure OnNotifyPropertyChanged(msg:String);
+    procedure OnNotifyPropertyChanged(propertyName:String);
 
     {
     Properties
@@ -97,13 +97,15 @@ implementation
       try
          bResult := False;
 
-         FmtStr(formatResult,'PropertyChanged fired: ''%s''',[propertyName]);
+         FmtStr(formatResult,'PropertyChanged firing: ''%s''',[propertyName]);
          WriteLn(formatResult);
 
          OnNotifyPropertyChanged(propertyName);//SIGSEV
 
        finally
 
+          FmtStr(formatResult,'PropertyChanged fired: ''%s''',[propertyName]);
+          WriteLn(formatResult);
        end;
        except
          on E: Exception do
@@ -135,6 +137,7 @@ implementation
   begin
     FKey := Value;
     NotifyPropertyChanged('Key');
+    Dirty := true;
   end;
 
   {
@@ -177,21 +180,20 @@ implementation
   begin
     try
       try
-        FmtStr(formatResult,'FHandlers.Count (before): ''%d''',[FHandlers.Count]);
-        WriteLn(formatResult);
-
-        extracted := FHandlers.Extract(f);
-        if extracted=nil Then
-        begin
-          FmtStr(formatResult,'item not extracted from FHandlers: ''%d''',[FHandlers.Count]);
+          FmtStr(formatResult,'FHandlers.Count (before): ''%d''',[FHandlers.Count]);
           WriteLn(formatResult);
-        end
-        else
-        begin
-          FmtStr(formatResult,'FHandlers.Count (after): ''%d''',[FHandlers.Count]);
-          WriteLn(formatResult);
-        end;
 
+          extracted := FHandlers.Extract(f);
+          if extracted=nil Then
+          begin
+            FmtStr(formatResult,'item not extracted from FHandlers: ''%d''',[FHandlers.Count]);
+            WriteLn(formatResult);
+          end
+          else
+          begin
+            FmtStr(formatResult,'FHandlers.Count (after): ''%d''',[FHandlers.Count]);
+            WriteLn(formatResult);
+          end;
       finally
            //
       end;
@@ -205,16 +207,38 @@ implementation
   end;
 
 
-  procedure TModelBase.OnNotifyPropertyChanged(msg:String);
+  procedure TModelBase.OnNotifyPropertyChanged(propertyName : String);
   var
-    //handler : Pointer;
+    sErrorMessage, formatResult:String;
     proc:  TProcArgString;
   begin
-    for proc{handler} in FHandlers do
-    begin
-         //proc:={TProcArgString(}handler{^}{)};
-         proc(msg);//TODO:passed function worked BEFORE being stuffed into list, but not AFTER being retrieved (SIGSEGV)
-    end;
+    try
+      try
+        //if (propertyName='SomeInteger') Then
+        //begin
+        //  FmtStr(formatResult,'OnNotifyPropertyChanged: propertyName (before): ''%s''',[propertyName]);
+        //  WriteLn(formatResult);
+        //end;
+
+        for proc in FHandlers do
+        begin
+             proc(propertyName);
+        end;
+      finally
+         //if (propertyName='SomeInteger') Then
+         //begin
+         //  FmtStr(formatResult,'OnNotifyPropertyChanged: propertyName (after): ''%s''',[propertyName]);
+         //  WriteLn(formatResult);
+         //end;
+      end;
+      except
+        on E: Exception do
+        begin
+           WriteLn(sErrorMessage);
+           sErrorMessage:=FormatErrorForLog(E.Message , 'OnNotifyPropertyChanged' , E.HelpContext.ToString);
+           LogErrorToFile(sErrorMessage);
+        end;
+      end;
   end;
 
 
