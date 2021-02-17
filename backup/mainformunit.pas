@@ -282,6 +282,22 @@ begin
     FileNew:=True;
 end;
 
+function FileSave():Boolean;
+var
+  UserString: string;
+begin
+  UserString := InputBox('Save As...', 'Please enter model name:', objModel.Key);
+  if (not String.IsNullOrWhiteSpace(UserString) and (UserString <> ModelBase.KEY_NEW)) then
+  begin
+     //ShowMessage(UserString);
+     FileSave:=True;
+  end
+  else
+  begin
+     //ShowMessage(UserString);
+     FileSave:=False;
+  end;
+end;
 
 {$R *.lfm}
 
@@ -400,7 +416,7 @@ begin
     try
     If not bStopControlEvents Then
     begin
-        objModel.SomeString := SomeStringEdit.Text;
+        objModel.SomeString := TEdit(sender).Text;
     End;
     finally
       //
@@ -450,7 +466,7 @@ begin
     try
       If not bStopControlEvents Then
       begin
-            objModel.SomeBoolean := SomeBooleanCheckBox.Checked;
+            objModel.SomeBoolean := TCheckBox(Sender).Checked;
       End;
     finally
       //
@@ -473,7 +489,7 @@ begin
     try
       If not bStopControlEvents Then
       begin
-            value := StrToDateTime(SomeDateDateEdit.Text);
+            value := StrToDateTime(TDateEdit(Sender).Text);
       End;
     finally
       objModel.SomeDateTime := value;
@@ -548,7 +564,7 @@ begin
         //perform sender disable/enable in all actions
         TAction(Sender).Enabled := False;
 
-        If Something() Then
+        If Something() Then  //TODO:TOpenDialog
         begin
            sStatusMessage := 'FileOpen done.'  ;
         end
@@ -589,7 +605,7 @@ begin
       //perform sender disable/enable in all actions
       TAction(Sender).Enabled := False;
 
-        If Something() Then
+        If Something() Then //TODO:TSaveDialog
         begin
            sStatusMessage := 'FileSave done.'  ;
         end
@@ -631,7 +647,7 @@ begin
     //perform sender disable/enable in all actions
     TAction(Sender).Enabled := False;
 
-        If Something() Then
+        If FileSave() Then  //TODO:TSaveDialog
         begin
            sStatusMessage := 'FileSaveAs done.'  ;
         end
@@ -674,7 +690,7 @@ begin
         //perform sender disable/enable in all actions
         TAction(Sender).Enabled := False;
 
-        If Something() Then
+        If Something() Then //TODO:TPrintDialog
         begin
            sStatusMessage := 'FilePrint done.'  ;
         end
@@ -716,7 +732,7 @@ begin
     //perform sender disable/enable in all actions
     TAction(Sender).Enabled := False;
 
-        If Something() Then
+        If Something() Then  //TODO:TPrinterSetupDialog
         begin
            sStatusMessage := 'FilePrintSetup done.'  ;
         end
@@ -1096,7 +1112,7 @@ begin
     //perform sender disable/enable in all actions
     TAction(Sender).Enabled := False;
 
-        If Something() Then
+        If Something() Then //TODO:TFindDialog
         begin
            sStatusMessage := 'EditFind done.'  ;
         end
@@ -1138,7 +1154,7 @@ begin
     //perform sender disable/enable in all actions
     TAction(Sender).Enabled := False;
 
-        If Something() Then
+        If Something() Then    //TODO:TReplaceDialog
         begin
            sStatusMessage := 'EditReplace done.'  ;
         end
