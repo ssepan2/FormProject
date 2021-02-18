@@ -97,15 +97,15 @@ implementation
       try
          bResult := False;
 
-         FmtStr(formatResult,'PropertyChanged firing: ''%s''',[propertyName]);
-         WriteLn(formatResult);
+         //FmtStr(formatResult,'PropertyChanged firing: ''%s''',[propertyName]);
+         //WriteLn(formatResult);
 
          OnNotifyPropertyChanged(propertyName);//SIGSEV
 
        finally
 
-          FmtStr(formatResult,'PropertyChanged fired: ''%s''',[propertyName]);
-          WriteLn(formatResult);
+          //FmtStr(formatResult,'PropertyChanged fired: ''%s''',[propertyName]);
+          //WriteLn(formatResult);
        end;
        except
          on E: Exception do
@@ -214,22 +214,22 @@ implementation
   begin
     try
       try
-        if (propertyName='SomeInteger') Then
-        begin
-          FmtStr(formatResult,'OnNotifyPropertyChanged: propertyName (before): ''%s''',[propertyName]);
-          WriteLn(formatResult);
-        end;
+        //if (propertyName='SomeInteger') Then
+        //begin
+        //  FmtStr(formatResult,'OnNotifyPropertyChanged: propertyName (before): ''%s''',[propertyName]);
+        //  WriteLn(formatResult);
+        //end;
 
         for proc in FHandlers do
         begin
              proc(propertyName);
         end;
       finally
-         if (propertyName='SomeInteger') Then
-         begin
-           FmtStr(formatResult,'OnNotifyPropertyChanged: propertyName (after): ''%s''',[propertyName]);
-           WriteLn(formatResult);
-         end;
+         //if (propertyName='SomeInteger') Then
+         //begin
+         //  FmtStr(formatResult,'OnNotifyPropertyChanged: propertyName (after): ''%s''',[propertyName]);
+         //  WriteLn(formatResult);
+         //end;
       end;
       except
         on E: Exception do

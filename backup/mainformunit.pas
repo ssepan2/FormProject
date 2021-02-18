@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, ExtCtrls, ActnList, Buttons, IniPropStorage, CheckLst, ExtDlgs,
-  EditBtn, DividerBevel, RTTICtrls, ssepan_laz_utility, ssepan_laz_application,
+  EditBtn, DividerBevel, RTTICtrls, LCLType, ssepan_laz_utility, ssepan_laz_application,
   ModelBase,SomeModel,DefaultTranslator ;
 
 type
@@ -201,44 +201,44 @@ begin
                 FmtStr(formatResult,APP_TITLE_FORMAT,[objModel.Key]);
                 MainForm.Caption := formatResult;
 
-                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.Key]);
-                WriteLn(formatResult);
+                //FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.Key]);
+                //WriteLn(formatResult);
             end;
             'SomeString':
             begin
                 MainForm.SomeStringEdit.Text := objModel.SomeString;
 
-                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.SomeString]);
-                WriteLn(formatResult);
+                //FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.SomeString]);
+                //WriteLn(formatResult);
             end;
             'SomeInteger':
             begin
                 MainForm.SomeIntegerEdit.Text := IntToStr(objModel.SomeInteger);
 
-                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.SomeInteger.ToString()]);
-                WriteLn(formatResult);
+                //FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.SomeInteger.ToString()]);
+                //WriteLn(formatResult);
             end;
             'SomeBoolean':
             begin
                 MainForm.SomeBooleanCheckBox.Checked := objModel.SomeBoolean;
 
-                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.SomeBoolean.ToString()]);
-                WriteLn(formatResult);
+                //FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.SomeBoolean.ToString()]);
+                //WriteLn(formatResult);
             end;
             'SomeDateTime':
             begin
                 formatResult := FormatDateTime('c',objModel.SomeDateTime);
                 MainForm.SomeDateDateEdit.Text := formatResult;
 
-                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,formatResult]);
-                WriteLn(formatResult);
+                //FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,formatResult]);
+                //WriteLn(formatResult);
             end;
             'Dirty':
             begin
                 MainForm.imgDirtyIcon.Visible := objModel.Dirty; //use wrapper sub in viewmodel
 
-                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.Dirty.ToString()]);
-                WriteLn(formatResult);
+                //FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,objModel.Dirty.ToString()]);
+                //WriteLn(formatResult);
             end;
             Else
             begin
@@ -261,7 +261,7 @@ End;
 {%EndRegion}
 
 
-function FileNew():Boolean;
+procedure FileNew();
 var
    proc:  TProcArgString;
 begin
@@ -278,25 +278,34 @@ begin
     objModel.AddHandler(proc);
 
     objModel.RefreshModel(False); //to update view
-
-    FileNew:=True;
 end;
 
-function FileSave():Boolean;
-var
-  UserString: string;
+// <summary>
+// Write model to settings
+// </summary>
+procedure FileSave();
 begin
-  UserString := InputBox('Save As...', 'Please enter model name:', objModel.Key);
-  if (not String.IsNullOrWhiteSpace(UserString) and (UserString <> ModelBase.KEY_NEW)) then
-  begin
-     //ShowMessage(UserString);
-     FileSave:=True;
-  end
-  else
-  begin
-     //ShowMessage(UserString);
-     FileSave:=False;
-  end;
+     //SAVE
+     //TODO:save properties to INI
+     //objModel.SaveToSettings(Settings) 'TODO:if saveas, read and if already present, prompt to replace
+
+end;
+
+procedure FileOpen();
+begin
+  //OPEN
+  //TODO: update properties from INI
+  //objModel.SaveToSettings(Path, Settings)
+    //If objModel.OpenFromSettings(Path, Settings, response) Then
+    //
+    //    sStatusMessage = Subst(("Opened '&1'."), response)
+    //Else
+    //    'clear model on failure;
+    //    ' NEW
+    //    $objModel = New SomeModel(Me, "$objModel")
+    //    $objModel.RefreshModel
+    //    Error.Raise(Subst(("Unable to Open: '&1'"), response))
+    //Endif
 end;
 
 {$R *.lfm}
@@ -308,18 +317,8 @@ var
 begin
      bStopControlEvents := False;
 
-      WriteLn('-------------------------------------');
-      //temporary; do in File New action
-      If (Not FileNew()) Then
-      begin
-         //
-      end;
-      //proc := @objModel_PropertyChanged;
-      //objModel := TSomeModel.Create();
-      //objModel.AddHandler(proc);
-      ////objModel.Key:=ModelBase.KEY_NEW;
-      //objModel.RefreshModel(False); //to update view
-
+      //temporary?; do in form show?
+      FileNew();
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -343,6 +342,19 @@ begin
         //sSomeString:=objIniFile.StoredValue['SomeString'];
         //ShowMessage(sSomeString);
 
+end;
+
+procedure TMainForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+var
+   //objIniFile:TIniPropStorage;
+   sSomeString:String;
+begin
+
+  // sSomeString:=sSomeString+'*';
+    //IniPropStorage1.IniFileName:=ExtractFilePath(Application.ExeName)+'.ini';
+    //IniPropStorage1.IniSection:='SomeSection';
+    //IniPropStorage1.StoredValue['SomeString']:=sSomeString;
+    //IniPropStorage1.Save;
 end;
 
 procedure TMainForm.IniPropStorage1RestoreProperties(Sender: TObject);
@@ -370,19 +382,6 @@ begin
       on E: Exception do
         LogErrorToFile(FormatErrorForLog(E.Message , 'IniPropStorageSaveProperties' , E.HelpContext.ToString));
   end;
-end;
-
-procedure TMainForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-var
-   //objIniFile:TIniPropStorage;
-   sSomeString:String;
-begin
-
-  // sSomeString:=sSomeString+'*';
-    //IniPropStorage1.IniFileName:=ExtractFilePath(Application.ExeName)+'.ini';
-    //IniPropStorage1.IniSection:='SomeSection';
-    //IniPropStorage1.StoredValue['SomeString']:=sSomeString;
-    //IniPropStorage1.Save;
 end;
 
 { ViewModel  }
@@ -508,11 +507,13 @@ end;
 {File}
 procedure TMainForm.ActionFileNewOnExecute(Sender: TObject);
 var
-   sStatusMessage:String;
-   sErrorMessage:String;
+   sStatusMessage,sErrorMessage, formatResult:String;
+   bCancel : Boolean;
 begin
    try
        try
+          bCancel := False;
+
            //clear status, error messages at beginning of every action
           sStatusMessage:='FileNew...';
           sErrorMessage:='';
@@ -523,14 +524,43 @@ begin
           //perform sender disable/enable in all actions
           TAction(Sender).Enabled := False;
 
-          //TODO: check dirty and save 1st
-         If (FileNew()) Then
+          If (objModel<>nil) Then
           begin
-             sStatusMessage := 'FileNew done.'  ;
+              If objModel.Dirty Then
+              begin
+                  //prompt before saving
+                  FmtStr(formatResult,'Save changes?: ''%s'' ',[objModel.Key]);
+
+                  Case MessageDlg('Save As...',formatResult, mtConfirmation, [mbYes, mbNo, mbCancel], 0) of
+                       mrYes:
+                       begin
+                          //Yes, SAVE
+                          FileSave();
+                       end;
+                       mrNo:
+                       begin
+                          //No, skip Save and continue to do New
+                       end;
+                       mrCancel:
+                       begin
+                          //Cancel, skip Save and New
+                          bCancel := True;
+                       end;
+                       Else
+                          raise Exception.Create('unexpected response enum');
+                  End; //case
+              End;
+          End;
+
+          If bCancel Then
+          begin
+              sStatusMessage := 'New cancelled.';
           end
           Else
           begin
-             sStatusMessage := 'FileNew cancelled.' ;
+              //NEW
+              FileNew();
+             sStatusMessage := 'FileNew done.';
           End;
        finally
          //always do this
@@ -549,13 +579,15 @@ end;
 
 procedure TMainForm.ActionFileOpenOnExecute(Sender: TObject);
 var
-   sStatusMessage:String;
-   sErrorMessage:String;
+   sStatusMessage,sErrorMessage,formatResult,sResponse:String;
+   bCancel : Boolean;
 begin
    try
      try
+        bCancel := False;
+
          //clear status, error messages at beginning of every action
-        sStatusMessage:='FileOpen...';
+        sStatusMessage:='Opening...';
         sErrorMessage:='';
 
         //use progress bar (marquee) with action icon (where available) in status bar
@@ -564,18 +596,74 @@ begin
         //perform sender disable/enable in all actions
         TAction(Sender).Enabled := False;
 
-        If Something() Then  //TODO:TOpenDialog
-        begin
-           sStatusMessage := 'FileOpen done.'  ;
-        end
-        Else
-        begin
-           sStatusMessage := 'FileOpen cancelled.' ;
-        End;
+         If (objModel<>nil) Then
+         begin
+             If objModel.Dirty Then
+             begin
+                 //prompt before saving
+                 FmtStr(formatResult,'Save changes?: ''%s'' ',[objModel.Key]);
+
+                 Case MessageDlg('Save As...',formatResult, mtConfirmation, [mbYes, mbNo, mbCancel], 0) of
+                      mrYes:
+                      begin
+                         //Yes, SAVE
+                         FileSave();
+                      end;
+                      mrNo:
+                      begin
+                         //No, skip Save and continue to do New
+                      end;
+                      mrCancel:
+                      begin
+                         //Cancel, skip Save and New
+                         bCancel := True;
+                      end;
+                      Else
+                         raise Exception.Create('unexpected response enum');
+                 End; //case
+             End;
+         End;
+
+         If bCancel Then
+         begin
+             sStatusMessage := 'Open cancelled during Save.';
+         end
+         Else
+         begin
+            sResponse := InputBox('Open...', 'Please enter model name:', objModel.Key);
+            if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> ModelBase.KEY_NEW)) then
+            begin
+                //If Not objModel.VerifyKey(nil, sResponse, 'TODO:Path') Then
+                //begin
+                //  FmtStr(formatResult,'ID not found in settings: Slot =''%s''', [sResponse]);
+                //  raise Exception.Create(formatResult);
+                //end
+                //Else
+                //begin
+                    objModel.Key := sResponse;
+                //End;
+            end
+            Else
+            begin
+                bCancel := True;
+            End;
+
+            If bCancel Then
+            begin
+                sStatusMessage := 'Open cancelled during model name input.';
+            end
+            Else
+            begin
+                //OPEN
+                FileOpen();
+               sStatusMessage := 'Open done.';
+            End;
+         End;
+
      finally
        //always do this
        TAction(Sender).Enabled := True;
-       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+       StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
    except
        on E: Exception do
@@ -590,13 +678,15 @@ end;
 
 procedure TMainForm.ActionFileSaveOnExecute(Sender: TObject);
 var
-   sStatusMessage:String;
-   sErrorMessage:String;
+   sStatusMessage,sErrorMessage,sResponse:String;
+   bCancel : Boolean;
 begin
    try
      try
+       bCancel := False;
+
        //clear status, error messages at beginning of every action
-      sStatusMessage:='FileSave...';
+      sStatusMessage:='Saving...';
       sErrorMessage:='';
 
       //use progress bar (marquee) with action icon (where available) in status bar
@@ -605,18 +695,33 @@ begin
       //perform sender disable/enable in all actions
       TAction(Sender).Enabled := False;
 
-        If Something() Then //TODO:TSaveDialog
+      If String.IsNullOrWhiteSpace(objModel.Key) Or (objModel.Key = ModelBase.KEY_NEW) Then
+      begin
+        sResponse := InputBox('Save As...', 'Please enter model name:', objModel.Key);
+        if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> ModelBase.KEY_NEW)) then
         begin
-           sStatusMessage := 'FileSave done.'  ;
+           objModel.Key:= sResponse;
         end
-        Else
-        begin
-           sStatusMessage := 'FileSave cancelled.' ;
-        End;
+         Else
+         begin
+            bCancel:=True;
+         end;
+      End;
+
+      If (bCancel) Then
+      begin
+           sStatusMessage := 'Save cancelled.' ;
+      end
+      Else
+      begin
+        FileSave();
+         sStatusMessage := 'Save done.';
+      end;
+
      finally
        //always do this
        TAction(Sender).Enabled := True;
-       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+       StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
    except
        on E: Exception do
@@ -632,33 +737,46 @@ end;
 
 procedure TMainForm.ActionFileSaveAsOnExecute(Sender: TObject);
 var
-   sStatusMessage:String;
-   sErrorMessage:String;
+   sStatusMessage,sErrorMessage,sResponse:String;
+   bCancel : Boolean;
 begin
    try
      try
-     //clear status, error messages at beginning of every action
-    sStatusMessage:='FileSaveAs...';
-    sErrorMessage:='';
+         bCancel := False;
 
-    //use progress bar (marquee) with action icon (where available) in status bar
-    StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFileSaveAs.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+         //clear status, error messages at beginning of every action
+         sStatusMessage:='Saving As...';
+         sErrorMessage:='';
 
-    //perform sender disable/enable in all actions
-    TAction(Sender).Enabled := False;
+        //use progress bar (marquee) with action icon (where available) in status bar
+        StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFileSaveAs.Glyph);//, sbFileNew.Images[0].Image, True, 33);
 
-        If FileSave() Then  //TODO:TSaveDialog
+        //perform sender disable/enable in all actions
+        TAction(Sender).Enabled := False;
+
+        sResponse := InputBox('Save As...', 'Please enter model name:', objModel.Key);
+        if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> ModelBase.KEY_NEW)) then
         begin
-           sStatusMessage := 'FileSaveAs done.'  ;
+           objModel.Key:= sResponse;
         end
-        Else
-        begin
-           sStatusMessage := 'FileSaveAs cancelled.' ;
-        End;
+         Else
+         begin
+            bCancel:=True;
+         end;
+
+      If (bCancel) Then
+      begin
+           sStatusMessage := 'Save As cancelled.' ;
+      end
+      Else
+      begin
+        FileSave();
+         sStatusMessage := 'Save As done.';
+      end;
      finally
        //always do this
        TAction(Sender).Enabled := True;
-       ssepan_laz_application.StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+       StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
    except
        on E: Exception do
@@ -667,9 +785,7 @@ begin
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
-
    end;
-
 end;
 
 procedure TMainForm.ActionFilePrintOnExecute(Sender: TObject);
@@ -677,7 +793,6 @@ var
    sStatusMessage:String;
    sErrorMessage:String;
 begin
-
    try
      try
          //clear status, error messages at beginning of every action

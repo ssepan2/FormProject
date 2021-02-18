@@ -97,15 +97,15 @@ implementation
       try
          bResult := False;
 
-         FmtStr(formatResult,'PropertyChanged firing: ''%s''',[propertyName]);
-         WriteLn(formatResult);
+         //FmtStr(formatResult,'PropertyChanged firing: ''%s''',[propertyName]);
+         //WriteLn(formatResult);
 
-         OnNotifyPropertyChanged(propertyName);//SIGSEV
+         OnNotifyPropertyChanged(propertyName);
 
        finally
 
-          FmtStr(formatResult,'PropertyChanged fired: ''%s''',[propertyName]);
-          WriteLn(formatResult);
+          //FmtStr(formatResult,'PropertyChanged fired: ''%s''',[propertyName]);
+          //WriteLn(formatResult);
        end;
        except
          on E: Exception do
