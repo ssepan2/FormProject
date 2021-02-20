@@ -59,10 +59,12 @@ type
     }
     property Dirty : Boolean read GetDirty write SetDirty;
     Property Key : String read GetKey write SetKey;
-end;
+  class var
 
-const
- KEY_NEW = '(new)';
+    const
+     KEY_NEW = '(new)';
+
+end;
 
 //var
 //  test1:string;
@@ -100,7 +102,7 @@ implementation
          //FmtStr(formatResult,'PropertyChanged firing: ''%s''',[propertyName]);
          //WriteLn(formatResult);
 
-         OnNotifyPropertyChanged(propertyName);//SIGSEV
+         OnNotifyPropertyChanged(propertyName);
 
        finally
 
@@ -150,17 +152,17 @@ implementation
   begin
     try
       try
-        FmtStr(formatResult,'FHandlers.Count (before): ''%d''',[FHandlers.Count]);
-        WriteLn(formatResult);
+        //FmtStr(formatResult,'FHandlers.Count (before): ''%d''',[FHandlers.Count]);
+        //WriteLn(formatResult);
 
-        f('Key');//TODO:passed function worked BEFORE being stuffed into list, but not AFTER being retrieved (SIGSEGV)
+        f('Key');
         if FHandlers.IndexOf(f) = -1 then
         begin
              FHandlers.Add(f);
         end;
 
-        FmtStr(formatResult,'FHandlers.Count (after): ''%d''',[FHandlers.Count]);
-        WriteLn(formatResult);
+        //FmtStr(formatResult,'FHandlers.Count (after): ''%d''',[FHandlers.Count]);
+        //WriteLn(formatResult);
       finally
            //
       end;

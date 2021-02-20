@@ -261,74 +261,202 @@ End;
 {%EndRegion}
 
 
-procedure FileNew();
+function FileNew() : Boolean;
 var
+   sErrorMessage:String;
    proc:  TProcArgString;
 begin
-    Application.ProcessMessages;
+  try
+      try
+        Application.ProcessMessages;
 
-    proc := @objModel_PropertyChanged;
+        proc := @objModel_PropertyChanged;
 
-    if (objModel<>nil) then
-    begin
-       objModel.RemoveHandler(proc);
-       objModel.Free;
+        if (objModel<>nil) then
+        begin
+           objModel.RemoveHandler(proc);
+           objModel.Free;
+        end;
+        objModel := TSomeModel.Create();
+        objModel.AddHandler(proc);
+
+        objModel.RefreshModel(False); //to update view
+
+        FileNew := True;
+      finally
+        //always do this
+      end;
+    except
+        on E: Exception do
+        begin
+           sErrorMessage:=FormatErrorForLog(E.Message , 'FileNew' , E.HelpContext.ToString);
+           LogErrorToFile(sErrorMessage);
+        end;
     end;
-    objModel := TSomeModel.Create();
-    objModel.AddHandler(proc);
-
-    objModel.RefreshModel(False); //to update view
 end;
 
 // <summary>
 // Write model to settings
 // </summary>
-procedure FileSave();
+function FileSave() : Boolean;
+var
+   sErrorMessage:String;
 begin
-     //SAVE
-     //TODO:save properties to INI
-     //objModel.SaveToSettings(Settings) 'TODO:if saveas, read and if already present, prompt to replace
+  try
+      try
+        Application.ProcessMessages;
 
+       //SAVE
+       //save properties to INI
+       If Not TSomeModel.SaveToSettings(objModel,TSomeModel.C_INI_FILE) Then
+       begin
+           raise Exception.Create('save failed.');
+       end;
+       FileSave := True;
+      finally
+        //always do this
+      end;
+    except
+        on E: Exception do
+        begin
+           sErrorMessage:=FormatErrorForLog(E.Message , 'FileSave' , E.HelpContext.ToString);
+           LogErrorToFile(sErrorMessage);
+        end;
+    end;
 end;
 
-procedure FileOpen();
+function FileOpen() : Boolean;
+var
+   sErrorMessage,filePath:String;
 begin
-  //OPEN
-  //TODO: update properties from INI
-  //objModel.SaveToSettings(Path, Settings)
-    //If objModel.OpenFromSettings(Path, Settings, response) Then
-    //
-    //    sStatusMessage = Subst(("Opened '&1'."), response)
-    //Else
-    //    'clear model on failure;
-    //    ' NEW
-    //    $objModel = New SomeModel(Me, "$objModel")
-    //    $objModel.RefreshModel
-    //    Error.Raise(Subst(("Unable to Open: '&1'"), response))
-    //Endif
+  try
+      try
+        Application.ProcessMessages;
+
+        //OPEN
+        //update properties from INI
+        filePath:=TSomeModel.C_INI_FILE;
+        If Not TSomeModel.OpenFromSettings(objModel,filePath) Then
+        begin
+          raise Exception.Create('open failed.');
+        End;
+        FileOpen := True;
+
+        objModel.RefreshModel(False); //to update view
+
+      finally
+        //always do this
+      end;
+    except
+        on E: Exception do
+        begin
+           sErrorMessage:=FormatErrorForLog(E.Message , 'FileOpen' , E.HelpContext.ToString);
+           LogErrorToFile(sErrorMessage);
+        end;
+    end;
 end;
 
-{$R *.lfm}
+function CheckSaveAndContinue() : Boolean;
+var
+   sErrorMessage, formatResult:String;
+   continue : Boolean;
+begin
+  try
+      try
+          If (objModel<>nil) Then
+          begin
+              If objModel.Dirty Then
+              begin
+                   continue := False;
+
+                  //prompt before saving
+                  FmtStr(formatResult,'Save changes?: ''%s'' ',[objModel.Key]);
+
+                  Case MessageDlg('Save As...',formatResult, mtConfirmation, [mbYes, mbNo, mbCancel], 0) of
+                       mrYes:
+                       begin
+                          //Yes, SAVE
+                          if Not FileSave() Then
+                          begin
+                             raise Exception.Create('save failed.');
+                          end;
+                          continue := True;
+                       end;
+                       mrNo:
+                       begin
+                          //No, skip Save and continue to do target action
+                          continue := True;
+                       end;
+                       mrCancel:
+                       begin
+                          //Cancel, skip Save and target action
+                          continue := False;
+                       end;
+                       Else
+                          raise Exception.Create('unexpected response enum');
+                  End; //case
+              End;
+          End;
+      finally
+        //always do this
+        CheckSaveAndContinue := continue;
+      end;
+    except
+        on E: Exception do
+        begin
+           sErrorMessage:=FormatErrorForLog(E.Message , 'CheckSaveAndContinue' , E.HelpContext.ToString);
+           LogErrorToFile(sErrorMessage);
+        end;
+    end;
+end;{$R *.lfm}
 
 { TMainForm }
 procedure TMainForm.FormCreate(Sender: TObject);
 var
+   sErrorMessage:String;
    proc:  TProcArgString;
 begin
-     bStopControlEvents := False;
+  try
+      try
+         bStopControlEvents := False;
 
-      //temporary?; do in form show?
-      FileNew();
+          //temporary?; do in form show?
+        if Not FileNew() Then
+        begin
+           raise Exception.Create('new failed.');
+        end;
+      finally
+        //always do this
+      end;
+    except
+        on E: Exception do
+        begin
+           sErrorMessage:=FormatErrorForLog(E.Message , 'FileNew' , E.HelpContext.ToString);
+           LogErrorToFile(sErrorMessage);
+        end;
+    end;
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 var
+   sErrorMessage:String;
    proc:  TProcArgString;
 begin
-  proc := @objModel_PropertyChanged;
-  objModel.RemoveHandler(proc);
-  objModel := Nil;
-
+  try
+      try
+        proc := @objModel_PropertyChanged;
+        objModel.RemoveHandler(proc);
+        objModel := Nil;
+      finally
+        //always do this
+      end;
+    except
+        on E: Exception do
+        begin
+           sErrorMessage:=FormatErrorForLog(E.Message , 'FileNew' , E.HelpContext.ToString);
+           LogErrorToFile(sErrorMessage);
+        end;
+    end;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
@@ -418,7 +546,7 @@ begin
         objModel.SomeString := TEdit(sender).Text;
     End;
     finally
-      //
+      //Note: don't put off field assignment until finally; something fires in between and causes control to rewrite old value over model field
     end;
     except
       on E: Exception do
@@ -433,20 +561,15 @@ procedure TMainForm.SomeIntegerEditChange(Sender: TObject);
 var
      sErrorMessage, formatResult, blah:String;
      //BUG:removing unused 'blah' causes Sender to have value '1' in Text during New (stack corruption?)
-     value:LongInt;
 begin
   try
     try
       If not bStopControlEvents Then
       begin
-            value := StrToInt(TEdit(sender).Text);
-           //if (Value=1) then
-           //begin
-           //    WriteLn('value=1');
-           //end;
+            objModel.SomeInteger := StrToInt(TEdit(sender).Text);
       End;
     finally
-      objModel.SomeInteger := value;
+      //Note: don't put off field assignment until finally; something fires in between and causes control to rewrite old value over model field
     end;
     except
       on E: Exception do
@@ -468,7 +591,7 @@ begin
             objModel.SomeBoolean := TCheckBox(Sender).Checked;
       End;
     finally
-      //
+      //Note: don't put off field assignment until finally; something fires in between and causes control to rewrite old value over model field
     end;
     except
       on E: Exception do
@@ -482,16 +605,15 @@ end;
 procedure TMainForm.SomeDateDateEditChange(Sender: TObject);
 var
      sErrorMessage, formatResult:String;
-     value:TDateTime;
 begin
   try
     try
       If not bStopControlEvents Then
       begin
-            value := StrToDateTime(TDateEdit(Sender).Text);
+            objModel.SomeDateTime := StrToDateTime(TDateEdit(Sender).Text);
       End;
     finally
-      objModel.SomeDateTime := value;
+      //Note: don't put off field assignment until finally; something fires in between and causes control to rewrite old value over model field
     end;
     except
       on E: Exception do
@@ -524,33 +646,7 @@ begin
           //perform sender disable/enable in all actions
           TAction(Sender).Enabled := False;
 
-          If (objModel<>nil) Then
-          begin
-              If objModel.Dirty Then
-              begin
-                  //prompt before saving
-                  FmtStr(formatResult,'Save changes?: ''%s'' ',[objModel.Key]);
-
-                  Case MessageDlg('Save As...',formatResult, mtConfirmation, [mbYes, mbNo, mbCancel], 0) of
-                       mrYes:
-                       begin
-                          //Yes, SAVE
-                          FileSave();
-                       end;
-                       mrNo:
-                       begin
-                          //No, skip Save and continue to do New
-                       end;
-                       mrCancel:
-                       begin
-                          //Cancel, skip Save and New
-                          bCancel := True;
-                       end;
-                       Else
-                          raise Exception.Create('unexpected response enum');
-                  End; //case
-              End;
-          End;
+          bCancel := CheckSaveAndContinue();
 
           If bCancel Then
           begin
@@ -559,7 +655,10 @@ begin
           Else
           begin
               //NEW
-              FileNew();
+             if Not FileNew() Then
+             begin
+                raise Exception.Create('new failed.');
+             end;
              sStatusMessage := 'FileNew done.';
           End;
        finally
@@ -570,7 +669,7 @@ begin
      except
          on E: Exception do
          begin
-            sErrorMessage:=FormatErrorForLog(E.Message , 'FileNew' , E.HelpContext.ToString);
+            sErrorMessage:=FormatErrorForLog(E.Message , 'ActionFileNewOnExecute' , E.HelpContext.ToString);
             StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
             LogErrorToFile(sErrorMessage);
          end;
@@ -596,33 +695,7 @@ begin
         //perform sender disable/enable in all actions
         TAction(Sender).Enabled := False;
 
-         If (objModel<>nil) Then
-         begin
-             If objModel.Dirty Then
-             begin
-                 //prompt before saving
-                 FmtStr(formatResult,'Save changes?: ''%s'' ',[objModel.Key]);
-
-                 Case MessageDlg('Save As...',formatResult, mtConfirmation, [mbYes, mbNo, mbCancel], 0) of
-                      mrYes:
-                      begin
-                         //Yes, SAVE
-                         FileSave();
-                      end;
-                      mrNo:
-                      begin
-                         //No, skip Save and continue to do New
-                      end;
-                      mrCancel:
-                      begin
-                         //Cancel, skip Save and New
-                         bCancel := True;
-                      end;
-                      Else
-                         raise Exception.Create('unexpected response enum');
-                 End; //case
-             End;
-         End;
+        bCancel := CheckSaveAndContinue();
 
          If bCancel Then
          begin
@@ -630,8 +703,8 @@ begin
          end
          Else
          begin
-            sResponse := InputBox('Open...', 'Please enter model name:', ''{objModel.Key});
-            if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> ModelBase.KEY_NEW)) then
+            sResponse := InputBox('Open...', 'Please enter model name:', '');
+            if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> TModelBase.KEY_NEW)) then
             begin
                 //If Not objModel.VerifyKey(nil, sResponse, 'TODO:Path') Then
                 //begin
@@ -655,7 +728,10 @@ begin
             Else
             begin
                 //OPEN
-                FileOpen();
+               if Not FileOpen() Then
+               begin
+                  raise Exception.Create('open failed.');
+               end;
                sStatusMessage := 'Open done.';
             End;
          End;
@@ -668,7 +744,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'FileOpen' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionFileOpenOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -695,10 +771,10 @@ begin
       //perform sender disable/enable in all actions
       TAction(Sender).Enabled := False;
 
-      If String.IsNullOrWhiteSpace(objModel.Key) Or (objModel.Key = ModelBase.KEY_NEW) Then
+      If String.IsNullOrWhiteSpace(objModel.Key) Or (objModel.Key = TModelBase.KEY_NEW) Then
       begin
         sResponse := InputBox('Save As...', 'Please enter model name:', objModel.Key);
-        if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> ModelBase.KEY_NEW)) then
+        if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> TModelBase.KEY_NEW)) then
         begin
            objModel.Key:= sResponse;
         end
@@ -714,7 +790,10 @@ begin
       end
       Else
       begin
-        FileSave();
+         if Not FileSave() Then
+         begin
+            raise Exception.Create('save failed.');
+         end;
          sStatusMessage := 'Save done.';
       end;
 
@@ -726,13 +805,11 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'FileSave' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionFileSaveOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
-
    end;
-
 end;
 
 procedure TMainForm.ActionFileSaveAsOnExecute(Sender: TObject);
@@ -755,7 +832,7 @@ begin
         TAction(Sender).Enabled := False;
 
         sResponse := InputBox('Save As...', 'Please enter model name:', objModel.Key);
-        if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> ModelBase.KEY_NEW)) then
+        if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> TModelBase.KEY_NEW)) then
         begin
            objModel.Key:= sResponse;
         end
@@ -764,15 +841,18 @@ begin
             bCancel:=True;
          end;
 
-      If (bCancel) Then
-      begin
-           sStatusMessage := 'Save As cancelled.' ;
-      end
-      Else
-      begin
-        FileSave();
-         sStatusMessage := 'Save As done.';
-      end;
+        If (bCancel) Then
+        begin
+             sStatusMessage := 'Save As cancelled.' ;
+        end
+        Else
+        begin
+           if Not FileSave() Then
+           begin
+              raise Exception.Create('save failed.');
+           end;
+           sStatusMessage := 'Save As done.';
+        end;
      finally
        //always do this
        TAction(Sender).Enabled := True;
@@ -781,7 +861,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'FileSaveAs' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionFileSaveAsOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -821,7 +901,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'FilePrint' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionFilePrintOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -863,7 +943,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'FilePrintSetup' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionFilePrintSetupOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -906,7 +986,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'FileExit' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionFileExitOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -949,7 +1029,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'EditUndo' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionEditUndoOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -991,7 +1071,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'EditRedo' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionEditRedoOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1033,7 +1113,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'EditSelectAll' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionEditSelectAllOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1075,7 +1155,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'EditCut' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionEditCutOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1117,7 +1197,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'EditCopy' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionEditCopyOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1159,7 +1239,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'EditPaste' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionEditPasteExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1201,7 +1281,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'EditPasteSpecial' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionEditPasteSpecialOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1243,7 +1323,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'EditFind' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionEditFindOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1285,7 +1365,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'EditReplace' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionEditReplaceOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1327,7 +1407,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'EditGoTo' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionEditGoToOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1372,7 +1452,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'EditRefresh' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionEditRefreshOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1414,7 +1494,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'EditPreferences' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionEditPreferencesOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1457,7 +1537,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'WindowCascade' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionWindowCascadeOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1499,7 +1579,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'WindowHide' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionWindowHideExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1541,7 +1621,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'WindowNewWindow' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionWindowNewWindowOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1583,7 +1663,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'WindowShow' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionWindowShowExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1625,7 +1705,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'WindowTile' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionWindowTileOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1667,7 +1747,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'WindowArrangeAll' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionWindowArrangeAllExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1710,7 +1790,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'HelpHelpContents' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionHelpHelpContentsOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1751,7 +1831,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'HelpHelpIndex' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionHelpHelpIndexOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1792,7 +1872,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'HelpLicenceInformation' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionHelpLicenceInformationOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1833,7 +1913,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'HelpOnlineHelp' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionHelpOnlineHelpOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1874,7 +1954,7 @@ begin
    except
        on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'HelpCheckForUpdates' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionHelpCheckForUpdatesOnExecute' , E.HelpContext.ToString);
           StopProgressBar('', sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
           LogErrorToFile(sErrorMessage);
        end;
@@ -1937,7 +2017,7 @@ begin
    except
          on E: Exception do
        begin
-          sErrorMessage:=FormatErrorForLog(E.Message , 'HelpAbout' , E.HelpContext.ToString);
+          sErrorMessage:=FormatErrorForLog(E.Message , 'ActionHelpAboutOnExecute' , E.HelpContext.ToString);
           StopProgressBar
           (
            '',

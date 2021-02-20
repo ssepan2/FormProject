@@ -57,17 +57,22 @@ type
     {
     Methods
     }
-    procedure SaveToSettings(sFilePath:String; objSettings : TObject{Settings});
     procedure RefreshModel(bPreserveDirty : Boolean );
+    Function VerifyKey(objModel : TSomeModel; sKey,sFilePath : String) : Boolean;
     {
     Static
     }
-    Function VerifyKey(objSettings : TObject{Settings}; sIdParam,sFilePath : String) : Boolean;//Static;
-    Function OpenFromSettings( objModel : TSomeModel;  objSettings : TObject{Settings}; sIdParam,sFilePath : String) : Boolean;//Static;
+  class var
+    const
+        C_INI_FILE = 'SomeIni.ini';
+    {
+    Methods
+    }
+    class Function OpenFromSettings(var objModel : TSomeModel; sFilePath : String) : Boolean;
+    class function SaveToSettings(var objModel : TSomeModel; sFilePath:String) : Boolean;
+
   end;
 
-const
-    C_INI_FILE = 'SomeIni.ini';
 
 //var
 //  test2:string;
@@ -228,43 +233,7 @@ implementation
   {
   Methods
   }
-  procedure TSomeModel.SaveToSettings(sFilePath:String; objSettings : TObject{Settings});
-  var
-     sErrorMessage, formatResult:String;
-  begin
-      try
-        try
-          If (key = Null) Then
-          begin
-              raise Exception.Create('model.Key is null');
-          End;
 
-          with TIniFile.Create(sFilePath) do
-          begin
-
-           WriteString(Key, 'SomeString', SomeString);
-           WriteBool(Key, 'SomeBoolean', SomeBoolean);
-           WriteInteger(Key, 'SomeInteger', SomeInteger);
-           WritedateTime(Key, 'SomeDateTime', SomeDateTime);
-
-           UpdateFile; // Not needed
-           Free;
-         end;
-
-
-        finally
-               Dirty := False;
-        end;
-      except
-        on E: Exception do
-        begin
-           FmtStr(formatResult,'Key: ''%s''',[key]);
-           WriteLn(formatResult);
-           sErrorMessage:=FormatErrorForLog(E.Message , 'SaveToSettings' , E.HelpContext.ToString);
-           LogErrorToFile(sErrorMessage);
-        end;
-      end;
-  End;
 
   procedure TSomeModel.RefreshModel(bPreserveDirty : Boolean );
   var
@@ -297,74 +266,78 @@ implementation
       end;
   end;
 
-  {
-  Static
-  }
-   Function TSomeModel.VerifyKey(objSettings : TObject{Settings}; sIdParam,sFilePath : String) : Boolean;//Static;
-   var
-     sErrorMessage,formattedString:String;
-     readValue : Variant;
-      bReturnValue : Boolean;
-      slot : String;
-      slots : TStrings;
-   begin
-       try
-          try
-            bReturnValue := False;
-            readValue := False;
-            slots := TStrings.Create;
-
-          If (sIdParam = Null) Then
-           begin
-               raise Exception.Create('model.Key is null');
-           End;
-
-          with TIniFile.Create(sFilePath) do
-          begin
-             {TIniFile}ReadSections(slots);
-             For slot In slots Do
-             begin
-                //FmtStr(formattedString,'Slot: ''%s'' ', [slot]);
-                //WriteLn(formattedString);
-                If slot = sIdParam Then
-                 begin
-                     bReturnValue := True;
-                     Break;
-                 End;
-             end;
-
-             //{TIniFile}UpdateFile; // Not needed
-             {TIniFile}Free;
-          end;
-
-          finally
-            VerifyKey := bReturnValue;
-          end;
-       except
-         on E: Exception do
-         begin
-            sErrorMessage:=FormatErrorForLog(E.Message , 'VerifyKey' , E.HelpContext.ToString);
-            LogErrorToFile(sErrorMessage);
-         end;
-       end;
-
-  End;
-
-  Function TSomeModel.OpenFromSettings( objModel : TSomeModel;  objSettings : TObject{Settings}; sIdParam,sFilePath : String) : Boolean;//Static;
+  Function TSomeModel.VerifyKey(objModel : TSomeModel; sKey,sFilePath : String) : Boolean;//Static;
   var
-          sErrorMessage,formatResult:String;
-          returnValue : Boolean;
-          readValue : Variant;
-          bAllowDirty : Boolean;// := False; //model should implicitly be Not Dirty after Open (unless null/missing values were replaced with defaults)
+    sErrorMessage,formattedString:String;
+    readValue : Variant;
+     bReturnValue : Boolean;
+     slot : String;
+     slots : TStrings;
   begin
       try
          try
-          readValue := False;
+           bReturnValue := False;
+           readValue := False;
+           slots := TStrings.Create;
 
-            If (sIdParam = Null) Then
-           begin
-               raise Exception.Create('model.Key is null');
-           End;
+         If (sKey = Null) Then
+          begin
+              raise Exception.Create('model.Key is null');
+          End;
+
+         with TIniFile.Create(sFilePath) do
+         begin
+            {TIniFile}ReadSections(slots);
+            For slot In slots Do
+            begin
+               //FmtStr(formattedString,'Slot: ''%s'' ', [slot]);
+               //WriteLn(formattedString);
+               If slot = sKey Then
+                begin
+                    bReturnValue := True;
+                    Break;
+                End;
+            end;
+
+            //{TIniFile}UpdateFile; // Not needed
+            {TIniFile}Free;
+         end;
+
+         finally
+           VerifyKey := bReturnValue;
+         end;
+      except
+        on E: Exception do
+        begin
+           sErrorMessage:=FormatErrorForLog(E.Message , 'VerifyKey' , E.HelpContext.ToString);
+           LogErrorToFile(sErrorMessage);
+        end;
+      end;
+
+ End;
+
+  {
+  Static
+  }
+  class Function TSomeModel.OpenFromSettings(var objModel : TSomeModel; sFilePath : String) : Boolean;
+  var
+          sErrorMessage,formatResult:String;
+          readValue : Variant;
+          bAllowDirty : Boolean;//model should implicitly be Not Dirty after Open (unless null/missing values were replaced with defaults)
+  begin
+      try
+         try
+            readValue := False;
+            bAllowDirty := False;
+
+             If (String.IsNullOrWhiteSpace(objModel.Key)) Then
+             begin
+                 raise Exception.Create('model.Key is null');
+             End
+             Else If (objModel.Key = KEY_NEW) Then
+             begin
+                 raise Exception.Create('model.Key is still new');
+             end;
 
             with TIniFile.Create(sFilePath) do
             begin
@@ -372,10 +345,10 @@ implementation
              //need to clear values after failure, in case an error during opening leaves data in inconsistent state; see if caller can check/handle this
 
              //setting these will set Dirty property...
-             readValue := {TIniFile}ReadString(sIdParam,'SomeString',Null);
+             readValue := {TIniFile}ReadString(objModel.Key,'SomeString','');
              If (readValue = Null) Then
              begin
-                 FmtStr(formatResult,'Error opening key=''%s'', SomeString=Null',[sIdParam]);
+                 FmtStr(formatResult,'Error opening key=''%s'', SomeString=Null',[objModel.Key]);
                  WriteLn(formatResult);
                  objModel.SomeString := ''; //String.Default
                  bAllowDirty := True;
@@ -383,12 +356,14 @@ implementation
              Else
              begin
                  objModel.SomeString := readValue;
+                 //FmtStr(formatResult,'opened key=''%s'', SomeString=''%s''',[objModel.Key, objModel.SomeString]);
+                 //WriteLn(formatResult);
              End;
 
-             readValue := {TIniFile}ReadBool(sIdParam,'SomeBoolean',False);
+             readValue := {TIniFile}ReadBool(objModel.Key,'SomeBoolean',False);
              If (readValue = Null) Then
              begin
-                 FmtStr(formatResult,'Error opening key=''%s'', SomeBoolean=Null',[sIdParam]);
+                 FmtStr(formatResult,'Error opening key=''%s'', SomeBoolean=Null',[objModel.Key]);
                  WriteLn(formatResult);
                  objModel.SomeBoolean := False; //Boolean.Default
                  bAllowDirty := True;
@@ -396,12 +371,14 @@ implementation
              Else
              begin
                  objModel.SomeBoolean := readValue;
+                 //FmtStr(formatResult,'opened key=''%s'', SomeBoolean=''%s''',[objModel.Key, objModel.SomeBoolean.ToString()]);
+                 //WriteLn(formatResult);
              End;
 
-             readValue := {TIniFile}ReadInteger(sIdParam,'SomeInteger',0);
+             readValue := {TIniFile}ReadInteger(objModel.Key,'SomeInteger',0);
              If (readValue = Null) Then
              begin
-                 FmtStr(formatResult,'Error opening key=''%s'', SomeInteger=Null',[sIdParam]);
+                 FmtStr(formatResult,'Error opening key=''%s'', SomeInteger=Null',[objModel.Key]);
                  WriteLn(formatResult);
                  objModel.SomeInteger := 0; //Integer.Default
                  bAllowDirty := True;
@@ -409,12 +386,15 @@ implementation
              Else
              begin
                  objModel.SomeInteger := readValue;
+                 //FmtStr(formatResult,'opened key=''%s'', SomeInteger=''%s''',[objModel.Key, objModel.SomeInteger.ToString()]);
+                 //WriteLn(formatResult);
              End;
 
-             readValue := {TIniFile}ReadDateTime(sIdParam,'SomeDateTime',Date);
+             //readValue := {TIniFile}ReadString{ReadDateTime}(objModel.Key,'SomeDateTime',''{DateTimeToStr(Date)});
+             readValue := {TIniFile}ReadDateTime(objModel.Key,'SomeDateTime',Date);
              If (readValue = Null) Then
              begin
-                 FmtStr(formatResult,'Error opening key=''%s'', SomeDateTime=Null',[sIdParam]);
+                 FmtStr(formatResult,'Error opening key=''%s'', SomeDateTime=Null',[objModel.Key]);
                  WriteLn(formatResult);
                  objModel.SomeDateTime := Date; //Date.Default
                  bAllowDirty := True;
@@ -422,6 +402,8 @@ implementation
              Else
              begin
                  objModel.SomeDateTime := readValue;
+                 //FmtStr(formatResult,'opened key=''%s'', SomeDateTime=''%s''',[objModel.Key, DateTimeToStr(objModel.SomeDateTime)]);
+                 //WriteLn(formatResult);
              End;
 
              //{TIniFile}UpdateFile; // Not needed
@@ -429,24 +411,78 @@ implementation
            end;
 
            //...so clear dirty flag after retrieving saved values (if no Null replacements were handled)
-           If Not bAllowDirty = True Then
+           If Not bAllowDirty Then
            begin
                objModel.Dirty := False;
            End;
 
          finally
-           returnValue := True;
-           OpenFromSettings := returnValue;
+           OpenFromSettings := True;
          end;
       except
         on E: Exception do
         begin
            sErrorMessage:=FormatErrorForLog(E.Message , 'OpenFromSettings' , E.HelpContext.ToString);
            LogErrorToFile(sErrorMessage);
+
+           raise e;
         end;
       end;
 
   End;
+
+class function TSomeModel.SaveToSettings(var objModel : TSomeModel; sFilePath:String) : Boolean;
+var
+   sErrorMessage, formatResult:String;
+begin
+    try
+      try
+        If (String.IsNullOrWhiteSpace(objModel.Key)) Then
+        begin
+            raise Exception.Create('model.Key is null');
+        End
+        Else If (objModel.Key = KEY_NEW) Then
+        begin
+            raise Exception.Create('model.Key is still new');
+        end;
+
+        with TIniFile.Create(sFilePath) do
+        begin
+
+           WriteString(objModel.Key, 'SomeString', objModel.SomeString);
+           WriteBool(objModel.Key, 'SomeBoolean', objModel.SomeBoolean);
+           WriteInteger(objModel.Key, 'SomeInteger', objModel.SomeInteger);
+           WritedateTime(objModel.Key, 'SomeDateTime', objModel.SomeDateTime);
+           FmtStr(formatResult,'saved key=''%s'', SomeString=''%s''',[objModel.Key, objModel.SomeString]);
+           WriteLn(formatResult);
+           FmtStr(formatResult,'saved key=''%s'', SomeBoolean=''%s''',[objModel.Key, objModel.SomeBoolean.ToString()]);
+           WriteLn(formatResult);
+           FmtStr(formatResult,'saved key=''%s'', SomeInteger=''%s''',[objModel.Key, objModel.SomeInteger.ToString()]);
+           WriteLn(formatResult);
+           FmtStr(formatResult,'saved key=''%s'', SomeDateTime=''%s''',[objModel.Key, DateTimeToStr(objModel.SomeDateTime)]);
+           WriteLn(formatResult);
+
+           UpdateFile; // Not needed
+           Free;
+         end;
+
+
+      finally
+             objModel.Dirty := False;
+             SaveToSettings := True;
+      end;
+    except
+      on E: Exception do
+      begin
+         FmtStr(formatResult,'Key: ''%s''',[objModel.Key]);
+         WriteLn(formatResult);
+         sErrorMessage:=FormatErrorForLog(E.Message , 'SaveToSettings' , E.HelpContext.ToString);
+         LogErrorToFile(sErrorMessage);
+
+         raise E;
+      end;
+    end;
+End;
 
 end.
 
