@@ -356,7 +356,7 @@ begin
     end;
 end;
 
-function CheckSaveAndContinue() : Boolean;
+function CheckForSaveOrCancel() : Boolean;
 var
    sErrorMessage, formatResult:String;
    cancel : Boolean;
@@ -404,7 +404,7 @@ begin
       finally
              //BUG:backwards; cancel becomes cancel
              //always do this
-             CheckSaveAndContinue := cancel;
+             CheckForSaveOrCancel := cancel;
       end;
     except
         on E: Exception do
@@ -651,7 +651,7 @@ begin
           //perform sender disable/enable in all actions
           TAction(Sender).Enabled := False;
 
-          bCancel := Not CheckSaveAndContinue();
+          bCancel := CheckForSaveOrCancel();
 
           If bCancel Then
           begin
@@ -700,7 +700,7 @@ begin
         //perform sender disable/enable in all actions
         TAction(Sender).Enabled := False;
 
-        bCancel := Not CheckSaveAndContinue();
+        bCancel := CheckForSaveOrCancel();
 
          If bCancel Then
          begin
@@ -974,15 +974,10 @@ begin
         //perform sender disable/enable in all actions
         TAction(Sender).Enabled := False;
 
+        //TODO:check for save or cancel
+        //?
+
         Self.Close();
-        //If Something() Then
-        //begin
-        //   sStatusMessage := 'FileExit done.'  ;
-        //end
-        //Else
-        //begin
-        //   sStatusMessage := 'FileExit cancelled.' ;
-        //End;
      finally
        //always do this
        TAction(Sender).Enabled := True;

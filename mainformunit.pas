@@ -961,6 +961,7 @@ procedure TMainForm.ActionFileExitOnExecute(Sender: TObject);
 var
    sStatusMessage:String;
    sErrorMessage:String;
+   bCancel : Boolean;
 begin
    try
      try
@@ -974,15 +975,19 @@ begin
         //perform sender disable/enable in all actions
         TAction(Sender).Enabled := False;
 
-        Self.Close();
-        //If Something() Then
-        //begin
-        //   sStatusMessage := 'FileExit done.'  ;
-        //end
-        //Else
-        //begin
-        //   sStatusMessage := 'FileExit cancelled.' ;
-        //End;
+        //TODO:check for save or cancel
+        bCancel := CheckForSaveOrCancel();
+
+        If bCancel Then
+        begin
+            sStatusMessage := 'Exit cancelled.';
+        end
+        Else
+        begin
+            //EXIT
+           Self.Close();
+        End;
+
      finally
        //always do this
        TAction(Sender).Enabled := True;
