@@ -230,8 +230,8 @@ begin
                 formatResult := FormatDateTime('c',objModel.SomeDateTime);
                 MainForm.SomeDateDateEdit.Text := formatResult;
 
-                FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,formatResult]);
-                WriteLn(formatResult);
+                //FmtStr(formatResult,'handled event: ''%s'' = ''%s'' ',[propertyName,formatResult]);
+                //WriteLn(formatResult);
             end;
             'Dirty':
             begin
@@ -359,7 +359,7 @@ end;
 function CheckSaveAndContinue() : Boolean;
 var
    sErrorMessage, formatResult:String;
-   continue : Boolean;
+   cancel : Boolean;
 begin
   try
       try
@@ -367,7 +367,7 @@ begin
           begin
               If objModel.Dirty Then
               begin
-                   continue := False;
+                   cancel := False;
 
                   //prompt before saving
                   FmtStr(formatResult,'Save changes?: ''%s'' ',[objModel.Key]);
@@ -376,21 +376,25 @@ begin
                        mrYes:
                        begin
                           //Yes, SAVE
-                          if Not FileSave() Then
+                          if FileSave() Then
                           begin
+                            cancel := False;
+                          end
+                          else
+                          begin
+                             cancel := True;
                              raise Exception.Create('save failed.');
                           end;
-                          continue := True;
                        end;
                        mrNo:
                        begin
-                          //No, skip Save and continue to do target action
-                          continue := True;
+                          //No, skip Save-or-cancel, do target action
+                          cancel := False;
                        end;
                        mrCancel:
                        begin
                           //Cancel, skip Save and target action
-                          continue := False;
+                          cancel := True;
                        end;
                        Else
                           raise Exception.Create('unexpected response enum');
@@ -398,8 +402,9 @@ begin
               End;
           End;
       finally
-        //always do this
-        CheckSaveAndContinue := continue;
+             //BUG:backwards; cancel becomes cancel
+             //always do this
+             CheckSaveAndContinue := cancel;
       end;
     except
         on E: Exception do
@@ -646,7 +651,7 @@ begin
           //perform sender disable/enable in all actions
           TAction(Sender).Enabled := False;
 
-          bCancel := CheckSaveAndContinue();
+          bCancel := Not CheckSaveAndContinue();
 
           If bCancel Then
           begin
@@ -695,7 +700,7 @@ begin
         //perform sender disable/enable in all actions
         TAction(Sender).Enabled := False;
 
-        bCancel := CheckSaveAndContinue();
+        bCancel := Not CheckSaveAndContinue();
 
          If bCancel Then
          begin
