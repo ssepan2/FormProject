@@ -19,8 +19,9 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainFormUnit"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="923"/>
-        <CursorPos X="78" Y="947"/>
+        <TopLine Value="330"/>
+        <CursorPos X="15" Y="363"/>
+        <FoldState Value=" T3lG0/225 piZof0B6 pj8jg0k2]9NkW0Z2_"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -68,11 +69,11 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="392" TopLine="361"/>
+        <Caret Line="389" TopLine="361"/>
       </Position1>
       <Position2>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="431" TopLine="381"/>
+        <Caret Line="392" TopLine="361"/>
       </Position2>
       <Position3>
         <Filename Value="mainformunit.pas"/>
@@ -92,99 +93,99 @@
       </Position6>
       <Position7>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="392" TopLine="361"/>
+        <Caret Line="390" TopLine="361"/>
       </Position7>
       <Position8>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="947" TopLine="921"/>
+        <Caret Line="392" TopLine="361"/>
       </Position8>
       <Position9>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="387" TopLine="361"/>
+        <Caret Line="394" TopLine="361"/>
       </Position9>
       <Position10>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="388" TopLine="361"/>
+        <Caret Line="431" TopLine="406"/>
       </Position10>
       <Position11>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="389" TopLine="361"/>
+        <Caret Line="440" TopLine="406"/>
       </Position11>
       <Position12>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="390" TopLine="361"/>
+        <Caret Line="950" TopLine="923"/>
       </Position12>
       <Position13>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="392" TopLine="361"/>
+        <Caret Line="951" TopLine="923"/>
       </Position13>
       <Position14>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="394" TopLine="361"/>
+        <Caret Line="954" TopLine="923"/>
       </Position14>
       <Position15>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="431" TopLine="406"/>
+        <Caret Line="957" TopLine="923"/>
       </Position15>
       <Position16>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="440" TopLine="406"/>
+        <Caret Line="959" TopLine="923"/>
       </Position16>
       <Position17>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="950" TopLine="923"/>
+        <Caret Line="317" TopLine="300"/>
       </Position17>
       <Position18>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="951" TopLine="923"/>
+        <Caret Line="323" TopLine="300"/>
       </Position18>
       <Position19>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="954" TopLine="923"/>
+        <Caret Line="327" TopLine="300"/>
       </Position19>
       <Position20>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="957" TopLine="923"/>
+        <Caret Line="329" TopLine="300"/>
       </Position20>
       <Position21>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="959" TopLine="923"/>
+        <Caret Line="339" TopLine="300"/>
       </Position21>
       <Position22>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="317" TopLine="300"/>
+        <Caret Line="350" TopLine="306"/>
       </Position22>
       <Position23>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="323" TopLine="300"/>
+        <Caret Line="405" TopLine="378"/>
       </Position23>
       <Position24>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="327" TopLine="300"/>
+        <Caret Line="431" TopLine="406"/>
       </Position24>
       <Position25>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="329" TopLine="300"/>
+        <Caret Line="440" TopLine="406"/>
       </Position25>
       <Position26>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="339" TopLine="300"/>
+        <Caret Line="947" Column="78" TopLine="923"/>
       </Position26>
       <Position27>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="350" TopLine="306"/>
+        <Caret Line="385" Column="4" TopLine="348"/>
       </Position27>
       <Position28>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="405" TopLine="378"/>
+        <Caret Line="666" Column="57" TopLine="634"/>
       </Position28>
       <Position29>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="431" TopLine="406"/>
+        <Caret Line="713" Column="55" TopLine="687"/>
       </Position29>
       <Position30>
         <Filename Value="mainformunit.pas"/>
-        <Caret Line="440" TopLine="406"/>
+        <Caret Line="670" Column="55" TopLine="517"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -199,15 +200,6 @@
     </RunParams>
   </ProjectSession>
   <Debugging>
-    <BreakPoints Count="1">
-      <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="mainformunit.pas"/>
-        <Line Value="317"/>
-      </Item1>
-    </BreakPoints>
     <Watches Count="1">
       <Item1>
         <Expression Value="objModel.SomeString"/>

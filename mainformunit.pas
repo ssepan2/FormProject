@@ -295,6 +295,37 @@ begin
     end;
 end;
 
+function FileOpen() : Boolean;
+var
+   sErrorMessage,filePath:String;
+begin
+  try
+      try
+        Application.ProcessMessages;
+
+        //OPEN
+        //update properties from INI
+        filePath:=TSomeModel.C_INI_FILE;
+        If Not TSomeModel.OpenFromSettings(objModel,filePath) Then
+        begin
+          raise Exception.Create('open failed.');
+        End;
+        FileOpen := True;
+
+        objModel.RefreshModel(False); //to update view
+
+      finally
+        //always do this
+      end;
+    except
+        on E: Exception do
+        begin
+           sErrorMessage:=FormatErrorForLog(E.Message , 'FileOpen' , E.HelpContext.ToString);
+           LogErrorToFile(sErrorMessage);
+        end;
+    end;
+end;
+
 // <summary>
 // Write model to settings
 // </summary>
@@ -349,40 +380,9 @@ begin
     end;
 end;
 
-function FileOpen() : Boolean;
+function CheckForSaveOrCancel(var sStatusMessage:String) : Boolean;
 var
-   sErrorMessage,filePath:String;
-begin
-  try
-      try
-        Application.ProcessMessages;
-
-        //OPEN
-        //update properties from INI
-        filePath:=TSomeModel.C_INI_FILE;
-        If Not TSomeModel.OpenFromSettings(objModel,filePath) Then
-        begin
-          raise Exception.Create('open failed.');
-        End;
-        FileOpen := True;
-
-        objModel.RefreshModel(False); //to update view
-
-      finally
-        //always do this
-      end;
-    except
-        on E: Exception do
-        begin
-           sErrorMessage:=FormatErrorForLog(E.Message , 'FileOpen' , E.HelpContext.ToString);
-           LogErrorToFile(sErrorMessage);
-        end;
-    end;
-end;
-
-function CheckForSaveOrCancel() : Boolean;
-var
-   sStatusMessage,sErrorMessage, formatResult:String;
+   sErrorMessage, formatResult:String;
    cancel : Boolean;
 begin
   try
@@ -400,7 +400,7 @@ begin
                        mrYes:
                        begin
                           //Yes, SAVE
-                          if FileSave(True, sStatusMessage) Then  //DEBUG:error saving during exit (still new)
+                          if FileSave(True, sStatusMessage) Then
                           begin
                             cancel := False;
                           end
@@ -658,12 +658,13 @@ end;
 {File}
 procedure TMainForm.ActionFileNewOnExecute(Sender: TObject);
 var
-   sStatusMessage,sErrorMessage:String;
+   sStatusMessage,sStatusMessageFromCheck,sErrorMessage:String;
    bCancel : Boolean;
 begin
    try
        try
-          bCancel := CheckForSaveOrCancel();
+          sStatusMessageFromCheck := '';
+          bCancel := CheckForSaveOrCancel(sStatusMessageFromCheck);
 
            //clear status, error messages at beginning of every action
           sStatusMessage:='New...';
@@ -684,7 +685,7 @@ begin
               //NEW
              if Not FileNew() Then
              begin
-                raise Exception.Create('new failed.');
+                raise Exception.Create('New failed.');
              end;
              sStatusMessage := 'New done.';
           End;
@@ -705,12 +706,13 @@ end;
 
 procedure TMainForm.ActionFileOpenOnExecute(Sender: TObject);
 var
-   sStatusMessage,sErrorMessage,formatResult,sResponse:String;
+   sStatusMessage,sStatusMessageFromCheck,sErrorMessage,formatResult,sResponse:String;
    bCancel : Boolean;
 begin
    try
      try
-        bCancel := CheckForSaveOrCancel();
+        sStatusMessageFromCheck := '';
+        bCancel := CheckForSaveOrCancel(sStatusMessageFromCheck);
 
          //clear status, error messages at beginning of every action
         sStatusMessage:='Opening...';
@@ -758,7 +760,7 @@ begin
                begin
                   raise Exception.Create('open failed.');
                end;
-               sStatusMessage := 'Open done.';
+               sStatusMessage := sStatusMessageFromCheck +'; Open done.';//in rare cases, we will want to get a message from the check
             End;
          End;
 
@@ -938,13 +940,13 @@ end;
 
 procedure TMainForm.ActionFileExitOnExecute(Sender: TObject);
 var
-   sStatusMessage:String;
-   sErrorMessage:String;
+   sStatusMessage,sStatusMessageFromCheck, sErrorMessage:String;
    bCancel : Boolean;
 begin
    try
      try
-        bCancel := CheckForSaveOrCancel();//TODO:pass back sStatusMessage and concat
+        sStatusMessageFromCheck := '';
+        bCancel := CheckForSaveOrCancel(sStatusMessageFromCheck);
 
         //clear status, error messages at beginning of every action
        sStatusMessage:='Exit...';
