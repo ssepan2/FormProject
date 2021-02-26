@@ -298,21 +298,45 @@ end;
 // <summary>
 // Write model to settings
 // </summary>
-function FileSave() : Boolean;
+function FileSave(bSaveAs : Boolean; var sStatusMessage:String) : Boolean;
 var
-   sErrorMessage:String;
+   sErrorMessage,sResponse:String;
+   bCancel : Boolean;
 begin
   try
       try
+         bCancel := False;
+
         Application.ProcessMessages;
 
-       //SAVE
-       //save properties to INI
-       If Not TSomeModel.SaveToSettings(objModel,TSomeModel.C_INI_FILE) Then
-       begin
-           raise Exception.Create('save failed.');
-       end;
-       FileSave := True;
+         //SAVE
+         //save properties to INI
+         If (String.IsNullOrWhiteSpace(objModel.Key) Or (objModel.Key = TModelBase.KEY_NEW) Or (bSaveAs)) Then
+         begin
+           sResponse := InputBox('Save...', 'Enter Name for model:', objModel.Key);
+           if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> TModelBase.KEY_NEW)) then
+           begin
+              objModel.Key:= sResponse;
+           end
+            Else
+            begin
+               bCancel:=True;
+            end;
+         End;
+
+         If (bCancel) Then
+         begin
+            sStatusMessage := 'Save cancelled.' ;
+         end
+         Else
+         begin
+            If Not TSomeModel.SaveToSettings(objModel,TSomeModel.C_INI_FILE) Then
+            begin
+               raise Exception.Create('save failed.');
+            end;
+            sStatusMessage := 'Save done.';
+         end;
+         FileSave := True;
       finally
         //always do this
       end;
@@ -358,17 +382,17 @@ end;
 
 function CheckForSaveOrCancel() : Boolean;
 var
-   sErrorMessage, formatResult:String;
+   sStatusMessage,sErrorMessage, formatResult:String;
    cancel : Boolean;
 begin
   try
       try
+        cancel := False;
+
           If (objModel<>nil) Then
           begin
               If objModel.Dirty Then
               begin
-                   cancel := False;
-
                   //prompt before saving
                   FmtStr(formatResult,'Save changes?: ''%s'' ',[objModel.Key]);
 
@@ -376,7 +400,7 @@ begin
                        mrYes:
                        begin
                           //Yes, SAVE
-                          if FileSave() Then
+                          if FileSave(True, sStatusMessage) Then  //DEBUG:error saving during exit (still new)
                           begin
                             cancel := False;
                           end
@@ -634,15 +658,15 @@ end;
 {File}
 procedure TMainForm.ActionFileNewOnExecute(Sender: TObject);
 var
-   sStatusMessage,sErrorMessage, formatResult:String;
+   sStatusMessage,sErrorMessage:String;
    bCancel : Boolean;
 begin
    try
        try
-          bCancel := False;
+          bCancel := CheckForSaveOrCancel();
 
            //clear status, error messages at beginning of every action
-          sStatusMessage:='FileNew...';
+          sStatusMessage:='New...';
           sErrorMessage:='';
 
           //use progress bar (marquee) with action icon (where available) in status bar
@@ -650,8 +674,6 @@ begin
 
           //perform sender disable/enable in all actions
           TAction(Sender).Enabled := False;
-
-          bCancel := CheckForSaveOrCancel();
 
           If bCancel Then
           begin
@@ -664,7 +686,7 @@ begin
              begin
                 raise Exception.Create('new failed.');
              end;
-             sStatusMessage := 'FileNew done.';
+             sStatusMessage := 'New done.';
           End;
        finally
          //always do this
@@ -688,7 +710,7 @@ var
 begin
    try
      try
-        bCancel := False;
+        bCancel := CheckForSaveOrCancel();
 
          //clear status, error messages at beginning of every action
         sStatusMessage:='Opening...';
@@ -700,8 +722,6 @@ begin
         //perform sender disable/enable in all actions
         TAction(Sender).Enabled := False;
 
-        bCancel := CheckForSaveOrCancel();
-
          If bCancel Then
          begin
              sStatusMessage := 'Open cancelled during Save.';
@@ -711,6 +731,7 @@ begin
             sResponse := InputBox('Open...', 'Please enter model name:', '');
             if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> TModelBase.KEY_NEW)) then
             begin
+                //TODO:implement VerifyKey
                 //If Not objModel.VerifyKey(nil, sResponse, 'TODO:Path') Then
                 //begin
                 //  FmtStr(formatResult,'ID not found in settings: Slot =''%s''', [sResponse]);
@@ -759,53 +780,30 @@ end;
 
 procedure TMainForm.ActionFileSaveOnExecute(Sender: TObject);
 var
-   sStatusMessage,sErrorMessage,sResponse:String;
-   bCancel : Boolean;
+   sStatusMessage,sErrorMessage:String;
 begin
    try
      try
-       bCancel := False;
+        //clear status, error messages at beginning of every action
+        sStatusMessage:='Saving...';
+        sErrorMessage:='';
 
-       //clear status, error messages at beginning of every action
-      sStatusMessage:='Saving...';
-      sErrorMessage:='';
+        //use progress bar (marquee) with action icon (where available) in status bar
+        StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFileSave.Glyph);//, sbFileNew.Images[0].Image, True, 33);
 
-      //use progress bar (marquee) with action icon (where available) in status bar
-      StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, sbFileSave.Glyph);//, sbFileNew.Images[0].Image, True, 33);
+        //perform sender disable/enable in all actions
+        TAction(Sender).Enabled := False;
 
-      //perform sender disable/enable in all actions
-      TAction(Sender).Enabled := False;
-
-      If String.IsNullOrWhiteSpace(objModel.Key) Or (objModel.Key = TModelBase.KEY_NEW) Then
-      begin
-        sResponse := InputBox('Save As...', 'Please enter model name:', objModel.Key);
-        if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> TModelBase.KEY_NEW)) then
+        //SAVE
+        //save properties to INI
+        if Not FileSave(False, sStatusMessage) Then
         begin
-           objModel.Key:= sResponse;
-        end
-         Else
-         begin
-            bCancel:=True;
-         end;
-      End;
-
-      If (bCancel) Then
-      begin
-           sStatusMessage := 'Save cancelled.' ;
-      end
-      Else
-      begin
-         if Not FileSave() Then
-         begin
-            raise Exception.Create('save failed.');
-         end;
-         sStatusMessage := 'Save done.';
-      end;
-
+          raise Exception.Create('Save failed.');
+        end;
      finally
-       //always do this
-       TAction(Sender).Enabled := True;
-       StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
+         //always do this
+         TAction(Sender).Enabled := True;
+         StopProgressBar(sStatusMessage, sErrorMessage, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon);
      end;
    except
        on E: Exception do
@@ -819,13 +817,10 @@ end;
 
 procedure TMainForm.ActionFileSaveAsOnExecute(Sender: TObject);
 var
-   sStatusMessage,sErrorMessage,sResponse:String;
-   bCancel : Boolean;
+   sStatusMessage,sErrorMessage:String;
 begin
    try
      try
-         bCancel := False;
-
          //clear status, error messages at beginning of every action
          sStatusMessage:='Saving As...';
          sErrorMessage:='';
@@ -836,28 +831,12 @@ begin
         //perform sender disable/enable in all actions
         TAction(Sender).Enabled := False;
 
-        sResponse := InputBox('Save As...', 'Please enter model name:', objModel.Key);
-        if (Not String.IsNullOrWhiteSpace(sResponse) And (sResponse <> TModelBase.KEY_NEW)) then
-        begin
-           objModel.Key:= sResponse;
-        end
-         Else
+        //SAVE
+        //save properties to INI
+         if Not FileSave(False, sStatusMessage) Then
          begin
-            bCancel:=True;
+            raise Exception.Create('Save As failed.');
          end;
-
-        If (bCancel) Then
-        begin
-             sStatusMessage := 'Save As cancelled.' ;
-        end
-        Else
-        begin
-           if Not FileSave() Then
-           begin
-              raise Exception.Create('save failed.');
-           end;
-           sStatusMessage := 'Save As done.';
-        end;
      finally
        //always do this
        TAction(Sender).Enabled := True;
@@ -961,23 +940,32 @@ procedure TMainForm.ActionFileExitOnExecute(Sender: TObject);
 var
    sStatusMessage:String;
    sErrorMessage:String;
+   bCancel : Boolean;
 begin
    try
      try
-         //clear status, error messages at beginning of every action
-        sStatusMessage:='FileExit...';
-        sErrorMessage:='';
+        bCancel := CheckForSaveOrCancel();//TODO:pass back sStatusMessage and concat
 
-        //use progress bar (marquee) with action icon (where available) in status bar
-        StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
+        //clear status, error messages at beginning of every action
+       sStatusMessage:='Exit...';
+       sErrorMessage:='';
 
-        //perform sender disable/enable in all actions
-        TAction(Sender).Enabled := False;
+       //use progress bar (marquee) with action icon (where available) in status bar
+       StartProgressBarWithPicture(sStatusMessage, sErrorMessage, True, False, 0, 100, lblStatusMessage, lblErrorMessage, ProgressBar, imgActionIcon, Nil);//, sbFileNew.Images[0].Image, True, 33);
 
-        //TODO:check for save or cancel
-        //?
+       //perform sender disable/enable in all actions
+       TAction(Sender).Enabled := False;
 
-        Self.Close();
+        If bCancel Then
+        begin
+            sStatusMessage := 'Exit cancelled.';
+        end
+        Else
+        begin
+            //EXIT
+           Self.Close();
+        End;
+
      finally
        //always do this
        TAction(Sender).Enabled := True;
